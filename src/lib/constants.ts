@@ -1,0 +1,418 @@
+import type { HouseholdBudgetCategory, TimeFormat } from '@/types';
+
+// Currency symbols mapping
+export const CURRENCY_SYMBOLS: Record<string, string> = {
+  USD: '$',
+  EUR: '€',
+  GBP: '£',
+  JPY: '¥',
+  CNY: '¥',
+  KRW: '₩',
+  INR: '₹',
+  RUB: '₽',
+  BRL: 'R$',
+  ZAR: 'R',
+  CHF: 'CHF',
+  CAD: 'C$',
+  AUD: 'A$',
+  NZD: 'NZ$',
+  HKD: 'HK$',
+  SGD: 'S$',
+  MXN: 'MX$',
+  NOK: 'kr',
+  SEK: 'kr',
+  DKK: 'kr',
+  PLN: 'zł',
+  TRY: '₺',
+  THB: '฿',
+  IDR: 'Rp',
+  MYR: 'RM',
+  PHP: '₱',
+  CZK: 'Kč',
+  ILS: '₪',
+  AED: 'د.إ',
+  SAR: '﷼',
+  TWD: 'NT$',
+  VND: '₫',
+  UAH: '₴',
+  EGP: 'E£',
+  NGN: '₦',
+  PKR: '₨',
+  BDT: '৳',
+  KES: 'KSh',
+  QAR: 'ر.ق',
+  KWD: 'د.ك',
+  MAD: 'د.م.',
+  ARS: '$',
+  CLP: '$',
+  COP: '$',
+  PEN: 'S/',
+  RON: 'lei',
+  HUF: 'Ft',
+};
+
+// Helper function to get currency symbol
+export function getCurrencySymbol(currencyCode: string): string {
+  return CURRENCY_SYMBOLS[currencyCode] || currencyCode;
+}
+
+// Helper function to format currency amount
+export function formatCurrency(amount: number, currencyCode: string): string {
+  const symbol = getCurrencySymbol(currencyCode);
+  return `${symbol}${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+// Time format options
+export const TIME_FORMAT_OPTIONS: { value: TimeFormat; label: string; example: string }[] = [
+  { value: '12h', label: '12-hour', example: '2:30 PM' },
+  { value: '24h', label: '24-hour', example: '14:30' },
+];
+
+// Helper function to format time based on preference
+export function formatTime(time: string, format: TimeFormat = '24h'): string {
+  if (!time) return '';
+
+  // Parse the time string (expected format: "HH:MM" or "HH:MM:SS")
+  const [hourStr, minuteStr] = time.split(':');
+  const hour = parseInt(hourStr, 10);
+  const minute = minuteStr || '00';
+
+  if (isNaN(hour)) return time;
+
+  if (format === '12h') {
+    const period = hour >= 12 ? 'PM' : 'AM';
+    const hour12 = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+    return `${hour12}:${minute} ${period}`;
+  }
+
+  // 24-hour format
+  return `${hour.toString().padStart(2, '0')}:${minute}`;
+}
+
+// Default budget categories for travel
+export const DEFAULT_BUDGET_CATEGORIES: HouseholdBudgetCategory[] = [
+  { id: 'flights', name: 'Flights' },
+  { id: 'accommodation', name: 'Accommodation' },
+  { id: 'food', name: 'Food & Dining' },
+  { id: 'transport', name: 'Local Transport' },
+  { id: 'activities', name: 'Activities & Tours' },
+  { id: 'shopping', name: 'Shopping' },
+  { id: 'insurance', name: 'Travel Insurance' },
+  { id: 'visa', name: 'Visa & Documents' },
+  { id: 'communication', name: 'SIM & Internet' },
+  { id: 'entertainment', name: 'Entertainment' },
+  { id: 'tips', name: 'Tips & Gratuities' },
+  { id: 'emergency', name: 'Emergency Fund' },
+];
+
+// Currency list with common currencies at the top
+export const CURRENCIES = [
+  { value: "USD", label: "USD - US Dollar" },
+  { value: "EUR", label: "EUR - Euro" },
+  { value: "GBP", label: "GBP - British Pound" },
+  { value: "JPY", label: "JPY - Japanese Yen" },
+  { value: "CAD", label: "CAD - Canadian Dollar" },
+  { value: "AUD", label: "AUD - Australian Dollar" },
+  { value: "CHF", label: "CHF - Swiss Franc" },
+  { value: "CNY", label: "CNY - Chinese Yuan" },
+  { value: "INR", label: "INR - Indian Rupee" },
+  { value: "MXN", label: "MXN - Mexican Peso" },
+  { value: "BRL", label: "BRL - Brazilian Real" },
+  { value: "KRW", label: "KRW - South Korean Won" },
+  { value: "SGD", label: "SGD - Singapore Dollar" },
+  { value: "HKD", label: "HKD - Hong Kong Dollar" },
+  { value: "NOK", label: "NOK - Norwegian Krone" },
+  { value: "SEK", label: "SEK - Swedish Krona" },
+  { value: "DKK", label: "DKK - Danish Krone" },
+  { value: "NZD", label: "NZD - New Zealand Dollar" },
+  { value: "ZAR", label: "ZAR - South African Rand" },
+  { value: "RUB", label: "RUB - Russian Ruble" },
+  { value: "TRY", label: "TRY - Turkish Lira" },
+  { value: "PLN", label: "PLN - Polish Zloty" },
+  { value: "THB", label: "THB - Thai Baht" },
+  { value: "IDR", label: "IDR - Indonesian Rupiah" },
+  { value: "MYR", label: "MYR - Malaysian Ringgit" },
+  { value: "PHP", label: "PHP - Philippine Peso" },
+  { value: "CZK", label: "CZK - Czech Koruna" },
+  { value: "ILS", label: "ILS - Israeli Shekel" },
+  { value: "CLP", label: "CLP - Chilean Peso" },
+  { value: "PKR", label: "PKR - Pakistani Rupee" },
+  { value: "EGP", label: "EGP - Egyptian Pound" },
+  { value: "COP", label: "COP - Colombian Peso" },
+  { value: "SAR", label: "SAR - Saudi Riyal" },
+  { value: "AED", label: "AED - UAE Dirham" },
+  { value: "TWD", label: "TWD - Taiwan Dollar" },
+  { value: "ARS", label: "ARS - Argentine Peso" },
+  { value: "VND", label: "VND - Vietnamese Dong" },
+  { value: "BDT", label: "BDT - Bangladeshi Taka" },
+  { value: "NGN", label: "NGN - Nigerian Naira" },
+  { value: "UAH", label: "UAH - Ukrainian Hryvnia" },
+  { value: "PEN", label: "PEN - Peruvian Sol" },
+  { value: "RON", label: "RON - Romanian Leu" },
+  { value: "HUF", label: "HUF - Hungarian Forint" },
+  { value: "KES", label: "KES - Kenyan Shilling" },
+  { value: "QAR", label: "QAR - Qatari Riyal" },
+  { value: "KWD", label: "KWD - Kuwaiti Dinar" },
+  { value: "MAD", label: "MAD - Moroccan Dirham" },
+];
+
+// Country list
+export const COUNTRIES = [
+  { value: "AF", label: "Afghanistan" },
+  { value: "AL", label: "Albania" },
+  { value: "DZ", label: "Algeria" },
+  { value: "AD", label: "Andorra" },
+  { value: "AO", label: "Angola" },
+  { value: "AG", label: "Antigua and Barbuda" },
+  { value: "AR", label: "Argentina" },
+  { value: "AM", label: "Armenia" },
+  { value: "AU", label: "Australia" },
+  { value: "AT", label: "Austria" },
+  { value: "AZ", label: "Azerbaijan" },
+  { value: "BS", label: "Bahamas" },
+  { value: "BH", label: "Bahrain" },
+  { value: "BD", label: "Bangladesh" },
+  { value: "BB", label: "Barbados" },
+  { value: "BY", label: "Belarus" },
+  { value: "BE", label: "Belgium" },
+  { value: "BZ", label: "Belize" },
+  { value: "BJ", label: "Benin" },
+  { value: "BT", label: "Bhutan" },
+  { value: "BO", label: "Bolivia" },
+  { value: "BA", label: "Bosnia and Herzegovina" },
+  { value: "BW", label: "Botswana" },
+  { value: "BR", label: "Brazil" },
+  { value: "BN", label: "Brunei" },
+  { value: "BG", label: "Bulgaria" },
+  { value: "BF", label: "Burkina Faso" },
+  { value: "BI", label: "Burundi" },
+  { value: "CV", label: "Cabo Verde" },
+  { value: "KH", label: "Cambodia" },
+  { value: "CM", label: "Cameroon" },
+  { value: "CA", label: "Canada" },
+  { value: "CF", label: "Central African Republic" },
+  { value: "TD", label: "Chad" },
+  { value: "CL", label: "Chile" },
+  { value: "CN", label: "China" },
+  { value: "CO", label: "Colombia" },
+  { value: "KM", label: "Comoros" },
+  { value: "CG", label: "Congo" },
+  { value: "CD", label: "Congo (Democratic Republic)" },
+  { value: "CR", label: "Costa Rica" },
+  { value: "CI", label: "Cote d'Ivoire" },
+  { value: "HR", label: "Croatia" },
+  { value: "CU", label: "Cuba" },
+  { value: "CY", label: "Cyprus" },
+  { value: "CZ", label: "Czech Republic" },
+  { value: "DK", label: "Denmark" },
+  { value: "DJ", label: "Djibouti" },
+  { value: "DM", label: "Dominica" },
+  { value: "DO", label: "Dominican Republic" },
+  { value: "EC", label: "Ecuador" },
+  { value: "EG", label: "Egypt" },
+  { value: "SV", label: "El Salvador" },
+  { value: "GQ", label: "Equatorial Guinea" },
+  { value: "ER", label: "Eritrea" },
+  { value: "EE", label: "Estonia" },
+  { value: "SZ", label: "Eswatini" },
+  { value: "ET", label: "Ethiopia" },
+  { value: "FJ", label: "Fiji" },
+  { value: "FI", label: "Finland" },
+  { value: "FR", label: "France" },
+  { value: "GA", label: "Gabon" },
+  { value: "GM", label: "Gambia" },
+  { value: "GE", label: "Georgia" },
+  { value: "DE", label: "Germany" },
+  { value: "GH", label: "Ghana" },
+  { value: "GR", label: "Greece" },
+  { value: "GD", label: "Grenada" },
+  { value: "GT", label: "Guatemala" },
+  { value: "GN", label: "Guinea" },
+  { value: "GW", label: "Guinea-Bissau" },
+  { value: "GY", label: "Guyana" },
+  { value: "HT", label: "Haiti" },
+  { value: "HN", label: "Honduras" },
+  { value: "HU", label: "Hungary" },
+  { value: "IS", label: "Iceland" },
+  { value: "IN", label: "India" },
+  { value: "ID", label: "Indonesia" },
+  { value: "IR", label: "Iran" },
+  { value: "IQ", label: "Iraq" },
+  { value: "IE", label: "Ireland" },
+  { value: "IL", label: "Israel" },
+  { value: "IT", label: "Italy" },
+  { value: "JM", label: "Jamaica" },
+  { value: "JP", label: "Japan" },
+  { value: "JO", label: "Jordan" },
+  { value: "KZ", label: "Kazakhstan" },
+  { value: "KE", label: "Kenya" },
+  { value: "KI", label: "Kiribati" },
+  { value: "KP", label: "Korea (North)" },
+  { value: "KR", label: "Korea (South)" },
+  { value: "KW", label: "Kuwait" },
+  { value: "KG", label: "Kyrgyzstan" },
+  { value: "LA", label: "Laos" },
+  { value: "LV", label: "Latvia" },
+  { value: "LB", label: "Lebanon" },
+  { value: "LS", label: "Lesotho" },
+  { value: "LR", label: "Liberia" },
+  { value: "LY", label: "Libya" },
+  { value: "LI", label: "Liechtenstein" },
+  { value: "LT", label: "Lithuania" },
+  { value: "LU", label: "Luxembourg" },
+  { value: "MG", label: "Madagascar" },
+  { value: "MW", label: "Malawi" },
+  { value: "MY", label: "Malaysia" },
+  { value: "MV", label: "Maldives" },
+  { value: "ML", label: "Mali" },
+  { value: "MT", label: "Malta" },
+  { value: "MH", label: "Marshall Islands" },
+  { value: "MR", label: "Mauritania" },
+  { value: "MU", label: "Mauritius" },
+  { value: "MX", label: "Mexico" },
+  { value: "FM", label: "Micronesia" },
+  { value: "MD", label: "Moldova" },
+  { value: "MC", label: "Monaco" },
+  { value: "MN", label: "Mongolia" },
+  { value: "ME", label: "Montenegro" },
+  { value: "MA", label: "Morocco" },
+  { value: "MZ", label: "Mozambique" },
+  { value: "MM", label: "Myanmar" },
+  { value: "NA", label: "Namibia" },
+  { value: "NR", label: "Nauru" },
+  { value: "NP", label: "Nepal" },
+  { value: "NL", label: "Netherlands" },
+  { value: "NZ", label: "New Zealand" },
+  { value: "NI", label: "Nicaragua" },
+  { value: "NE", label: "Niger" },
+  { value: "NG", label: "Nigeria" },
+  { value: "MK", label: "North Macedonia" },
+  { value: "NO", label: "Norway" },
+  { value: "OM", label: "Oman" },
+  { value: "PK", label: "Pakistan" },
+  { value: "PW", label: "Palau" },
+  { value: "PS", label: "Palestine" },
+  { value: "PA", label: "Panama" },
+  { value: "PG", label: "Papua New Guinea" },
+  { value: "PY", label: "Paraguay" },
+  { value: "PE", label: "Peru" },
+  { value: "PH", label: "Philippines" },
+  { value: "PL", label: "Poland" },
+  { value: "PT", label: "Portugal" },
+  { value: "QA", label: "Qatar" },
+  { value: "RO", label: "Romania" },
+  { value: "RU", label: "Russia" },
+  { value: "RW", label: "Rwanda" },
+  { value: "KN", label: "Saint Kitts and Nevis" },
+  { value: "LC", label: "Saint Lucia" },
+  { value: "VC", label: "Saint Vincent and the Grenadines" },
+  { value: "WS", label: "Samoa" },
+  { value: "SM", label: "San Marino" },
+  { value: "ST", label: "Sao Tome and Principe" },
+  { value: "SA", label: "Saudi Arabia" },
+  { value: "SN", label: "Senegal" },
+  { value: "RS", label: "Serbia" },
+  { value: "SC", label: "Seychelles" },
+  { value: "SL", label: "Sierra Leone" },
+  { value: "SG", label: "Singapore" },
+  { value: "SK", label: "Slovakia" },
+  { value: "SI", label: "Slovenia" },
+  { value: "SB", label: "Solomon Islands" },
+  { value: "SO", label: "Somalia" },
+  { value: "ZA", label: "South Africa" },
+  { value: "SS", label: "South Sudan" },
+  { value: "ES", label: "Spain" },
+  { value: "LK", label: "Sri Lanka" },
+  { value: "SD", label: "Sudan" },
+  { value: "SR", label: "Suriname" },
+  { value: "SE", label: "Sweden" },
+  { value: "CH", label: "Switzerland" },
+  { value: "SY", label: "Syria" },
+  { value: "TW", label: "Taiwan" },
+  { value: "TJ", label: "Tajikistan" },
+  { value: "TZ", label: "Tanzania" },
+  { value: "TH", label: "Thailand" },
+  { value: "TL", label: "Timor-Leste" },
+  { value: "TG", label: "Togo" },
+  { value: "TO", label: "Tonga" },
+  { value: "TT", label: "Trinidad and Tobago" },
+  { value: "TN", label: "Tunisia" },
+  { value: "TR", label: "Turkey" },
+  { value: "TM", label: "Turkmenistan" },
+  { value: "TV", label: "Tuvalu" },
+  { value: "UG", label: "Uganda" },
+  { value: "UA", label: "Ukraine" },
+  { value: "AE", label: "United Arab Emirates" },
+  { value: "GB", label: "United Kingdom" },
+  { value: "US", label: "United States" },
+  { value: "UY", label: "Uruguay" },
+  { value: "UZ", label: "Uzbekistan" },
+  { value: "VU", label: "Vanuatu" },
+  { value: "VA", label: "Vatican City" },
+  { value: "VE", label: "Venezuela" },
+  { value: "VN", label: "Vietnam" },
+  { value: "YE", label: "Yemen" },
+  { value: "ZM", label: "Zambia" },
+  { value: "ZW", label: "Zimbabwe" },
+];
+
+// Country code to currency code mapping
+// Maps ISO 3166-1 alpha-2 country codes to ISO 4217 currency codes
+export const COUNTRY_CURRENCY_MAP: Record<string, string> = {
+  // Americas
+  US: 'USD', CA: 'CAD', MX: 'MXN', BR: 'BRL', AR: 'ARS',
+  CL: 'CLP', CO: 'COP', PE: 'PEN', VE: 'VES', EC: 'USD',
+  UY: 'UYU', PY: 'PYG', BO: 'BOB', CR: 'CRC', PA: 'USD',
+  GT: 'GTQ', HN: 'HNL', SV: 'USD', NI: 'NIO', CU: 'CUP',
+  DO: 'DOP', JM: 'JMD', TT: 'TTD', BS: 'BSD', BB: 'BBD',
+
+  // Europe
+  GB: 'GBP', DE: 'EUR', FR: 'EUR', IT: 'EUR', ES: 'EUR',
+  PT: 'EUR', NL: 'EUR', BE: 'EUR', AT: 'EUR', IE: 'EUR',
+  GR: 'EUR', FI: 'EUR', SE: 'SEK', NO: 'NOK', DK: 'DKK',
+  CH: 'CHF', PL: 'PLN', CZ: 'CZK', HU: 'HUF', RO: 'RON',
+  BG: 'BGN', HR: 'EUR', SK: 'EUR', SI: 'EUR', LT: 'EUR',
+  LV: 'EUR', EE: 'EUR', CY: 'EUR', MT: 'EUR', LU: 'EUR',
+  RU: 'RUB', UA: 'UAH', BY: 'BYN', RS: 'RSD', BA: 'BAM',
+  MK: 'MKD', AL: 'ALL', ME: 'EUR', XK: 'EUR', MD: 'MDL',
+  IS: 'ISK', TR: 'TRY', MC: 'EUR', AD: 'EUR', SM: 'EUR',
+  VA: 'EUR', LI: 'CHF',
+
+  // Asia
+  JP: 'JPY', CN: 'CNY', KR: 'KRW', IN: 'INR', ID: 'IDR',
+  TH: 'THB', VN: 'VND', MY: 'MYR', SG: 'SGD', PH: 'PHP',
+  HK: 'HKD', TW: 'TWD', BD: 'BDT', PK: 'PKR', LK: 'LKR',
+  NP: 'NPR', MM: 'MMK', KH: 'KHR', LA: 'LAK', MN: 'MNT',
+  KZ: 'KZT', UZ: 'UZS', TM: 'TMT', KG: 'KGS', TJ: 'TJS',
+  AZ: 'AZN', GE: 'GEL', AM: 'AMD', BN: 'BND', MV: 'MVR',
+  BT: 'BTN', AF: 'AFN', IR: 'IRR', IQ: 'IQD',
+
+  // Middle East
+  SA: 'SAR', AE: 'AED', QA: 'QAR', KW: 'KWD', BH: 'BHD',
+  OM: 'OMR', JO: 'JOD', LB: 'LBP', IL: 'ILS', SY: 'SYP',
+  YE: 'YER', PS: 'ILS',
+
+  // Africa
+  ZA: 'ZAR', EG: 'EGP', NG: 'NGN', KE: 'KES', MA: 'MAD',
+  TN: 'TND', DZ: 'DZD', ET: 'ETB', GH: 'GHS', TZ: 'TZS',
+  UG: 'UGX', RW: 'RWF', SN: 'XOF', CI: 'XOF', CM: 'XAF',
+  AO: 'AOA', MZ: 'MZN', MG: 'MGA', ZM: 'ZMW', ZW: 'ZWL',
+  BW: 'BWP', NA: 'NAD', MU: 'MUR', SC: 'SCR', MW: 'MWK',
+
+  // Oceania
+  AU: 'AUD', NZ: 'NZD', FJ: 'FJD', PG: 'PGK', WS: 'WST',
+  TO: 'TOP', VU: 'VUV', SB: 'SBD',
+};
+
+// Helper function to get default currency for a country
+export function getDefaultCurrencyForCountry(countryCode: string): string {
+  return COUNTRY_CURRENCY_MAP[countryCode.toUpperCase()] || 'USD';
+}
+
+// Helper function to find country code from country name
+export function getCountryCodeFromName(countryName: string): string | null {
+  const country = COUNTRIES.find(
+    c => c.label.toLowerCase() === countryName.toLowerCase()
+  );
+  return country?.value || null;
+}
