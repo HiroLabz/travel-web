@@ -6,26 +6,16 @@ import { useAuth } from '@/hooks/use-auth';
 import { Loader2, Plane } from 'lucide-react';
 import { OnboardingProgress } from '@/components/onboarding/onboarding-progress';
 import { PlanSelection } from '@/components/onboarding/plan-selection';
-import { useToast } from '@/hooks/use-toast';
 
 export default function PlanSelectionPage() {
-  const { user, userProfile, loading: authLoading } = useAuth();
+  const { userProfile, loading: authLoading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { toast } = useToast();
 
-  // Handle canceled checkout
+  // Redirect if user has already completed onboarding — unless they came here
+  // via "Manage Subscription" (?manage=true) to change their plan.
   useEffect(() => {
-    if (searchParams.get('canceled') === 'true') {
-      toast({
-        title: 'Checkout canceled',
-        description: 'You can select a plan whenever you\'re ready.',
-      });
-    }
-  }, [searchParams, toast]);
-
-  // Redirect if user has already completed onboarding
-  useEffect(() => {
+    if (searchParams.get('manage') === 'true') return;
     if (!authLoading && userProfile) {
       if (userProfile.onboardingStep === 'completed') {
         router.replace('/dashboard');
@@ -36,7 +26,7 @@ export default function PlanSelectionPage() {
         router.replace('/dashboard');
       }
     }
-  }, [userProfile, authLoading, router]);
+  }, [userProfile, authLoading, router, searchParams]);
 
   if (authLoading) {
     return (

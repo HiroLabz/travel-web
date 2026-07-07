@@ -200,38 +200,8 @@ export default function ProfilePage() {
     }
   };
 
-  const handleManageSubscription = async () => {
-    if (!userProfile?.stripeCustomerId) return;
-
-    setLoadingPortal(true);
-    try {
-      const response = await fetch('/api/stripe/create-portal', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ stripeCustomerId: userProfile.stripeCustomerId }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to open subscription management');
-      }
-
-      if (data.url) {
-        window.location.href = data.url;
-      }
-    } catch (error) {
-      console.error('Error opening portal:', error);
-      toast({
-        title: 'Error',
-        description: error instanceof Error ? error.message : 'Failed to open subscription management',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoadingPortal(false);
-    }
+  const handleManageSubscription = () => {
+    router.push('/onboarding/plan?manage=true');
   };
 
   // Helper to format trial end date

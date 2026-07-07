@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Combobox } from '@/components/ui/combobox';
 import { Loader2, Users, Plane, Sparkles, Globe, MapPin, Banknote, Clock, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { COUNTRIES, CURRENCIES, TIME_FORMAT_OPTIONS } from '@/lib/constants';
 import { OnboardingProgress } from '@/components/onboarding/onboarding-progress';
 import type { TimeFormat } from '@/types';
@@ -23,69 +23,9 @@ function GroupCreationForm() {
   const [currency, setCurrency] = useState('');
   const [timeFormat, setTimeFormat] = useState<TimeFormat>('24h');
   const [loading, setLoading] = useState(false);
-  const [verifyingPayment, setVerifyingPayment] = useState(false);
   const { user, userProfile, loading: authLoading } = useAuth();
   const { toast } = useToast();
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  // Handle Stripe redirect with session_id - verify and update Firestore
-  useEffect(() => {
-    const sessionId = searchParams.get('session_id');
-    if (!sessionId || !user || !db) return;
-    if (userProfile?.stripeSubscriptionStatus === 'active' || userProfile?.stripeSubscriptionStatus === 'trialing') return;
-
-    const firestore = db; // Capture for TypeScript
-    const verifyAndUpdateSubscription = async () => {
-      setVerifyingPayment(true);
-      try {
-        const response = await fetch('/api/stripe/verify-session', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sessionId }),
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || 'Failed to verify payment');
-        }
-
-        // Update user's Firestore document with subscription info
-        const userRef = doc(firestore, 'users', user.uid);
-        const now = new Date().toISOString();
-        await updateDoc(userRef, {
-          stripeCustomerId: data.customerId,
-          stripeSubscriptionId: data.subscriptionId,
-          stripeSubscriptionStatus: data.subscriptionStatus,
-          onboardingStep: 'group',
-          subscription: {
-            plan: data.plan,
-            planStartDate: now,
-            creditsUsed: 0,
-            creditResetDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-            updatedAt: now,
-            ...(data.trialEnd && { trialEnd: data.trialEnd }),
-          },
-        });
-
-        toast({
-          title: 'Payment confirmed!',
-          description: 'Your subscription is now active. Let\'s create your travel group!',
-        });
-      } catch (error) {
-        console.error('Error verifying payment:', error);
-        toast({
-          title: 'Verification issue',
-          description: 'Please continue - we\'ll verify your subscription shortly.',
-        });
-      } finally {
-        setVerifyingPayment(false);
-      }
-    };
-
-    verifyAndUpdateSubscription();
-  }, [searchParams, user, userProfile, toast]);
 
   // Redirect checks
   useEffect(() => {
@@ -151,15 +91,12 @@ function GroupCreationForm() {
     }
   };
 
-  // Show loading while checking auth or verifying payment
-  if (authLoading || verifyingPayment) {
+  // Show loading while checking auth
+  if (authLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="h-8 w-8 animate-spin text-white mx-auto mb-4" />
-          {verifyingPayment && (
-            <p className="text-blue-200">Verifying your payment...</p>
-          )}
         </div>
       </div>
     );
