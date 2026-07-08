@@ -37,7 +37,7 @@ function GroupCreationForm() {
       }
 
       // If user hasn't selected a plan yet, redirect to plan selection
-      if (!userProfile.stripeSubscriptionId && userProfile.onboardingStep !== 'group') {
+      if (!userProfile.subscription?.plan && userProfile.onboardingStep !== 'group') {
         router.replace('/onboarding/plan');
       }
     }
@@ -119,14 +119,15 @@ function GroupCreationForm() {
             <OnboardingProgress currentStep="group" />
           </div>
 
-          {/* Subscription confirmation */}
-          {(userProfile?.stripeSubscriptionStatus === 'active' || userProfile?.stripeSubscriptionStatus === 'trialing') && (
+          {/* Plan confirmation (derived from plan/trial, not from billing status) */}
+          {userProfile?.subscription?.plan && (
             <div className="flex items-center gap-2 bg-white/10 rounded-lg px-3 py-2 mb-4">
               <CheckCircle className="w-4 h-4 text-emerald-300" />
               <span className="text-sm">
-                {userProfile.stripeSubscriptionStatus === 'trialing'
+                {userProfile.subscription.trialEnd &&
+                new Date(userProfile.subscription.trialEnd) > new Date()
                   ? 'Free trial active'
-                  : 'Subscription active'}
+                  : 'Plan active'}
               </span>
             </div>
           )}

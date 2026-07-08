@@ -1,5 +1,6 @@
 'use client';
 
+import { LenisProvider } from './lenis-provider';
 import { LandingNav } from './landing/landing-nav';
 import { HeroSection } from './landing/hero-section';
 import { FeatureSection } from './landing/feature-section';
@@ -10,16 +11,18 @@ import { LandingFooter } from './landing/landing-footer';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen">
-      <LandingNav />
-      <main>
-        <HeroSection />
-        <FeatureSection />
-        <PricingSection />
-        <HowItWorks />
-        <CTASection />
-      </main>
-      <LandingFooter />
-    </div>
+    <LenisProvider>
+      <div className="min-h-screen">
+        <LandingNav />
+        <main>
+          <HeroSection />
+          <FeatureSection />
+          {/*<PricingSection />*/}
+          <HowItWorks />
+          <CTASection />
+        </main>
+        <LandingFooter />
+      </div>
+    </LenisProvider>
   );
 }

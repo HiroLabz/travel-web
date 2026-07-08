@@ -50,7 +50,12 @@ export function PlanSelection() {
         return;
       }
 
-      // New subscriber — activate a 7-day trial locally (mimics the old Stripe result).
+      // New subscriber — start a 7-day trial window locally.
+      // NOTE: we deliberately do NOT write any stripe* fields here. Those are
+      // billing-authoritative markers that only trusted server code (a real
+      // payment webhook) may ever set. Writing them from the client would let a
+      // user forge a paid/trialing billing state. Entitlements and trial UI are
+      // derived from `subscription.plan` and `subscription.trialEnd` instead.
       const trialEnd = new Date(
         now.getTime() + TRIAL_PERIOD_DAYS * 24 * 60 * 60 * 1000
       ).toISOString();
@@ -59,9 +64,6 @@ export function PlanSelection() {
       ).toISOString();
 
       await updateDoc(userRef, {
-        stripeCustomerId: 'local',
-        stripeSubscriptionId: 'local',
-        stripeSubscriptionStatus: 'trialing',
         onboardingStep: 'group',
         subscription: {
           plan: planId,

@@ -1,110 +1,149 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { STRIPE_PLANS, TRIAL_PERIOD_DAYS } from '@/lib/stripe-config';
-import { Check, Sparkles } from 'lucide-react';
+import { useRef } from 'react';
 import Link from 'next/link';
+import { motion, useScroll, useTransform, useReducedMotion } from 'motion/react';
+import { Check, Star } from 'lucide-react';
+import { STRIPE_PLANS, TRIAL_PERIOD_DAYS } from '@/lib/stripe-config';
+
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+const PLANS = [
+  {
+    key: 'starter',
+    subtitle: 'Perfect for solo travelers',
+    featIntro: 'Starter includes:',
+    popular: false,
+  },
+  {
+    key: 'wanderer',
+    subtitle: 'Best for families & groups',
+    featIntro: 'Everything in Starter, plus:',
+    popular: true,
+  },
+] as const;
 
 export function PricingSection() {
-  const plans = [
-    { key: 'starter', popular: false },
-    { key: 'wanderer', popular: true },
-  ] as const;
+  const sectionRef = useRef<HTMLElement>(null);
+  const prefersReduced = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+  const headerY = useTransform(scrollYProgress, [0, 1], prefersReduced ? [0, 0] : [34, -34]);
+
+  // Staggered reveal, matching the feature section's choreography.
+  const reveal = (delay: number) => ({
+    initial: prefersReduced ? { opacity: 0 } : { opacity: 0, y: 30 },
+    whileInView: prefersReduced ? { opacity: 1 } : { opacity: 1, y: 0 },
+    viewport: { once: true, amount: 0.18, margin: '0px 0px -8% 0px' } as const,
+    transition: { duration: 0.8, ease: EASE, delay: prefersReduced ? 0 : delay },
+  });
 
   return (
-    <section id="pricing" className="py-20 md:py-32 bg-white dark:bg-slate-950">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-            Simple, Transparent Pricing
-          </h2>
-          <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-            Choose the plan that fits your travel style. Start with a free trial and upgrade anytime.
-          </p>
-        </div>
+    <section
+      id="pricing"
+      ref={sectionRef}
+      className="relative overflow-hidden bg-background text-foreground"
+    >
 
-        {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto">
-          {plans.map(({ key, popular }) => {
+
+      <div className="relative mx-auto max-w-[940px] px-[clamp(16px,4vw,24px)] pt-[clamp(48px,9vw,104px)] pb-[60px]">
+        {/* Header */}
+        <motion.div {...reveal(0)} className="mb-[clamp(40px,4vw,40px)] text-center">
+          <motion.div style={{ y: headerY }}>
+            <h1 className="m-0 mb-4 text-[30px] sm:text-[clamp(34px,6vw,52px)] font-bold leading-[1.05] tracking-[-0.025em]">
+              Simple, transparent pricing
+            </h1>
+            <p className="mx-auto m-0 max-w-full text-[14px] sm:text-[clamp(15px,2.5vw,19px)] leading-[1.5] text-muted-foreground">
+              Choose the plan that fits your travel style. Start with a free trial and upgrade
+              anytime.
+            </p>
+          </motion.div>
+        </motion.div>
+
+        {/* Plan grid — always two columns, divided by a single border. */}
+        <div className="grid grid-cols-2 border-y border-border">
+          {PLANS.map(({ key, subtitle, featIntro, popular }, i) => {
             const plan = STRIPE_PLANS[key];
             return (
-              <Card
+              <motion.div
                 key={key}
-                className={`relative flex flex-col h-full transition-all duration-300 hover:shadow-xl ${
-                  popular
-                    ? 'border-2 border-primary shadow-lg scale-100 md:scale-105'
-                    : 'border-slate-200 dark:border-slate-700'
-                }`}
+                {...reveal(i * 0.11)}
+                className={`flex flex-col px-[14px] py-[22px] sm:px-[34px] sm:py-[38px] ${popular ? 'border-l border-border' : ''
+                  }`}
               >
-                {/* Popular Badge */}
-                {popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-primary text-white text-sm font-semibold rounded-full shadow-lg">
-                      <Sparkles className="w-4 h-4" />
+                {/* Name + popular badge */}
+                <div className="mb-1.5 flex flex-wrap items-center gap-2.5">
+                  <h2 className="m-0 text-[18px] sm:text-[26px] font-bold tracking-[-0.02em]">
+                    {plan.name}
+                  </h2>
+                  {popular && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-primary/15 px-[7px] py-[2px] sm:px-[9px] sm:py-[3px] text-[9px] sm:text-[11px] font-bold text-primary">
+                      <Star className="h-[11px] w-[11px] fill-current" />
                       Most Popular
                     </span>
-                  </div>
-                )}
+                  )}
+                </div>
 
-                <CardHeader className={`text-center pb-4 ${popular ? 'pt-8' : 'pt-6'}`}>
-                  <CardTitle className="text-2xl font-bold">{plan.name}</CardTitle>
-                  <CardDescription className="text-slate-500 dark:text-slate-400">
-                    {key === 'starter' ? 'Perfect for solo travelers' : 'Best for families & groups'}
-                  </CardDescription>
+                <p className="m-0 min-h-[30px] sm:min-h-[44px] text-[11px] sm:text-[15px] text-muted-foreground">
+                  {subtitle}
+                </p>
 
-                  {/* Price */}
-                  <div className="mt-4">
-                    <span className="text-4xl md:text-5xl font-bold">${plan.price}</span>
-                    <span className="text-slate-500 dark:text-slate-400">/month</span>
-                  </div>
+                {/* Price */}
+                <div className="mt-[26px] mb-1.5 flex items-baseline gap-1.5">
+                  <span className="text-[26px] sm:text-[38px] font-bold leading-none tracking-[-0.03em]">
+                    ${plan.price}
+                  </span>
+                  <span className="text-[11px] sm:text-[14px] text-muted-foreground">/ month</span>
+                </div>
+                <p className="m-0 text-[11px] sm:text-[13px] font-bold text-green-500">
+                  {TRIAL_PERIOD_DAYS}-day free trial
+                </p>
 
-                  {/* Trial Badge */}
-                  <div className="mt-3">
-                    <span className="inline-flex items-center px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-sm font-medium rounded-full">
-                      {TRIAL_PERIOD_DAYS}-day free trial
-                    </span>
-                  </div>
-                </CardHeader>
-
-                <CardContent className="flex-1 flex flex-col">
-                  {/* Features List */}
-                  <ul className="space-y-3 mb-8 flex-1">
-                    {plan.features.map((feature, index) => (
-                      <li key={index} className="flex items-start gap-3">
-                        <div className="flex-shrink-0 w-5 h-5 mt-0.5 rounded-full bg-primary/10 flex items-center justify-center">
-                          <Check className="w-3 h-3 text-primary" />
-                        </div>
-                        <span className="text-slate-600 dark:text-slate-300">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* CTA Button */}
-                  <Button
-                    size="lg"
-                    className={`w-full min-h-[48px] text-base font-semibold ${
-                      popular
-                        ? 'bg-primary hover:bg-primary/90'
-                        : 'bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-slate-200 dark:text-slate-900'
+                {/* CTA */}
+                <Link
+                  href="/login?mode=signup"
+                  className={`mt-[26px] mb-[30px] block rounded-[11px] px-2 py-[9px] text-center text-[12px] font-bold transition-[transform,background-color,border-color] duration-200 hover:-translate-y-px sm:p-3 sm:text-[14px] ${popular
+                    ? 'border border-primary bg-primary text-primary-foreground hover:bg-primary/90'
+                    : 'border border-foreground/[0.12] bg-foreground/[0.03] text-foreground hover:border-foreground/20 hover:bg-foreground/[0.06]'
                     }`}
-                    asChild
-                  >
-                    <Link href="/login?mode=signup">
-                      Start Free Trial
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
+                >
+                  Start free trial
+                </Link>
+
+                {/* Feature list */}
+                <p className="m-0 mb-4 text-[11px] sm:text-[13px] text-muted-foreground">
+                  {featIntro}
+                </p>
+                <ul className="m-0 flex list-none flex-col gap-[14px] p-0">
+                  {plan.features.map((feature) => (
+                    <li
+                      key={feature}
+                      className="flex items-center gap-[7px] text-[12px] text-foreground/90 sm:gap-2.5 sm:text-[14px]"
+                    >
+                      <span className="inline-flex h-[15px] w-[15px] shrink-0 items-center justify-center sm:h-[17px] sm:w-[17px]">
+                        <Check
+                          className={`h-3.5 w-3.5 ${popular ? 'text-primary' : 'text-green-500'}`}
+                          strokeWidth={3}
+                        />
+                      </span>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
             );
           })}
         </div>
 
-        {/* Bottom Note */}
-        <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-8">
+        <motion.p
+          {...reveal(0.2)}
+          className="mt-[30px] m-0 text-center text-[13px] text-muted-foreground"
+        >
           No credit card required to start. Cancel anytime.
-        </p>
+        </motion.p>
       </div>
     </section>
   );

@@ -4,16 +4,24 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Logo } from '@/components/logo';
 import { Button } from '@/components/ui/button';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, MoveRight } from 'lucide-react';
 
 export function LandingNav() {
   const [scrolled, setScrolled] = useState(false);
+  // Keep the nav hidden through the pinned hero animation so it stays focused,
+  // then reveal it once the 2nd section starts entering the viewport.
+  const [visible, setVisible] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      const y = window.scrollY;
+      setScrolled(y > 20);
+      // Show by default at the top, hide while the pinned hero animation plays
+      // (first ~100vh of scroll), then bring it back for the rest of the page.
+      setVisible(y < window.innerHeight * 0.08 || y > window.innerHeight);
     };
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -28,17 +36,20 @@ export function LandingNav() {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
-          ? 'bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm shadow-md'
+      <nav className={`fixed top-0 left-0 right-0 z-10 transition-all duration-500 ${visible
+        ? 'translate-y-0 opacity-100'
+        : '-translate-y-full opacity-0 pointer-events-none'
+        } ${scrolled
+          ? 'bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm'
           : 'bg-transparent'
         }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16 md:h-20">
+        <div className="max-w-[95vw] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative flex justify-between w-full items-center h-16 md:h-20">
             {/* Logo */}
             <Logo />
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
+            {/* Desktop Navigation (centered) */}
+            <div className="hidden md:flex items-center space-x-8 absolute left-1/2 -translate-x-1/2">
               <button
                 onClick={() => scrollToSection('features')}
                 className="text-sm font-medium hover:text-primary transition-colors"
@@ -57,11 +68,13 @@ export function LandingNav() {
               >
                 How It Works
               </button>
-              <Button variant="outline" size="sm" asChild>
+            </div>
+
+            {/* Desktop Auth Buttons */}
+            <div className="hidden md:flex items-center space-x-4">
+              <Button variant="default" size="sm" className='rounded-full'>
                 <Link href="/login">Sign In</Link>
-              </Button>
-              <Button size="sm" asChild>
-                <Link href="/login?mode=signup">Get Started</Link>
+                <MoveRight />
               </Button>
             </div>
 
