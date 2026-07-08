@@ -200,38 +200,8 @@ export default function ProfilePage() {
     }
   };
 
-  const handleManageSubscription = async () => {
-    if (!userProfile?.stripeCustomerId) return;
-
-    setLoadingPortal(true);
-    try {
-      const response = await fetch('/api/stripe/create-portal', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ stripeCustomerId: userProfile.stripeCustomerId }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to open subscription management');
-      }
-
-      if (data.url) {
-        window.location.href = data.url;
-      }
-    } catch (error) {
-      console.error('Error opening portal:', error);
-      toast({
-        title: 'Error',
-        description: error instanceof Error ? error.message : 'Failed to open subscription management',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoadingPortal(false);
-    }
+  const handleManageSubscription = () => {
+    router.push('/onboarding/plan?manage=true');
   };
 
   // Helper to format trial end date
@@ -371,7 +341,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Subscription Section */}
-            {userProfile?.stripeSubscriptionId && (
+            {userProfile?.subscription?.plan && (
               <div className="border-t border-slate-200 dark:border-slate-700 pt-6 space-y-4">
                 <div className="flex items-center gap-2">
                   <CreditCard className="w-4 h-4 text-slate-400" />
@@ -388,22 +358,21 @@ export default function ProfilePage() {
                       </span>
                     </div>
                     <span className={`text-xs px-2 py-1 rounded-full ${
-                      userProfile.stripeSubscriptionStatus === 'active'
-                        ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
-                        : userProfile.stripeSubscriptionStatus === 'trialing'
+                      userProfile.subscription?.trialEnd &&
+                      new Date(userProfile.subscription.trialEnd) > new Date()
                         ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                        : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+                        : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
                     }`}>
-                      {userProfile.stripeSubscriptionStatus === 'trialing'
+                      {userProfile.subscription?.trialEnd &&
+                      new Date(userProfile.subscription.trialEnd) > new Date()
                         ? 'Trial'
-                        : userProfile.stripeSubscriptionStatus === 'active'
-                        ? 'Active'
-                        : userProfile.stripeSubscriptionStatus}
+                        : 'Active'}
                     </span>
                   </div>
 
                   {/* Trial Status */}
-                  {userProfile.stripeSubscriptionStatus === 'trialing' && userProfile.subscription?.trialEnd && (
+                  {userProfile.subscription?.trialEnd &&
+                  new Date(userProfile.subscription.trialEnd) > new Date() && (
                     <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
                       <Calendar className="w-4 h-4" />
                       <span>Trial ends: {formatTrialEnd(userProfile.subscription.trialEnd)}</span>

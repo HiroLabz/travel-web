@@ -1,85 +1,96 @@
+'use client';
+
+import { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'motion/react';
 
 export function HeroSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Track scroll progress across the tall section. The card sits in a sticky
+  // wrapper, so this progress (0 → 1) plays out while the card is pinned.
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end end'],
+  });
+
+  // Expand the inset card to a full-bleed hero. Everything finishes a little
+  // before the pin releases (0 → 0.7) so the card holds "full screen" briefly
+  // before the next section scrolls up.
+  const paddingTop = useTransform(scrollYProgress, [0, 0.7], [80, 0]);
+  const paddingX = useTransform(scrollYProgress, [0, 0.7], [28, 0]);
+  const paddingBottom = useTransform(scrollYProgress, [0, 0.7], [28, 0]);
+  const borderRadius = useTransform(scrollYProgress, [0, 0.7], [40, 0]);
+  const maxWidth = useTransform(scrollYProgress, [0, 0.7], [2000, 4000]);
+  const imageScale = useTransform(scrollYProgress, [0, 0.7], [1, 1.08]);
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-      {/* Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-indigo-600 dark:from-blue-900 dark:to-indigo-950" />
+    // Tall track: the extra height is the scroll distance the expansion plays over.
+    <section ref={sectionRef} className="relative h-[155vh]">
+      {/* Pinned viewport-height stage */}
+      <motion.div
+        style={{ paddingTop, paddingLeft: paddingX, paddingRight: paddingX, paddingBottom }}
+        className="sticky top-0 h-screen w-full overflow-hidden"
+      >
+        {/* Inset hero card */}
+        <motion.div
+          style={{ borderRadius, maxWidth }}
+          className="relative mx-auto h-full w-full overflow-hidden"
+        >
+          {/* Background photo */}
+          <motion.img
+            src="/assets/bg-image.jpg"
+            alt="Coastal lake and mountains"
+            style={{ scale: imageScale }}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
 
-      {/* Decorative Pattern Overlay */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
-          backgroundSize: '32px 32px'
-        }} />
-      </div>
-
-      {/* Content */}
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-8">
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white mb-6 md:mb-8 animate-in fade-in slide-in-from-bottom duration-500">
-          <Sparkles className="w-4 h-4" />
-          <span className="text-sm font-medium">AI-Powered Travel Planning</span>
-        </div>
-
-        {/* Headline */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4 md:mb-6 leading-[1.1] animate-in fade-in slide-in-from-bottom duration-700 delay-100">
-          Plan Your Dream<br />Adventures Together
-        </h1>
-
-        {/* Subheadline */}
-        <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-8 md:mb-12 max-w-3xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom duration-700 delay-200">
-          The collaborative travel binder modern families trust.
-          Create itineraries, organize documents, and share your journey, all in one place.
-        </p>
-
-        {/* CTAs */}
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-12 md:mb-16 animate-in fade-in slide-in-from-bottom duration-700 delay-300">
-          <Button
-            size="lg"
-            className="bg-white text-blue-600 hover:bg-white/90 px-8 py-6 text-base sm:text-lg shadow-xl min-h-[52px]"
-            asChild
-          >
-            <Link href="/login?mode=signup">
-              Start Planning Free
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Link>
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="border-2 border-white text-white bg-white/10 px-8 py-6 text-base sm:text-lg min-h-[52px]"
-            onClick={() => {
-              const element = document.getElementById('features');
-              element?.scrollIntoView({ behavior: 'smooth' });
+          {/* Diagonal teal gradient overlay */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'linear-gradient(105deg, hsl(184 48% 14%) 0%, color-mix(in srgb, hsl(184 48% 14%) 82%, transparent) 38%, color-mix(in srgb, hsl(184 48% 14%) 30%, transparent) 62%, transparent 82%)',
             }}
-          >
-            Explore Features
-          </Button>
-        </div>
+          />
 
-        {/* Social Proof */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-white/80 animate-in fade-in slide-in-from-bottom duration-700 delay-400">
-          <div className="flex -space-x-2">
-            {[1, 2, 3, 4].map((i) => (
-              <div
-                key={i}
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-400 border-2 border-white flex items-center justify-center text-white font-semibold text-sm"
+          {/* Text block */}
+          <div className="absolute inset-0 flex flex-col justify-center px-[clamp(24px,5vw,72px)] max-w-full md:max-w-[60%]">
+            <h1 className="m-0 text-white font-normal text-[clamp(40px,5.2vw,78px)] leading-[1.05] tracking-[-0.01em] duration-700">
+              Plan Your{' '}<br />
+              <strong className="font-bold">Dream Adventures</strong>
+              <br />
+              Together
+            </h1>
+            <p className="mt-7 text-white/80 text-[clamp(16px,1.15vw,19px)] leading-relaxed max-w-[35em] delay-100">
+              The collaborative travel binder modern families trust. Create
+              itineraries, organize documents, and share your journey, all in one
+              place.
+            </p>
+            <div className="flex flex-row gap-4 mt-9 duration-700 delay-200">
+              <Button
+                size="lg"
+                className="rounded-full bg-white  hover:bg-white/90 px-8 py-6 text-base font-semibold shadow-xl min-h-[52px]"
+                asChild
               >
-                {i === 1 && '😊'}
-                {i === 2 && '👨'}
-                {i === 3 && '👩'}
-                {i === 4 && '🌍'}
-              </div>
-            ))}
+                <Link href="/login?mode=signup">Get Started</Link>
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="rounded-full border-[1.5px] border-white/85 text-white bg-transparent hover:bg-white/10 hover:text-white px-8 py-6 text-base font-semibold min-h-[52px]"
+                onClick={() => {
+                  const element = document.getElementById('features');
+                  element?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                Learn More
+              </Button>
+            </div>
           </div>
-          <p className="text-sm">
-            Trusted by <strong className="font-semibold">10,000+</strong> families
-          </p>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

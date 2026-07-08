@@ -70,24 +70,8 @@ export default function DashboardPage() {
     router.push('/login');
   };
 
-  const handleBilling = async () => {
-    if (!userProfile?.stripeCustomerId) {
-      toast({ title: 'No billing account found', variant: 'destructive' });
-      return;
-    }
-    try {
-      const response = await fetch('/api/stripe/create-portal', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ stripeCustomerId: userProfile.stripeCustomerId }),
-      });
-      const data = await response.json();
-      if (data.url) {
-        window.location.href = data.url;
-      }
-    } catch (error) {
-      console.error('Error opening billing portal:', error);
-    }
+  const handleBilling = () => {
+    router.push('/onboarding/plan?manage=true');
   };
 
   const getInitials = (name: string | null | undefined) => {

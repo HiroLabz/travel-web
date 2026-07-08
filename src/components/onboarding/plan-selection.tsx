@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { PlanCard } from './plan-card';
-import { STRIPE_PLANS, StripePlanId } from '@/lib/stripe-config';
+import { STRIPE_PLANS, StripePlanId, TRIAL_PERIOD_DAYS } from '@/lib/stripe-config';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { doc, updateDoc } from 'firebase/firestore';
@@ -11,11 +12,14 @@ import { db } from '@/lib/firebase';
 export function PlanSelection() {
   const [selectedPlan, setSelectedPlan] = useState<StripePlanId | null>(null);
   const [loading, setLoading] = useState(false);
-  const { user, userProfile } = useAuth();
+  const { user } = useAuth();
   const { toast } = useToast();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const manageMode = searchParams.get('manage') === 'true';
 
   const handleSelectPlan = async (planId: StripePlanId) => {
-    if (!user) {
+    if (!user || !db) {
       toast({
         title: 'Please sign in',
         description: 'You need to be signed in to select a plan.',
@@ -28,49 +32,55 @@ export function PlanSelection() {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/stripe/create-checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const now = new Date();
+      const nowIso = now.toISOString();
+      const userRef = doc(db, 'users', user.uid);
+
+      if (manageMode) {
+        // Existing subscriber changing plan — update the plan only.
+        await updateDoc(userRef, {
+          'subscription.plan': planId,
+          'subscription.updatedAt': nowIso,
+        });
+        toast({
+          title: 'Plan updated',
+          description: `You're now on the ${STRIPE_PLANS[planId].name} plan.`,
+        });
+        router.push('/profile');
+        return;
+      }
+
+      // New subscriber — start a 7-day trial window locally.
+      // NOTE: we deliberately do NOT write any stripe* fields here. Those are
+      // billing-authoritative markers that only trusted server code (a real
+      // payment webhook) may ever set. Writing them from the client would let a
+      // user forge a paid/trialing billing state. Entitlements and trial UI are
+      // derived from `subscription.plan` and `subscription.trialEnd` instead.
+      const trialEnd = new Date(
+        now.getTime() + TRIAL_PERIOD_DAYS * 24 * 60 * 60 * 1000
+      ).toISOString();
+      const creditResetDate = new Date(
+        now.getTime() + 30 * 24 * 60 * 60 * 1000
+      ).toISOString();
+
+      await updateDoc(userRef, {
+        onboardingStep: 'group',
+        subscription: {
+          plan: planId,
+          planStartDate: nowIso,
+          creditsUsed: 0,
+          creditResetDate,
+          trialEnd,
+          updatedAt: nowIso,
         },
-        body: JSON.stringify({
-          planId,
-          userId: user.uid,
-          userEmail: user.email,
-          stripeCustomerId: userProfile?.stripeCustomerId,
-        }),
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to create checkout session');
-      }
-
-      // Save customer ID to Firestore before redirecting
-      if (data.customerId && db && !userProfile?.stripeCustomerId) {
-        try {
-          const userRef = doc(db, 'users', user.uid);
-          await updateDoc(userRef, {
-            stripeCustomerId: data.customerId,
-          });
-        } catch (e) {
-          console.error('Failed to save customer ID:', e);
-          // Continue anyway - it will be saved after checkout
-        }
-      }
-
-      // Redirect to Stripe Checkout
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        throw new Error('No checkout URL received');
-      }
+      router.push('/onboarding/group');
     } catch (error) {
-      console.error('Error creating checkout:', error);
+      console.error('Error selecting plan:', error);
       toast({
         title: 'Error',
-        description: error instanceof Error ? error.message : 'Failed to start checkout',
+        description: error instanceof Error ? error.message : 'Failed to select plan',
         variant: 'destructive',
       });
       setLoading(false);
