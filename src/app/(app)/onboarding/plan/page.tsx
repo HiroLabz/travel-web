@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
-import { Loader2, Plane } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { OnboardingProgress } from '@/components/onboarding/onboarding-progress';
 import { PlanSelection } from '@/components/onboarding/plan-selection';
 
@@ -30,41 +30,45 @@ export default function PlanSelectionPage() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-white" />
+      <div className="flex min-h-screen items-center justify-center bg-muted/40 dark:bg-[#050C1C]">
+        <Loader2 className="h-8 w-8 animate-spin text-secondary-500" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 py-12 px-4">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="bg-white/10 p-2 rounded-lg">
-              <Plane className="w-6 h-6 text-white" />
-            </div>
-            <span className="font-bold text-xl text-white">WanderNest</span>
-          </div>
-          <h1 className="text-3xl font-bold text-white mb-3">
-            Choose your adventure plan
-          </h1>
-          <p className="text-blue-200 max-w-lg mx-auto">
-            Start with a 7-day free trial. No credit card charged until after your trial ends.
-          </p>
+    <div className="relative h-screen w-full overflow-y-auto overflow-x-hidden bg-muted/40 py-12 px-4 lg:overflow-hidden dark:bg-[linear-gradient(165deg,#050C1C_0%,#08122A_55%,#050C1C_100%)]">
+      {/* Ambient glows (dark only, matching design) */}
+      <div
+        className="pointer-events-none absolute -top-40 left-1/2 hidden h-[520px] w-[900px] -translate-x-1/2 rounded-full dark:block"
+        style={{ background: 'radial-gradient(ellipse, rgba(16,89,210,.30) 0%, transparent 68%)' }}
+      />
+      <div
+        className="pointer-events-none absolute -bottom-40 -right-32 hidden h-[520px] w-[520px] rounded-full dark:block"
+        style={{ background: 'radial-gradient(circle, rgba(84,111,166,.20) 0%, transparent 70%)' }}
+      />
+
+      <div className="relative max-w-4xl mx-auto">
+        {/* Progress */}
+        <div className='max-w-[600px] mx-auto'>
+          <OnboardingProgress currentStep="plan" />
         </div>
 
-        {/* Progress */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-2xl py-4 px-6 mb-8 mx-auto max-w-md">
-          <OnboardingProgress currentStep="plan" />
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-[28px] font-bold tracking-tight text-foreground mb-1.5">
+            Choose your adventure plan
+          </h1>
+          <p className="text-[15px] leading-relaxed text-muted-foreground max-w-full mx-auto">
+            Start with a 7-day free trial. No credit card charged until after your trial ends.
+          </p>
         </div>
 
         {/* Plan Selection */}
         <PlanSelection />
 
         {/* Footer note */}
-        <p className="text-center text-blue-200/70 text-sm mt-8">
+        <p className="text-center text-muted-foreground text-sm mt-8">
           You can change or cancel your plan anytime from your profile settings.
         </p>
       </div>

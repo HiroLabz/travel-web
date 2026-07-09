@@ -7,14 +7,25 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Combobox } from '@/components/ui/combobox';
-import { Loader2, Users, Plane, Sparkles, Globe, MapPin, Banknote, Clock, CheckCircle } from 'lucide-react';
+import {
+  Loader2,
+  Users,
+  Globe,
+  MapPin,
+  Banknote,
+  Clock,
+  Info,
+  Sparkles,
+} from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { COUNTRIES, CURRENCIES, TIME_FORMAT_OPTIONS } from '@/lib/constants';
 import { OnboardingProgress } from '@/components/onboarding/onboarding-progress';
+import { SuccessOverlay } from '@/components/onboarding/success-overlay';
 import type { TimeFormat } from '@/types';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { AnimatePresence } from 'motion/react';
 
 function GroupCreationForm() {
   const [name, setName] = useState('');
@@ -23,6 +34,7 @@ function GroupCreationForm() {
   const [currency, setCurrency] = useState('');
   const [timeFormat, setTimeFormat] = useState<TimeFormat>('24h');
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState<string | null>(null);
   const { user, userProfile, loading: authLoading } = useAuth();
   const { toast } = useToast();
   const router = useRouter();
@@ -86,79 +98,66 @@ function GroupCreationForm() {
         }
       }
 
-      toast({ title: 'Welcome to WanderNest!', description: 'Your travel group is ready.' });
-      router.push('/dashboard');
+      // transitions.dev success feedback — hold the overlay briefly, then navigate.
+      setSuccess('Welcome to WanderNest!');
+      setTimeout(() => {
+        router.push('/dashboard');
+      }, 1100);
     }
   };
 
   // Show loading while checking auth
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-white mx-auto mb-4" />
-        </div>
+      <div className="flex min-h-screen items-center justify-center bg-muted/40 dark:bg-[#050C1C]">
+        <Loader2 className="h-8 w-8 animate-spin text-secondary-500" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden max-h-[90vh] overflow-y-auto">
-        {/* Header with welcome message */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-8 py-6 text-white sticky top-0 z-10">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="bg-white/20 p-2 rounded-lg">
-              <Plane className="w-6 h-6" />
-            </div>
-            <span className="font-bold text-xl">WanderNest</span>
-          </div>
+    <div className="relative h-screen w-full overflow-y-auto overflow-x-hidden bg-muted/40 lg:overflow-hidden dark:bg-[linear-gradient(165deg,#070d1c_0%,#08122A_50%,#050C1C_100%)]">
+      <AnimatePresence>
+        {success && <SuccessOverlay label={success} />}
+      </AnimatePresence>
 
-          {/* Progress indicator */}
-          <div className="mb-4">
-            <OnboardingProgress currentStep="group" />
-          </div>
+      {/* Ambient glows (dark only, matching design) */}
+      <div
+        className="pointer-events-none absolute -top-40 left-1/2 hidden h-[520px] w-[900px] -translate-x-1/2 rounded-full dark:block"
+        style={{ background: 'radial-gradient(ellipse, rgba(16,89,210,.30) 0%, transparent 68%)' }}
+      />
+      <div
+        className="pointer-events-none absolute -bottom-40 -right-32 hidden h-[520px] w-[520px] rounded-full dark:block"
+        style={{ background: 'radial-gradient(circle, rgba(84,111,166,.20) 0%, transparent 70%)' }}
+      />
 
-          {/* Plan confirmation (derived from plan/trial, not from billing status) */}
-          {userProfile?.subscription?.plan && (
-            <div className="flex items-center gap-2 bg-white/10 rounded-lg px-3 py-2 mb-4">
-              <CheckCircle className="w-4 h-4 text-emerald-300" />
-              <span className="text-sm">
-                {userProfile.subscription.trialEnd &&
-                new Date(userProfile.subscription.trialEnd) > new Date()
-                  ? 'Free trial active'
-                  : 'Plan active'}
-              </span>
-            </div>
-          )}
+      {/* Center the form when it fits; scroll (never clip) when it's taller than the viewport */}
+      <div className="relative flex min-h-full items-center justify-center px-4 py-8 sm:px-6">
+        <div className="w-full max-w-[600px]">
+          <OnboardingProgress currentStep="group" className="mb-6" />
 
-          <h1 className="text-2xl font-bold mb-2">Almost there!</h1>
-          <p className="text-blue-100">
+          <h1 className="text-[28px] font-bold tracking-tight text-center text-foreground">Almost there!</h1>
+          <p className="mt-1.5 text-[15px] leading-relaxed text-center text-muted-foreground">
             Create your first travel group to start planning amazing adventures.
           </p>
-        </div>
 
-        {/* Form */}
-        <div className="p-8">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="bg-blue-100 dark:bg-blue-900/50 p-3 rounded-full">
-              <Users className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-            </div>
-            <div>
-              <h2 className="font-semibold text-slate-900 dark:text-slate-100">
-                Create your Travel Group
-              </h2>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                A travel group is where you and your companions plan trips together.
-              </p>
-            </div>
-          </div>
+          <form onSubmit={handleSubmit}>
+            {/* Group details card */}
+            <div className="mt-5 rounded-2xl border border-border bg-card p-5">
+              <div className="mb-4 flex items-center gap-3">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-secondary-100 dark:bg-secondary-900/40">
+                  <Users className="h-6 w-6 text-secondary-600 dark:text-secondary-400" />
+                </span>
+                <div>
+                  <div className="text-base font-semibold text-foreground">Create your travel group</div>
+                  <p className="text-[12.5px] leading-snug text-muted-foreground">
+                    Where you and your companions plan trips together.
+                  </p>
+                </div>
+              </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Travel Group Name */}
-            <div>
-              <Label htmlFor="group-name" className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                Travel Group Name
+              <Label htmlFor="group-name" className="mb-2 block text-[13px] font-semibold text-foreground">
+                Travel group name
               </Label>
               <Input
                 id="group-name"
@@ -166,28 +165,33 @@ function GroupCreationForm() {
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g., The Adventure Crew, Smith Family"
                 required
-                className="mt-2"
+                className="h-12"
                 disabled={loading}
               />
-              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-                You can add family members and friends to this group later.
-              </p>
+              <div className="mt-2.5 flex items-center gap-1.5">
+                <Info className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                <span className="text-xs text-muted-foreground">
+                  You can add family members and friends to this group later.
+                </span>
+              </div>
             </div>
 
-            {/* Regional Settings Section */}
-            <div className="border-t border-slate-200 dark:border-slate-700 pt-6">
-              <div className="flex items-center gap-2 mb-4">
-                <Globe className="w-4 h-4 text-slate-500" />
-                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Regional Settings</span>
-                <span className="text-xs text-slate-400">(optional)</span>
+            {/* Regional settings card */}
+            <div className="mt-4 rounded-2xl border border-border bg-card p-5">
+              <div className="mb-4 flex items-center gap-2">
+                <Globe className="h-[19px] w-[19px] text-muted-foreground" />
+                <span className="text-[15px] font-semibold text-foreground">Regional settings</span>
+                <span className="rounded-full bg-muted px-2.5 py-0.5 text-[11.5px] text-muted-foreground">
+                  Optional
+                </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
                 {/* Country of Origin */}
                 <div>
-                  <Label className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-2">
-                    <Globe className="w-3.5 h-3.5 text-slate-400" />
-                    Country of Origin
+                  <Label className="mb-2 flex items-center gap-1.5 text-[12.5px] font-semibold text-foreground">
+                    <Globe className="h-4 w-4 text-muted-foreground" />
+                    Country of origin
                   </Label>
                   <Combobox
                     options={COUNTRIES}
@@ -197,14 +201,15 @@ function GroupCreationForm() {
                     searchPlaceholder="Search countries..."
                     emptyText="No country found."
                     disabled={loading}
+                    className="h-12"
                   />
                 </div>
 
                 {/* City of Origin */}
                 <div>
-                  <Label htmlFor="city-origin" className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-2">
-                    <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                    City of Origin
+                  <Label htmlFor="city-origin" className="mb-2 flex items-center gap-1.5 text-[12.5px] font-semibold text-foreground">
+                    <MapPin className="h-4 w-4 text-muted-foreground" />
+                    City of origin
                   </Label>
                   <Input
                     id="city-origin"
@@ -213,14 +218,15 @@ function GroupCreationForm() {
                     onChange={(e) => setCityOfOrigin(e.target.value)}
                     placeholder="e.g., New York"
                     disabled={loading}
+                    className="h-12"
                   />
                 </div>
 
                 {/* Preferred Currency */}
                 <div>
-                  <Label className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-2">
-                    <Banknote className="w-3.5 h-3.5 text-slate-400" />
-                    Preferred Currency
+                  <Label className="mb-2 flex items-center gap-1.5 text-[12.5px] font-semibold text-foreground">
+                    <Banknote className="h-4 w-4 text-muted-foreground" />
+                    Preferred currency
                   </Label>
                   <Combobox
                     options={CURRENCIES}
@@ -230,14 +236,15 @@ function GroupCreationForm() {
                     searchPlaceholder="Search currencies..."
                     emptyText="No currency found."
                     disabled={loading}
+                    className="h-12"
                   />
                 </div>
 
                 {/* Time Format */}
                 <div>
-                  <Label className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-2">
-                    <Clock className="w-3.5 h-3.5 text-slate-400" />
-                    Time Format
+                  <Label className="mb-2 flex items-center gap-1.5 text-[12.5px] font-semibold text-foreground">
+                    <Clock className="h-4 w-4 text-muted-foreground" />
+                    Time format
                   </Label>
                   <div className="flex gap-2">
                     {TIME_FORMAT_OPTIONS.map((option) => (
@@ -246,14 +253,14 @@ function GroupCreationForm() {
                         type="button"
                         onClick={() => setTimeFormat(option.value)}
                         disabled={loading}
-                        className={`flex-1 px-3 py-2 text-sm font-medium rounded-lg border transition-all ${
-                          timeFormat === option.value
-                            ? 'bg-blue-50 dark:bg-blue-900/50 border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-300 ring-1 ring-blue-500'
-                            : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600'
-                        }`}
+                        aria-pressed={timeFormat === option.value}
+                        className={`flex-1 rounded-xl border px-3 py-2 text-center transition-all ${timeFormat === option.value
+                          ? 'border-secondary-500 bg-secondary-50 text-secondary-700 ring-1 ring-secondary-500 dark:border-secondary-400 dark:bg-secondary-900/40 dark:text-secondary-300'
+                          : 'border-border bg-card text-muted-foreground hover:bg-accent'
+                          }`}
                       >
-                        <div className="text-xs">{option.label}</div>
-                        <div className="text-[10px] text-slate-400 dark:text-slate-500">{option.example}</div>
+                        <div className="text-[13px] font-semibold">{option.label}</div>
+                        <div className="text-[10.5px] opacity-70">{option.example}</div>
                       </button>
                     ))}
                   </div>
@@ -264,17 +271,17 @@ function GroupCreationForm() {
             <Button
               type="submit"
               disabled={loading || !name.trim()}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
+              className="mt-5 h-[52px] w-full rounded-2xl bg-gradient-to-b from-secondary-500 to-brand-500 text-base font-semibold text-white shadow-lg shadow-secondary-500/30 transition hover:brightness-110"
             >
               {loading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                   Creating your group...
                 </>
               ) : (
                 <>
-                  <Sparkles className="mr-2 h-4 w-4" />
-                  Get Started
+                  <Sparkles className="mr-2 h-5 w-5" />
+                  Get started
                 </>
               )}
             </Button>
@@ -289,8 +296,8 @@ export default function GroupPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-white" />
+        <div className="flex min-h-screen items-center justify-center bg-muted/40 dark:bg-[#050C1C]">
+          <Loader2 className="h-8 w-8 animate-spin text-secondary-500" />
         </div>
       }
     >
