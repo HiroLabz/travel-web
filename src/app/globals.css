@@ -342,3 +342,35 @@
     transition: none !important;
   }
 }
+
+/* ==========================================================
+   Transitions.dev — Modal open/close (create-trip-modal.tsx)
+   Driven by Radix's data-state attribute, not a manual state
+   machine — Presence already waits for the transition to end
+   before unmounting.
+   ========================================================== */
+.create-trip-modal-content {
+  /* translate(-50%, -50%) keeps the dialog centered (left/top: 50%) —
+     baked into the same transform so it isn't clobbered by the scale below. */
+  transform-origin: center;
+  transform: translate(-50%, -50%) scale(0.96);
+  opacity: 0;
+  transition:
+    transform 250ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 250ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.create-trip-modal-content[data-state='open'] {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+.create-trip-modal-content[data-state='closed'] {
+  transform: translate(-50%, -50%) scale(0.96);
+  opacity: 0;
+  transition-duration: 150ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .create-trip-modal-content {
+    transition: none !important;
+  }
+}

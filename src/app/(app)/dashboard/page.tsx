@@ -10,12 +10,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useState, useEffect } from 'react';
 import { auth, db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import DashboardClient from '@/components/dashboard-client';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { PWAInstallBanner } from '@/components/pwa-install-banner';
 import { getAvatarUrl } from '@/lib/avatar';
 import { CreditsIndicator } from '@/components/credits-indicator';
+import { CreateTripModal } from '@/components/create-trip-modal';
+import { Logo } from '@/components/logo';
 
 interface HouseholdOption {
   id: string;
@@ -25,9 +27,20 @@ interface HouseholdOption {
 export default function DashboardPage() {
   const { household, userProfile, loading, activeHouseholdId, setActiveHouseholdId } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { toast } = useToast();
   const [showMenu, setShowMenu] = useState(false);
   const [households, setHouseholds] = useState<HouseholdOption[]>([]);
+  const [createOpen, setCreateOpen] = useState(false);
+
+  // Deep link / bookmark support for the old /create route, which now
+  // redirects here with ?create=1 instead of rendering its own page.
+  useEffect(() => {
+    if (searchParams.get('create') === '1') {
+      setCreateOpen(true);
+      router.replace('/dashboard', { scroll: false });
+    }
+  }, [searchParams, router]);
 
   // Fetch all household names for the switcher
   useEffect(() => {
@@ -109,12 +122,7 @@ export default function DashboardPage() {
         <div className="max-w-6xl mx-auto flex justify-between items-center mb-6">
           {/* Logo Area */}
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-900/30">
-              <Compass className="w-6 h-6 text-white" />
-            </div>
-            <span className="font-bold text-lg tracking-tight text-foreground">
-              WanderNest <span className="text-muted-foreground font-medium">1.1</span>
-            </span>
+            <Logo />
           </div>
 
           {/* Credits & User Menu */}
@@ -216,7 +224,6 @@ export default function DashboardPage() {
 
         {/* Hero */}
         <div className="max-w-6xl mx-auto relative rounded-3xl border border-border overflow-hidden bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900 px-6 py-10 sm:px-12 sm:py-14 mb-10">
-          <Globe className="absolute -right-10 -top-16 w-72 h-72 sm:w-80 sm:h-80 text-white opacity-10 pointer-events-none" />
           <div className="relative">
             <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full mb-5">
               <Users className="w-4 h-4 text-white/80" />
@@ -230,11 +237,9 @@ export default function DashboardPage() {
             <p className="text-sm sm:text-base text-white/70 max-w-md mb-7">
               Explore the world&apos;s most hidden gems with personalized itineraries and local insights.
             </p>
-            <Link href="/create">
-              <Button size="lg" className="gap-2">
-                <Plus className="w-5 h-5" /> Start planning
-              </Button>
-            </Link>
+            <Button size="lg" className="gap-2" onClick={() => setCreateOpen(true)}>
+              <Plus className="w-5 h-5" /> Start planning
+            </Button>
           </div>
         </div>
       </div>
@@ -256,6 +261,8 @@ export default function DashboardPage() {
         </div>
         <DashboardClient />
       </div>
+
+      <CreateTripModal open={createOpen} onOpenChange={setCreateOpen} />
     </div>
   );
 }
