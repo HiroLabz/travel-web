@@ -1,57 +1,119 @@
 'use client';
 
-import { Check, CreditCard, Users } from 'lucide-react';
+import { Check } from 'lucide-react';
+import { motion, useReducedMotion } from 'motion/react';
 import { cn } from '@/lib/utils';
+import { ONBOARDING_STEPS, type OnboardingStepId } from '@/lib/onboarding-steps';
 
 interface OnboardingProgressProps {
-  currentStep: 'plan' | 'group';
+  currentStep: OnboardingStepId;
+  /** Optional classes for the <nav> wrapper (e.g. width / alignment overrides). */
+  className?: string;
 }
 
-const steps = [
-  { id: 'plan', name: 'Choose Plan', icon: CreditCard },
-  { id: 'group', name: 'Create Group', icon: Users },
-];
-
-export function OnboardingProgress({ currentStep }: OnboardingProgressProps) {
-  const currentIndex = steps.findIndex((s) => s.id === currentStep);
+export function OnboardingProgress({ currentStep, className }: OnboardingProgressProps) {
+  const currentIndex = ONBOARDING_STEPS.findIndex((s) => s.id === currentStep);
+  const reduceMotion = useReducedMotion();
 
   return (
-    <nav aria-label="Progress" className="mb-8">
-      <ol className="flex items-center justify-center gap-4">
-        {steps.map((step, index) => {
-          const isCompleted = index < currentIndex;
-          const isCurrent = step.id === currentStep;
-          const Icon = step.icon;
+    <nav aria-label="Progress" className={cn('flex w-full items-center', className)}>
+      {ONBOARDING_STEPS.map((step, index) => {
+        const isCompleted = index < currentIndex;
+        const isCurrent = step.id === currentStep;
+        const Icon = step.icon;
+        // The connector that follows this step is "filled" once the step is done.
+        const connectorFilled = index < currentIndex;
+        const subLabel = isCompleted ? 'Completed' : isCurrent ? 'In progress' : 'Up next';
 
-          return (
-            <li key={step.id} className="flex items-center">
-              <div
+        return (
+          <div key={step.id} className="contents">
+            {/* Step */}
+            <div
+              className="flex w-28 shrink-0 flex-col items-center gap-2"
+              aria-current={isCurrent ? 'step' : undefined}
+            >
+              <span
                 className={cn(
-                  'flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors',
-                  isCompleted && 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400',
-                  isCurrent && 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400',
-                  !isCompleted && !isCurrent && 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500'
+                  'flex h-[42px] w-[42px] items-center justify-center rounded-full transition-colors',
+                  isCompleted && 'bg-success-500 shadow-lg shadow-success-500/40',
+                  isCurrent &&
+                    'border-2 border-secondary-500 bg-secondary-100 ring-4 ring-secondary-500/15 dark:border-secondary-400 dark:bg-secondary-900/40',
+                  !isCompleted && !isCurrent && 'border-2 border-border bg-muted'
                 )}
               >
                 {isCompleted ? (
-                  <Check className="h-4 w-4" />
+                  <Check className="h-5 w-5 text-white" strokeWidth={3} />
                 ) : (
-                  <Icon className="h-4 w-4" />
+                  <Icon
+                    className={cn(
+                      'h-[21px] w-[21px]',
+                      isCurrent ? 'text-secondary-600 dark:text-secondary-300' : 'text-muted-foreground'
+                    )}
+                  />
                 )}
-                <span>{step.name}</span>
-              </div>
-              {index < steps.length - 1 && (
+              </span>
+              <div className="text-center">
                 <div
                   className={cn(
-                    'mx-2 h-0.5 w-8',
-                    isCompleted ? 'bg-emerald-500' : 'bg-slate-200 dark:bg-slate-700'
+                    'text-sm font-semibold',
+                    isCompleted || isCurrent ? 'text-foreground' : 'text-muted-foreground'
                   )}
+                >
+                  {step.name}
+                </div>
+                <div
+                  className={cn(
+                    'text-[11.5px]',
+                    isCompleted && 'text-success-600 dark:text-success-400',
+                    isCurrent && 'text-secondary-600 dark:text-secondary-400',
+                    !isCompleted && !isCurrent && 'text-muted-foreground/70'
+                  )}
+                >
+                  {subLabel}
+                </div>
+              </div>
+            </div>
+
+            {/* Connector — animated line, aligned to the badge centers */}
+            {index < ONBOARDING_STEPS.length - 1 && (
+              <svg
+                className="mx-[-8px] mb-[42px] h-[3px] flex-1 overflow-visible"
+                viewBox="0 0 48 3"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                {/* Track */}
+                <line
+                  x1="0"
+                  y1="1.5"
+                  x2="48"
+                  y2="1.5"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  className="stroke-border"
                 />
-              )}
-            </li>
-          );
-        })}
-      </ol>
+                {/* Real-time animated progress line */}
+                <motion.line
+                  x1="0"
+                  y1="1.5"
+                  x2="48"
+                  y2="1.5"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  className="stroke-success-500"
+                  initial={{ pathLength: reduceMotion ? (connectorFilled ? 1 : 0) : 0 }}
+                  animate={{ pathLength: connectorFilled ? 1 : 0 }}
+                  transition={
+                    reduceMotion
+                      ? { duration: 0 }
+                      : { duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.1 }
+                  }
+                />
+              </svg>
+            )}
+          </div>
+        );
+      })}
     </nav>
   );
 }

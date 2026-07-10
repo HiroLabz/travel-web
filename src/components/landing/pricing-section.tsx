@@ -98,7 +98,7 @@ export function PricingSection() {
                   </span>
                   <span className="text-[11px] sm:text-[14px] text-muted-foreground">/ month</span>
                 </div>
-                <p className="m-0 text-[11px] sm:text-[13px] font-bold text-green-500">
+                <p className="m-0 text-[11px] sm:text-[13px] font-bold text-success-500">
                   {TRIAL_PERIOD_DAYS}-day free trial
                 </p>
 
@@ -125,7 +125,7 @@ export function PricingSection() {
                     >
                       <span className="inline-flex h-[15px] w-[15px] shrink-0 items-center justify-center sm:h-[17px] sm:w-[17px]">
                         <Check
-                          className={`h-3.5 w-3.5 ${popular ? 'text-primary' : 'text-green-500'}`}
+                          className={`h-3.5 w-3.5 ${popular ? 'text-primary' : 'text-success-500'}`}
                           strokeWidth={3}
                         />
                       </span>

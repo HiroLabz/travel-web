@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 
 export function CTASection() {
   return (
-    <section className="py-16 md:py-24 lg:py-32 bg-gradient-to-br from-blue-600 to-indigo-600 dark:from-blue-900 dark:to-indigo-900 relative overflow-hidden">
+    <section className="py-16 md:py-24 lg:py-32 bg-gradient-to-br from-secondary-500 to-secondary-700 dark:from-secondary-800 dark:to-secondary-900 relative overflow-hidden">
       {/* Decorative Elements */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0" style={{
@@ -22,7 +22,8 @@ export function CTASection() {
         </p>
         <Button
           size="lg"
-          className="w-full sm:w-auto bg-white text-blue-600 hover:bg-white/90 px-8 sm:px-10 py-6 text-base sm:text-lg shadow-2xl min-h-[52px]"
+          /* bg-white / hover:bg-white/90 intentional: solid button over colored gradient */
+          className="w-full sm:w-auto bg-white text-secondary-500 hover:bg-white/90 px-8 sm:px-10 py-6 text-base sm:text-lg shadow-2xl min-h-[52px]"
           asChild
         >
           <Link href="/login?mode=signup">

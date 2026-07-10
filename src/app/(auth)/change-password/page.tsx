@@ -90,9 +90,9 @@ export default function ChangePasswordPage() {
   }
 
   return (
-    <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row h-[600px]">
-      {/* Left Side - Visual */}
-      <div className="w-full md:w-1/2 bg-slate-900 text-white p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
+    <div className="w-full max-w-4xl bg-card rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row h-[600px]">
+      {/* Left Side - Visual (fixed dark decorative panel; text-white is intentional over-dark) */}
+      <div className="w-full md:w-1/2 bg-neutral-dark-900 text-white p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full opacity-20">
           <Image src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=1000" alt="Travel" fill style={{ objectFit: 'cover' }} />
         </div>
@@ -105,14 +105,14 @@ export default function ChangePasswordPage() {
           <h1 className="text-4xl font-bold leading-tight mb-4">
             Secure your <span className="text-primary">account</span>
           </h1>
-          <p className="text-slate-400">
+          <p className="text-neutral-dark-300">
             Please create a new password to continue. Your account security is important to us.
           </p>
         </div>
 
         <div className="relative z-10 flex gap-2 items-center">
-          <Shield className="w-5 h-5 text-emerald-400" />
-          <p className="text-xs text-slate-400 py-1.5">Your password is encrypted and secure</p>
+          <Shield className="w-5 h-5 text-success-400" />
+          <p className="text-xs text-neutral-dark-300 py-1.5">Your password is encrypted and secure</p>
         </div>
       </div>
 
@@ -120,27 +120,27 @@ export default function ChangePasswordPage() {
       <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
         <div className="max-w-xs mx-auto w-full">
           <div className="flex items-center gap-2 mb-4">
-            <div className="bg-amber-100 p-2 rounded-full">
-              <Lock className="w-5 h-5 text-amber-600" />
+            <div className="bg-warning-100 p-2 rounded-full">
+              <Lock className="w-5 h-5 text-warning-600" />
             </div>
           </div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">
+          <h2 className="text-2xl font-bold text-foreground mb-2">
             Change Your Password
           </h2>
-          <p className="text-slate-500 mb-8 text-sm">
+          <p className="text-muted-foreground mb-8 text-sm">
             Your account was created with a temporary password. Please set a new password to continue.
           </p>
 
           <form onSubmit={handleChangePassword} className="space-y-4">
             <div>
-              <Label htmlFor="current-password" className="block text-xs font-medium text-slate-700 mb-1">
+              <Label htmlFor="current-password" className="block text-xs font-medium text-foreground mb-1">
                 Temporary Password
               </Label>
               <Input
                 id="current-password"
                 type="password"
                 required
-                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:outline-none"
+                className="w-full p-3 bg-muted border border-input rounded-lg text-sm focus:ring-2 focus:ring-primary focus:outline-none"
                 placeholder="Enter temporary password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
@@ -148,14 +148,14 @@ export default function ChangePasswordPage() {
             </div>
 
             <div>
-              <Label htmlFor="new-password" className="block text-xs font-medium text-slate-700 mb-1">
+              <Label htmlFor="new-password" className="block text-xs font-medium text-foreground mb-1">
                 New Password
               </Label>
               <Input
                 id="new-password"
                 type="password"
                 required
-                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:outline-none"
+                className="w-full p-3 bg-muted border border-input rounded-lg text-sm focus:ring-2 focus:ring-primary focus:outline-none"
                 placeholder="Enter new password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
@@ -163,20 +163,20 @@ export default function ChangePasswordPage() {
             </div>
 
             <div>
-              <Label htmlFor="confirm-password" className="block text-xs font-medium text-slate-700 mb-1">
+              <Label htmlFor="confirm-password" className="block text-xs font-medium text-foreground mb-1">
                 Confirm New Password
               </Label>
               <Input
                 id="confirm-password"
                 type="password"
                 required
-                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:outline-none"
+                className="w-full p-3 bg-muted border border-input rounded-lg text-sm focus:ring-2 focus:ring-primary focus:outline-none"
                 placeholder="Confirm new password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
               {newPassword && confirmPassword && newPassword !== confirmPassword && (
-                <p className="text-xs text-red-500 mt-1">Passwords do not match</p>
+                <p className="text-xs text-destructive mt-1">Passwords do not match</p>
               )}
             </div>
 

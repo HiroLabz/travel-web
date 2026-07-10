@@ -35,7 +35,7 @@ export default function OnboardingPage() {
 
   // Show loading while determining where to redirect
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-dark-900 via-secondary-900 to-neutral-dark-900 flex items-center justify-center">
       <Loader2 className="h-8 w-8 animate-spin text-white" />
     </div>
   );
