@@ -48,3 +48,5 @@ firestore-debug.log
 .claude/
 CLAUDE.MD
 docs/
+.zoogentic
+.superpowers

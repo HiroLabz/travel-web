@@ -1,27 +1,23 @@
 'use client';
 
-import { Check, CreditCard, Users, type LucideIcon } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { motion, useReducedMotion } from 'motion/react';
 import { cn } from '@/lib/utils';
+import { ONBOARDING_STEPS, type OnboardingStepId } from '@/lib/onboarding-steps';
 
 interface OnboardingProgressProps {
-  currentStep: 'plan' | 'group';
+  currentStep: OnboardingStepId;
   /** Optional classes for the <nav> wrapper (e.g. width / alignment overrides). */
   className?: string;
 }
 
-const steps: { id: 'plan' | 'group'; name: string; icon: LucideIcon }[] = [
-  { id: 'plan', name: 'Choose plan', icon: CreditCard },
-  { id: 'group', name: 'Create group', icon: Users },
-];
-
 export function OnboardingProgress({ currentStep, className }: OnboardingProgressProps) {
-  const currentIndex = steps.findIndex((s) => s.id === currentStep);
+  const currentIndex = ONBOARDING_STEPS.findIndex((s) => s.id === currentStep);
   const reduceMotion = useReducedMotion();
 
   return (
     <nav aria-label="Progress" className={cn('flex w-full items-center', className)}>
-      {steps.map((step, index) => {
+      {ONBOARDING_STEPS.map((step, index) => {
         const isCompleted = index < currentIndex;
         const isCurrent = step.id === currentStep;
         const Icon = step.icon;
@@ -79,7 +75,7 @@ export function OnboardingProgress({ currentStep, className }: OnboardingProgres
             </div>
 
             {/* Connector — animated line, aligned to the badge centers */}
-            {index < steps.length - 1 && (
+            {index < ONBOARDING_STEPS.length - 1 && (
               <svg
                 className="mx-[-8px] mb-[42px] h-[3px] flex-1 overflow-visible"
                 viewBox="0 0 48 3"
