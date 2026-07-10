@@ -14,9 +14,9 @@ export function CreditsIndicator() {
   const percentage = (remaining / maxCredits) * 100;
 
   const getColorClass = () => {
-    if (percentage > 50) return 'text-emerald-600 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-900/30';
-    if (percentage > 20) return 'text-amber-600 bg-amber-50 dark:text-amber-400 dark:bg-amber-900/30';
-    return 'text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-900/30';
+    if (percentage > 50) return 'text-success-accent bg-success-soft';
+    if (percentage > 20) return 'text-warning-accent bg-warning-soft';
+    return 'text-destructive-accent bg-destructive-soft';
   };
 
   return (
