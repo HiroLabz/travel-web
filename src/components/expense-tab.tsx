@@ -648,13 +648,13 @@ export function ExpenseTab({
     <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-200 mb-2">Expense Tracking</h2>
-        <p className="text-slate-500 dark:text-slate-400">Track and manage your trip expenses.</p>
+        <h2 className="text-2xl font-bold text-foreground mb-2">Expense tracking</h2>
+        <p className="text-muted-foreground">Track spending and split costs across the group.</p>
       </div>
 
       {/* Actions Bar */}
       <div className="flex flex-wrap gap-3 mb-6">
-        <Button onClick={() => { resetNewExpense(); setIsAddDialogOpen(true); }} className="gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700">
+        <Button onClick={() => { resetNewExpense(); setIsAddDialogOpen(true); }} className="gap-2 bg-brand-500 hover:bg-brand-600 rounded-lg">
           <Plus className="w-4 h-4" />
           Add Expense
         </Button>
@@ -663,7 +663,7 @@ export function ExpenseTab({
           variant="outline"
           onClick={handleExportToExcel}
           disabled={expenses.length === 0}
-          className="gap-2"
+          className="gap-2 border-border text-muted-foreground hover:bg-muted rounded-lg"
         >
           <Download className="w-4 h-4" />
           <span className="hidden sm:inline">Export</span>
@@ -674,7 +674,7 @@ export function ExpenseTab({
             variant={viewMode === 'list' ? 'default' : 'outline'}
             size="sm"
             onClick={() => setViewMode('list')}
-            className={viewMode === 'list' ? 'gap-1.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700' : 'gap-1.5'}
+            className={viewMode === 'list' ? 'gap-1.5 bg-brand-500 hover:bg-brand-600 rounded-lg' : 'gap-1.5 border-border text-muted-foreground hover:bg-muted rounded-lg'}
           >
             <List className="w-4 h-4" />
             <span className="hidden sm:inline">List</span>
@@ -683,7 +683,7 @@ export function ExpenseTab({
             variant={viewMode === 'chart' ? 'default' : 'outline'}
             size="sm"
             onClick={() => setViewMode('chart')}
-            className={viewMode === 'chart' ? 'gap-1.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700' : 'gap-1.5'}
+            className={viewMode === 'chart' ? 'gap-1.5 bg-brand-500 hover:bg-brand-600 rounded-lg' : 'gap-1.5 border-border text-muted-foreground hover:bg-muted rounded-lg'}
           >
             <PieChartIcon className="w-4 h-4" />
             <span className="hidden sm:inline">Charts</span>
@@ -694,18 +694,18 @@ export function ExpenseTab({
       {/* Summary Card */}
       <button
         onClick={() => setIsBreakdownDialogOpen(true)}
-        className="w-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white mb-6 text-left hover:from-blue-600 hover:to-blue-700 transition-all cursor-pointer"
+        className="w-full bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900 rounded-xl p-6 text-white mb-6 text-left hover:opacity-95 transition-all cursor-pointer"
       >
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-blue-100 text-sm">
+            <p className="text-white/70 text-sm">
               {isFilterActive ? 'Filtered Expenses' : 'Total Expenses'}
             </p>
             <p className="text-3xl font-bold">
               {formatCurrency(isFilterActive ? filteredTotalExpenses : totalExpenses, currency)}
             </p>
             {isFilterActive && (
-              <p className="text-blue-200 text-xs mt-1">
+              <p className="text-white/60 text-xs mt-1">
                 of {formatCurrency(totalExpenses, currency)} total
               </p>
             )}
@@ -716,27 +716,27 @@ export function ExpenseTab({
         </div>
         <div className="mt-4 flex gap-4 text-sm">
           <div>
-            <span className="text-blue-100">
+            <span className="text-white/70">
               {isFilterActive ? filteredExpenses.length : expenses.length}
             </span>
-            <span className="text-blue-200 ml-1">
+            <span className="text-white/60 ml-1">
               {isFilterActive ? `of ${expenses.length} expenses` : 'expenses'}
             </span>
           </div>
           <div>
-            <span className="text-blue-100">{expensesByCategory.length}</span>
-            <span className="text-blue-200 ml-1">categories</span>
+            <span className="text-white/70">{expensesByCategory.length}</span>
+            <span className="text-white/60 ml-1">categories</span>
           </div>
         </div>
-        <p className="text-blue-200 text-xs mt-3">Tap for breakdown details</p>
+        <p className="text-white/60 text-xs mt-3">Tap for breakdown details</p>
       </button>
 
       {/* Chart View */}
       {viewMode === 'chart' && expenses.length > 0 && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           {/* By Category Pie Chart */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-            <h3 className="font-semibold text-slate-800 dark:text-slate-200 mb-4">By Category</h3>
+          <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
+            <h3 className="font-semibold text-foreground mb-4">By Category</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -761,8 +761,8 @@ export function ExpenseTab({
           </div>
 
           {/* By Member Bar Chart */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-            <h3 className="font-semibold text-slate-800 dark:text-slate-200 mb-4">By Member</h3>
+          <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
+            <h3 className="font-semibold text-foreground mb-4">By Member</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={expensesByMember} layout="vertical">
@@ -786,7 +786,7 @@ export function ExpenseTab({
       {viewMode === 'list' && (
         <div className="flex flex-wrap gap-3 mb-4">
           <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-slate-400" />
+            <Filter className="w-4 h-4 text-muted-foreground" />
             <Select value={filterCategory} onValueChange={setFilterCategory}>
               <SelectTrigger className="w-40">
                 <SelectValue placeholder="Category" />
@@ -820,9 +820,9 @@ export function ExpenseTab({
         <div className="space-y-2">
           {filteredExpenses.length === 0 ? (
             <div className="text-center py-12">
-              <Receipt className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
-              <p className="text-slate-500 dark:text-slate-400">No expenses yet</p>
-              <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">
+              <Receipt className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground">No expenses yet</p>
+              <p className="text-sm text-muted-foreground mt-1">
                 Add your first expense or capture a receipt
               </p>
             </div>
@@ -835,7 +835,7 @@ export function ExpenseTab({
               return (
                 <div
                   key={expense.id}
-                  className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden"
+                  className="bg-card rounded-lg border border-border overflow-hidden"
                 >
                   {/* Main Content */}
                   <div className="p-3 sm:p-4">
@@ -851,12 +851,12 @@ export function ExpenseTab({
                         {/* Top row: Description + Amount */}
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0 flex-1">
-                            <p className="font-medium text-slate-800 dark:text-slate-200 truncate text-sm sm:text-base">
+                            <p className="font-medium text-foreground truncate text-sm sm:text-base">
                               {expense.description}
                             </p>
                             {/* Meta info row */}
                             <div className="flex items-center gap-2 mt-1 flex-wrap">
-                              <span className="text-xs text-slate-500 dark:text-slate-400">
+                              <span className="text-xs text-muted-foreground">
                                 {format(parseISO(expense.date), 'MMM d')}
                               </span>
                               <span
@@ -872,7 +872,7 @@ export function ExpenseTab({
                               {hasSplits && (
                                 <button
                                   onClick={() => setExpandedExpenseId(isExpanded ? null : expense.id)}
-                                  className="inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
+                                  className="inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded-full bg-brand-subtle text-brand-500 hover:opacity-80 transition-colors"
                                 >
                                   <Split className="w-3 h-3" />
                                   {expense.splits?.length}
@@ -895,10 +895,10 @@ export function ExpenseTab({
                                       name: expense.receiptName || expense.description
                                     });
                                   }}
-                                  className="inline-flex items-center justify-center p-0.5 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                                  className="inline-flex items-center justify-center p-0.5 rounded hover:bg-muted transition-colors"
                                   title="View receipt"
                                 >
-                                  <FileText className="w-3 h-3 text-blue-500" />
+                                  <FileText className="w-3 h-3 text-brand-500" />
                                 </button>
                               )}
                             </div>
@@ -911,7 +911,7 @@ export function ExpenseTab({
                               <img
                                 src={avatarUrl}
                                 alt={expense.assignedToName}
-                                className="w-6 h-6 rounded-full object-cover border border-slate-200 dark:border-slate-600 flex-shrink-0"
+                                className="w-6 h-6 rounded-full object-cover border border-border flex-shrink-0"
                               />
                             )}
                             {/* Stacked Avatars for splits */}
@@ -925,12 +925,12 @@ export function ExpenseTab({
                                       key={idx}
                                       src={splitAvatarUrl}
                                       alt={split.memberName}
-                                      className="w-5 h-5 rounded-full object-cover border-2 border-white dark:border-slate-800"
+                                      className="w-5 h-5 rounded-full object-cover border-2 border-card"
                                     />
                                   );
                                 })}
                                 {expense.splits.length > 3 && (
-                                  <div className="w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-600 border-2 border-white dark:border-slate-800 flex items-center justify-center text-[10px] font-medium text-slate-600 dark:text-slate-300">
+                                  <div className="w-5 h-5 rounded-full bg-muted border-2 border-card flex items-center justify-center text-[10px] font-medium text-muted-foreground">
                                     +{expense.splits.length - 3}
                                   </div>
                                 )}
@@ -939,11 +939,11 @@ export function ExpenseTab({
 
                             {/* Amount - shows original currency with home currency conversion */}
                             <div className="text-right">
-                              <p className="font-semibold text-slate-800 dark:text-slate-200 text-sm sm:text-base whitespace-nowrap">
+                              <p className="font-semibold text-foreground text-sm sm:text-base whitespace-nowrap">
                                 {formatCurrency(expense.amount, expense.originalCurrency || expense.currency)}
                               </p>
                               {expense.originalCurrency && expense.originalCurrency !== currency && (
-                                <p className="text-[10px] text-slate-400 whitespace-nowrap">
+                                <p className="text-[10px] text-muted-foreground whitespace-nowrap">
                                   ≈ {formatCurrency(getAmountInHomeCurrency(expense), currency)}
                                 </p>
                               )}
@@ -955,7 +955,7 @@ export function ExpenseTab({
                                 <Button
                                   variant="ghost"
                                   size="icon"
-                                  className="h-8 w-8 text-slate-400 hover:text-slate-600"
+                                  className="h-8 w-8 text-muted-foreground hover:text-foreground"
                                 >
                                   <MoreVertical className="w-4 h-4" />
                                 </Button>
@@ -982,10 +982,10 @@ export function ExpenseTab({
 
                   {/* Expanded Split Details */}
                   {isExpanded && hasSplits && expense.splits && (
-                    <div className="border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 px-4 py-3">
+                    <div className="border-t border-border bg-muted px-4 py-3">
                       <div className="flex items-center gap-2 mb-2">
-                        <Split className="w-4 h-4 text-blue-600" />
-                        <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                        <Split className="w-4 h-4 text-brand-500" />
+                        <span className="text-sm font-medium text-foreground">
                           {expense.splitType === 'equal' ? 'Split Equally' : 'Custom Split'}
                         </span>
                       </div>
@@ -999,13 +999,13 @@ export function ExpenseTab({
                                 <img
                                   src={splitAvatarUrl}
                                   alt={split.memberName}
-                                  className="w-6 h-6 rounded-full object-cover border border-slate-200 dark:border-slate-600"
+                                  className="w-6 h-6 rounded-full object-cover border border-border"
                                 />
-                                <span className="text-sm text-slate-700 dark:text-slate-300">
+                                <span className="text-sm text-foreground">
                                   {split.memberName}
                                 </span>
                               </div>
-                              <span className="text-sm font-medium text-slate-800 dark:text-slate-200">
+                              <span className="text-sm font-medium text-foreground">
                                 {formatCurrency(split.amount, currency)}
                               </span>
                             </div>

@@ -45,7 +45,7 @@ export function TripBottomNav({ activeTab, onTabChange, showInfoTab }: TripBotto
   const visibleMoreTabs = MORE_TABS.filter(t => !t.internationalOnly || showInfoTab);
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 safe-area-inset-bottom">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-card border-t border-border safe-area-inset-bottom">
       <div className="flex items-center justify-around h-16 px-2">
         {PRIMARY_TABS.map((tab) => (
           <button
@@ -54,8 +54,8 @@ export function TripBottomNav({ activeTab, onTabChange, showInfoTab }: TripBotto
             className={cn(
               "flex flex-col items-center justify-center flex-1 h-full px-1 transition-colors",
               activeTab === tab.id
-                ? "text-blue-600 dark:text-blue-400"
-                : "text-slate-500 dark:text-slate-400"
+                ? "text-brand-500"
+                : "text-muted-foreground"
             )}
           >
             <tab.icon className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -70,8 +70,8 @@ export function TripBottomNav({ activeTab, onTabChange, showInfoTab }: TripBotto
               className={cn(
                 "flex flex-col items-center justify-center flex-1 h-full px-1 transition-colors",
                 isMoreActive
-                  ? "text-blue-600 dark:text-blue-400"
-                  : "text-slate-500 dark:text-slate-400"
+                  ? "text-brand-500"
+                  : "text-muted-foreground"
               )}
             >
               <MoreHorizontal className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -89,7 +89,7 @@ export function TripBottomNav({ activeTab, onTabChange, showInfoTab }: TripBotto
                 onClick={() => onTabChange(tab.id)}
                 className={cn(
                   "flex items-center gap-3 cursor-pointer",
-                  activeTab === tab.id && "bg-slate-100 dark:bg-slate-700"
+                  activeTab === tab.id && "bg-muted"
                 )}
               >
                 <tab.icon className="w-4 h-4" />

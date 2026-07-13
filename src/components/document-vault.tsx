@@ -931,16 +931,18 @@ export function DocumentVault({ tripId, householdId, tripStartDate, tripEndDate,
   });
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-      <div className="flex justify-between items-center mb-6">
-        <h3 className="text-lg font-semibold text-slate-800 flex items-center">
-          <Folder className="w-5 h-5 mr-2 text-amber-500" />
-          Family Binder
+    <div className="bg-card p-6 rounded-xl shadow-sm border border-border">
+      <div className="flex justify-between items-center mb-6 flex-wrap gap-3">
+        <h3 className="text-lg font-semibold text-foreground flex items-center gap-3">
+          <span className="w-9 h-9 rounded-md bg-warning-soft text-warning-accent flex items-center justify-center flex-shrink-0">
+            <Folder className="w-5 h-5" />
+          </span>
+          Family binder
         </h3>
         <div className="flex items-center space-x-2">
           <Dialog open={isFolderDialogOpen} onOpenChange={setIsFolderDialogOpen}>
             <DialogTrigger asChild>
-              <Button size="sm" variant="outline" className="flex items-center">
+              <Button size="sm" variant="outline" className="flex items-center border-border text-muted-foreground hover:bg-muted rounded-lg">
                 <FolderPlus className="w-4 h-4 mr-1.5" />
                 New Folder
               </Button>
@@ -954,7 +956,7 @@ export function DocumentVault({ tripId, householdId, tripStartDate, tripEndDate,
           </Dialog>
           <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
             <DialogTrigger asChild>
-              <Button size="sm" className="flex items-center bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700">
+              <Button size="sm" className="flex items-center bg-brand-500 hover:bg-brand-600 rounded-lg">
                 <Upload className="w-4 h-4 mr-1.5" />
                 Add Doc
               </Button>
@@ -1008,10 +1010,10 @@ export function DocumentVault({ tripId, householdId, tripStartDate, tripEndDate,
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-3 py-1 text-xs font-medium rounded-full capitalize whitespace-nowrap ${
+            className={`px-3 py-1.5 text-xs font-semibold rounded-full capitalize whitespace-nowrap transition-colors ${
               activeTab === tab
-                ? 'bg-slate-100 text-slate-900 border border-slate-200'
-                : 'text-slate-500 hover:bg-slate-50'
+                ? 'bg-brand-subtle text-brand-500'
+                : 'text-muted-foreground hover:bg-muted'
             }`}
           >
             {tab}
@@ -1022,27 +1024,27 @@ export function DocumentVault({ tripId, householdId, tripStartDate, tripEndDate,
       {loadingDocs && <div className="flex justify-center py-8"><Loader2 className="animate-spin" /></div>}
       
       {!loadingDocs && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {filteredDocs.map((d) => (
             <div
               key={d.id}
-              className="p-3 border border-slate-100 rounded-lg hover:border-blue-200 hover:shadow-sm transition-all group bg-slate-50/50 cursor-pointer"
+              className="p-3 border border-border rounded-lg hover:border-brand-300 hover:shadow-sm transition-all group bg-muted/50 cursor-pointer"
               onClick={() => setPreviewDocument(d)}
             >
                 <div className="flex items-start justify-between">
                 <div className="flex items-center space-x-3">
-                    <div className="bg-white p-2 rounded-md shadow-sm">
+                    <div className="bg-card p-2 rounded-md shadow-sm">
                     {getIcon(d.folder)}
                     </div>
                     <div className="overflow-hidden">
-                    <span className="text-sm font-medium text-slate-800 truncate max-w-[150px] block hover:text-blue-600">{d.name}</span>
-                     <p className="text-xs text-slate-500">{d.size} • {d.folder}{d.assignedToName && d.assignedToName !== 'All' && <span className="ml-1 text-blue-500">• {d.assignedToName}</span>}</p>
+                    <span className="text-sm font-medium text-foreground truncate max-w-[150px] block group-hover:text-brand-500">{d.name}</span>
+                     <p className="text-xs text-muted-foreground">{d.size} • {d.folder}{d.assignedToName && d.assignedToName !== 'All' && <span className="ml-1 text-brand-500">• {d.assignedToName}</span>}</p>
                     </div>
                 </div>
                 <div onClick={(e) => e.stopPropagation()}>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <button className="text-slate-400 hover:text-slate-600 p-1 rounded-md hover:bg-slate-100 transition-colors">
+                      <button className="text-muted-foreground hover:text-foreground p-1 rounded-md hover:bg-muted transition-colors">
                         <MoreVertical className="w-4 h-4" />
                       </button>
                     </DropdownMenuTrigger>
@@ -1086,7 +1088,7 @@ export function DocumentVault({ tripId, householdId, tripStartDate, tripEndDate,
             </div>
             ))}
             {filteredDocs.length === 0 && (
-            <div className="col-span-full text-center py-8 text-slate-400 text-sm">
+            <div className="col-span-full text-center py-8 text-muted-foreground text-sm">
                 {searchQuery ? 'No documents match your search.' : 'No documents in this folder.'}
             </div>
             )}

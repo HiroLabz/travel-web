@@ -50,8 +50,8 @@ export function ChecklistItemRow({
         "flex items-center gap-2 p-2 rounded-lg border transition-all min-h-[44px]",
         "touch-manipulation",
         item.completed
-          ? "bg-slate-50 border-slate-200 dark:bg-slate-800/50 dark:border-slate-700"
-          : "bg-white border-slate-200 hover:border-indigo-200 dark:bg-slate-900 dark:border-slate-700 dark:hover:border-indigo-600"
+          ? "bg-muted border-border"
+          : "bg-card border-border hover:border-brand-300"
       )}
     >
       {/* Checkbox - Large touch target */}
@@ -60,8 +60,8 @@ export function ChecklistItemRow({
         className={cn(
           "w-6 h-6 rounded border-2 flex items-center justify-center transition-colors flex-shrink-0",
           item.completed
-            ? "bg-emerald-500 border-emerald-500 dark:bg-emerald-600 dark:border-emerald-600"
-            : "border-slate-300 hover:border-indigo-400 dark:border-slate-600 dark:hover:border-indigo-500"
+            ? "bg-success-accent border-success-accent"
+            : "border-border hover:border-brand-400"
         )}
         aria-label={item.completed ? "Mark as incomplete" : "Mark as complete"}
       >
@@ -86,7 +86,7 @@ export function ChecklistItemRow({
           }}
           className={cn(
             "flex-1 text-sm cursor-text select-none",
-            item.completed && "text-slate-400 line-through dark:text-slate-500"
+            item.completed && "text-muted-foreground line-through"
           )}
         >
           {item.text}
@@ -98,24 +98,24 @@ export function ChecklistItemRow({
         {onMoveUp && (
           <button
             onClick={onMoveUp}
-            className="p-1.5 hover:bg-slate-100 rounded dark:hover:bg-slate-700"
+            className="p-1.5 hover:bg-muted rounded"
             aria-label="Move up"
           >
-            <ChevronUp className="w-4 h-4 text-slate-400" />
+            <ChevronUp className="w-4 h-4 text-muted-foreground" />
           </button>
         )}
         {onMoveDown && (
           <button
             onClick={onMoveDown}
-            className="p-1.5 hover:bg-slate-100 rounded dark:hover:bg-slate-700"
+            className="p-1.5 hover:bg-muted rounded"
             aria-label="Move down"
           >
-            <ChevronDown className="w-4 h-4 text-slate-400" />
+            <ChevronDown className="w-4 h-4 text-muted-foreground" />
           </button>
         )}
         <button
           onClick={onDelete}
-          className="p-1.5 hover:bg-red-50 rounded text-slate-400 hover:text-red-500 dark:hover:bg-red-900/30"
+          className="p-1.5 hover:bg-destructive-soft rounded text-muted-foreground hover:text-destructive"
           aria-label="Delete item"
         >
           <X className="w-4 h-4" />

@@ -20,7 +20,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
-import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import {
   DollarSign,
   Pencil,
@@ -142,15 +141,17 @@ export function BudgetCard({
   };
 
   return (
-    <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 h-full">
+    <div className="bg-card p-6 rounded-xl shadow-sm border border-border h-full">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <div className="flex items-center justify-between mb-4">
-          <CollapsibleTrigger className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-              <DollarSign className="w-4 h-4 text-emerald-500" />
-              Estimated Budget
+          <CollapsibleTrigger className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+            <div className="w-9 h-9 rounded-md bg-success-soft text-success-accent flex items-center justify-center flex-shrink-0">
+              <DollarSign className="w-5 h-5" />
+            </div>
+            <h3 className="text-lg font-semibold text-foreground">
+              Budget
             </h3>
-            <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+            <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${isOpen ? 'rotate-180' : ''}`} />
           </CollapsibleTrigger>
           <div className="flex items-center gap-2">
             {budgetEditMode ? (
@@ -158,7 +159,7 @@ export function BudgetCard({
                 size="sm"
                 variant="ghost"
                 onClick={() => setBudgetEditMode(false)}
-                className="text-slate-500"
+                className="text-muted-foreground"
               >
                 <Check className="w-4 h-4 mr-1" />
                 Done
@@ -168,7 +169,7 @@ export function BudgetCard({
                 size="sm"
                 variant="ghost"
                 onClick={() => setBudgetEditMode(true)}
-                className="text-emerald-600"
+                className="text-success-accent"
               >
                 <Pencil className="w-4 h-4 mr-1" />
                 Edit
@@ -179,33 +180,41 @@ export function BudgetCard({
 
         <CollapsibleContent>
           {/* Total */}
-          <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg p-3 mb-4">
-            <div className="text-xs text-slate-500">Total Estimated</div>
-            <div className="text-2xl font-bold text-emerald-700">
+          <div className="mb-5">
+            <div className="text-xs text-muted-foreground">Total estimated</div>
+            <div className="text-3xl font-bold text-foreground mt-0.5">
               {formatCurrency(totalBudget, currency)}
             </div>
           </div>
 
-          {/* Chart or Empty State */}
+          {/* Category breakdown or Empty State */}
           {budgetChartData.length > 0 ? (
-            <div className="h-32 w-full mb-4">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={budgetChartData}>
-                  <XAxis dataKey="name" tick={{ fontSize: 9 }} interval={0} />
-                  <Tooltip
-                    contentStyle={{ fontSize: '12px' }}
-                    formatter={(value: number) => [`${getCurrencySymbol(currency)}${value}`, 'Cost']}
-                  />
-                  <Bar dataKey="cost" radius={[4, 4, 0, 0]}>
-                    {budgetChartData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="flex flex-col gap-3.5 mb-4">
+              {budgetChartData.map((entry, index) => {
+                const pct = totalBudget > 0 ? Math.round((entry.cost / totalBudget) * 100) : 0;
+                return (
+                  <div key={`${entry.name}-${index}`}>
+                    <div className="flex items-center justify-between text-sm">
+                      <div className="flex items-center gap-2 text-muted-foreground font-medium">
+                        <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: entry.color }} />
+                        {entry.name}
+                      </div>
+                      <div className="font-semibold text-foreground">
+                        {getCurrencySymbol(currency)}{entry.cost.toLocaleString()}
+                      </div>
+                    </div>
+                    <div className="h-1 rounded-full bg-muted mt-1.5 overflow-hidden">
+                      <div
+                        className="h-full rounded-full"
+                        style={{ width: `${pct}%`, backgroundColor: entry.color }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           ) : (
-            <div className="text-center py-4 text-slate-400 text-sm mb-4">
+            <div className="text-center py-4 text-muted-foreground text-sm mb-4">
               No budget items yet
             </div>
           )}
@@ -214,7 +223,7 @@ export function BudgetCard({
           {budgetEditMode && budgetItems.length > 0 && (
             <div className="space-y-2 mb-4 max-h-40 overflow-y-auto">
               {budgetItems.map(item => (
-                <div key={item.id} className="flex items-center justify-between bg-slate-50 rounded-lg px-3 py-2 text-sm">
+                <div key={item.id} className="flex items-center justify-between bg-muted rounded-lg px-3 py-2 text-sm">
                   <div className="flex items-center gap-2">
                     <span
                       className="w-3 h-3 rounded-full"
@@ -226,7 +235,7 @@ export function BudgetCard({
                     <span className="font-medium">{formatCurrency(item.amount, currency)}</span>
                     <button
                       onClick={() => handleDeleteBudgetItem(item.id)}
-                      className="text-red-400 hover:text-red-600"
+                      className="text-muted-foreground hover:text-destructive"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -238,7 +247,7 @@ export function BudgetCard({
 
           {/* Add Budget Item Form */}
           {budgetEditMode && (
-            <div className="space-y-3 border-t border-slate-100 pt-4">
+            <div className="space-y-3 border-t border-border pt-4">
               <Select
                 value={newBudgetItem.categoryId}
                 onValueChange={(v) => setNewBudgetItem(prev => ({ ...prev, categoryId: v }))}
@@ -262,7 +271,7 @@ export function BudgetCard({
               </Select>
               <div className="flex gap-2">
                 <div className="relative flex-1">
-                  <DollarSign className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400" />
+                  <DollarSign className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-muted-foreground" />
                   <Input
                     type="number"
                     placeholder="Amount"

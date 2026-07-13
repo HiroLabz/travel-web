@@ -4,17 +4,22 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { TimelineItem } from '@/components/timeline';
 
 interface SortableDestinationItemProps {
   id: string;
   children: React.ReactNode;
   disabled?: boolean;
+  dotClassName?: string;
+  isLast?: boolean;
 }
 
 export function SortableDestinationItem({
   id,
   children,
   disabled = false,
+  dotClassName,
+  isLast,
 }: SortableDestinationItemProps) {
   const {
     attributes,
@@ -35,30 +40,28 @@ export function SortableDestinationItem({
       ref={setNodeRef}
       style={style}
       className={cn(
-        'relative pl-6 group',
+        'group',
         isDragging && 'opacity-50 z-50',
         !disabled && 'cursor-grab active:cursor-grabbing'
       )}
       {...attributes}
       {...(!disabled ? listeners : {})}
     >
-      {/* Drag Handle Icon - visual indicator only */}
-      {!disabled && (
-        <div
-          className={cn(
-            'absolute left-0 top-1 p-1 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors',
-            'opacity-0 group-hover:opacity-50 hover:opacity-100'
-          )}
-          aria-hidden="true"
-        >
-          <GripVertical className="w-4 h-4 text-slate-400" />
-        </div>
-      )}
-
-      {/* Timeline dot */}
-      <span className="absolute -left-[21px] top-1 h-4 w-4 rounded-full border-4 border-indigo-100 dark:border-indigo-900 bg-indigo-500 block"></span>
-
-      {children}
+      <TimelineItem dotClassName={dotClassName} isLast={isLast}>
+        {/* Drag Handle Icon - visual indicator only */}
+        {!disabled && (
+          <div
+            className={cn(
+              'absolute -left-6 top-1 p-1 rounded hover:bg-muted transition-colors',
+              'opacity-0 group-hover:opacity-50 hover:opacity-100'
+            )}
+            aria-hidden="true"
+          >
+            <GripVertical className="w-4 h-4 text-muted-foreground" />
+          </div>
+        )}
+        {children}
+      </TimelineItem>
     </div>
   );
 }

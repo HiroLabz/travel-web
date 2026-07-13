@@ -121,13 +121,13 @@ export function CountryInfo({ countries, originCountry, tripId }: CountryInfoPro
 
   if (uniqueCountries.length === 0) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-8">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-8">
         <div className="flex flex-col items-center justify-center text-center">
-          <Globe className="w-10 h-10 text-slate-300 mb-4" />
-          <h3 className="text-lg font-semibold text-slate-800 mb-2">
+          <Globe className="w-10 h-10 text-muted-foreground mb-4" />
+          <h3 className="text-lg font-semibold text-foreground mb-2">
             No Destination Countries
           </h3>
-          <p className="text-slate-500 text-sm">
+          <p className="text-muted-foreground text-sm">
             Add countries to your destinations to see travel information.
           </p>
         </div>
@@ -139,7 +139,7 @@ export function CountryInfo({ countries, originCountry, tripId }: CountryInfoPro
     <div className="space-y-6">
       {/* Country Tabs */}
       {uniqueCountries.length > 1 && (
-        <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-2">
+        <div className="bg-card rounded-xl shadow-sm border border-border p-2">
           <div className="flex flex-wrap gap-2">
             {uniqueCountries.map((country) => (
               <button
@@ -147,8 +147,8 @@ export function CountryInfo({ countries, originCountry, tripId }: CountryInfoPro
                 onClick={() => setActiveCountry(country)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
                   activeCountry === country
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                    ? 'bg-brand-500 text-white shadow-sm'
+                    : 'text-muted-foreground hover:bg-muted'
                 }`}
               >
                 <Globe className="w-4 h-4" />
@@ -164,13 +164,13 @@ export function CountryInfo({ countries, originCountry, tripId }: CountryInfoPro
 
       {/* Loading State */}
       {loading && !info && (
-        <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-12">
+        <div className="bg-card rounded-xl shadow-sm border border-border p-12">
           <div className="flex flex-col items-center justify-center text-center">
-            <Loader2 className="w-10 h-10 text-blue-500 animate-spin mb-4" />
-            <h3 className="text-lg font-semibold text-slate-800 mb-2">
+            <Loader2 className="w-10 h-10 text-brand-500 animate-spin mb-4" />
+            <h3 className="text-lg font-semibold text-foreground mb-2">
               Loading Travel Information
             </h3>
-            <p className="text-slate-500 text-sm">
+            <p className="text-muted-foreground text-sm">
               Gathering immigration, customs, and cultural information for {activeCountry}...
             </p>
           </div>
@@ -179,13 +179,13 @@ export function CountryInfo({ countries, originCountry, tripId }: CountryInfoPro
 
       {/* Error State */}
       {error && !info && (
-        <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-8">
+        <div className="bg-card rounded-xl shadow-sm border border-border p-8">
           <div className="flex flex-col items-center justify-center text-center">
-            <AlertTriangle className="w-10 h-10 text-amber-500 mb-4" />
-            <h3 className="text-lg font-semibold text-slate-800 mb-2">
+            <AlertTriangle className="w-10 h-10 text-warning-accent mb-4" />
+            <h3 className="text-lg font-semibold text-foreground mb-2">
               Unable to Load Information
             </h3>
-            <p className="text-slate-500 text-sm mb-4">{error}</p>
+            <p className="text-muted-foreground text-sm mb-4">{error}</p>
             <Button onClick={() => fetchCountryInfo(activeCountry)} variant="outline" size="sm">
               <RefreshCw className="w-4 h-4 mr-2" />
               Try Again
@@ -198,28 +198,28 @@ export function CountryInfo({ countries, originCountry, tripId }: CountryInfoPro
       {info && (
         <>
           {/* Header */}
-          <div className="bg-gradient-to-br from-blue-50 to-blue-50 p-6 rounded-xl border border-blue-100">
+          <div className="bg-card p-6 rounded-xl border border-border shadow-sm">
             <div className="flex items-start justify-between">
               <div>
                 <div className="flex items-center gap-3 mb-2">
-                  <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                    <Globe className="w-6 h-6 text-blue-600" />
+                  <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
+                    <Globe className="w-6 h-6 text-brand-500" />
                     {info.countryName}
                   </h2>
                   {cached && (
-                    <span className="text-xs font-medium text-emerald-700 bg-emerald-100 px-2 py-1 rounded-full flex items-center gap-1">
+                    <span className="text-xs font-medium text-success-accent bg-success-soft px-2 py-1 rounded-full flex items-center gap-1">
                       <CheckCircle2 className="w-3 h-3" />
                       Saved
                     </span>
                   )}
                 </div>
-                <p className="text-slate-600 max-w-2xl">{info.summary}</p>
+                <p className="text-muted-foreground max-w-2xl">{info.summary}</p>
               </div>
               <Button
                 onClick={() => fetchCountryInfo(activeCountry, true)}
                 variant="ghost"
                 size="sm"
-                className="text-slate-500 hover:text-blue-600"
+                className="text-muted-foreground hover:text-brand-500"
                 title="Regenerate information"
                 disabled={loading}
               >
@@ -231,34 +231,34 @@ export function CountryInfo({ countries, originCountry, tripId }: CountryInfoPro
           {/* Immigration & Entry */}
           <Section
             title="Immigration & Entry"
-            icon={<Plane className="w-5 h-5 text-blue-500" />}
+            icon={<Plane className="w-5 h-5 text-brand-500" />}
             expanded={expandedSections.has('immigration')}
             onToggle={() => toggleSection('immigration')}
           >
             <div className="space-y-4">
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h4 className="font-medium text-slate-800 mb-2 flex items-center gap-2">
-                  <Info className="w-4 h-4 text-blue-500" />
+              <div className="bg-brand-subtle p-4 rounded-lg">
+                <h4 className="font-medium text-foreground mb-2 flex items-center gap-2">
+                  <Info className="w-4 h-4 text-brand-500" />
                   Visa Information
                 </h4>
-                <p className="text-slate-600 text-sm">{info.immigration.visaInfo}</p>
+                <p className="text-muted-foreground text-sm">{info.immigration.visaInfo}</p>
               </div>
 
               <div>
-                <h4 className="font-medium text-slate-800 mb-2">Entry Requirements</h4>
+                <h4 className="font-medium text-foreground mb-2">Entry Requirements</h4>
                 <ul className="space-y-2">
                   {info.immigration.entryRequirements.map((req, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-sm text-slate-600">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                    <li key={idx} className="flex items-start gap-2 text-sm text-muted-foreground">
+                      <CheckCircle2 className="w-4 h-4 text-success-accent mt-0.5 flex-shrink-0" />
                       {req}
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="bg-slate-50 p-3 rounded-lg">
-                <span className="text-xs font-medium text-slate-500 uppercase">Typical Stay Duration</span>
-                <p className="text-slate-700 text-sm mt-1">{info.immigration.stayDuration}</p>
+              <div className="bg-muted p-3 rounded-lg">
+                <span className="text-xs font-medium text-muted-foreground uppercase">Typical Stay Duration</span>
+                <p className="text-foreground text-sm mt-1">{info.immigration.stayDuration}</p>
               </div>
             </div>
           </Section>
@@ -266,20 +266,20 @@ export function CountryInfo({ countries, originCountry, tripId }: CountryInfoPro
           {/* Customs */}
           <Section
             title="Customs & Restrictions"
-            icon={<ShieldCheck className="w-5 h-5 text-emerald-500" />}
+            icon={<ShieldCheck className="w-5 h-5 text-brand-500" />}
             expanded={expandedSections.has('customs')}
             onToggle={() => toggleSection('customs')}
           >
             <div className="space-y-4">
               <div>
-                <h4 className="font-medium text-red-700 mb-2 flex items-center gap-2">
+                <h4 className="font-medium text-destructive mb-2 flex items-center gap-2">
                   <XCircle className="w-4 h-4" />
                   Prohibited Items
                 </h4>
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {info.customs.prohibited.map((item, idx) => (
-                    <li key={idx} className="flex items-center gap-2 text-sm text-slate-600 bg-red-50 p-2 rounded">
-                      <span className="w-1.5 h-1.5 bg-red-400 rounded-full flex-shrink-0" />
+                    <li key={idx} className="flex items-center gap-2 text-sm text-muted-foreground bg-destructive/10 p-2 rounded">
+                      <span className="w-1.5 h-1.5 bg-destructive rounded-full flex-shrink-0" />
                       {item}
                     </li>
                   ))}
@@ -287,23 +287,23 @@ export function CountryInfo({ countries, originCountry, tripId }: CountryInfoPro
               </div>
 
               <div>
-                <h4 className="font-medium text-amber-700 mb-2 flex items-center gap-2">
+                <h4 className="font-medium text-warning-accent mb-2 flex items-center gap-2">
                   <AlertTriangle className="w-4 h-4" />
                   Restricted Items
                 </h4>
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {info.customs.restricted.map((item, idx) => (
-                    <li key={idx} className="flex items-center gap-2 text-sm text-slate-600 bg-amber-50 p-2 rounded">
-                      <span className="w-1.5 h-1.5 bg-amber-400 rounded-full flex-shrink-0" />
+                    <li key={idx} className="flex items-center gap-2 text-sm text-muted-foreground bg-warning-soft p-2 rounded">
+                      <span className="w-1.5 h-1.5 bg-warning-accent rounded-full flex-shrink-0" />
                       {item}
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="bg-slate-50 p-3 rounded-lg">
-                <span className="text-xs font-medium text-slate-500 uppercase">Duty-Free Allowance</span>
-                <p className="text-slate-700 text-sm mt-1">{info.customs.dutyFree}</p>
+              <div className="bg-muted p-3 rounded-lg">
+                <span className="text-xs font-medium text-muted-foreground uppercase">Duty-Free Allowance</span>
+                <p className="text-foreground text-sm mt-1">{info.customs.dutyFree}</p>
               </div>
             </div>
           </Section>
@@ -311,47 +311,47 @@ export function CountryInfo({ countries, originCountry, tripId }: CountryInfoPro
           {/* Cultural Norms */}
           <Section
             title="Cultural Norms"
-            icon={<Heart className="w-5 h-5 text-rose-500" />}
+            icon={<Heart className="w-5 h-5 text-brand-500" />}
             expanded={expandedSections.has('cultural')}
             onToggle={() => toggleSection('cultural')}
           >
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-slate-50 p-4 rounded-lg">
-                  <span className="text-xs font-medium text-slate-500 uppercase">Greetings</span>
-                  <p className="text-slate-700 text-sm mt-1">{info.cultural.greetings}</p>
+                <div className="bg-muted p-4 rounded-lg">
+                  <span className="text-xs font-medium text-muted-foreground uppercase">Greetings</span>
+                  <p className="text-foreground text-sm mt-1">{info.cultural.greetings}</p>
                 </div>
-                <div className="bg-slate-50 p-4 rounded-lg">
-                  <span className="text-xs font-medium text-slate-500 uppercase">Dress Code</span>
-                  <p className="text-slate-700 text-sm mt-1">{info.cultural.dressCode}</p>
+                <div className="bg-muted p-4 rounded-lg">
+                  <span className="text-xs font-medium text-muted-foreground uppercase">Dress Code</span>
+                  <p className="text-foreground text-sm mt-1">{info.cultural.dressCode}</p>
                 </div>
               </div>
 
               <div>
-                <h4 className="font-medium text-slate-800 mb-3">Do&apos;s and Don&apos;ts</h4>
+                <h4 className="font-medium text-foreground mb-3">Do&apos;s and Don&apos;ts</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {info.cultural.doAndDont
                     .filter(item => item.type === 'do')
                     .map((item, idx) => (
-                      <div key={idx} className="flex items-start gap-2 bg-emerald-50 p-3 rounded-lg">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm text-slate-700">{item.text}</span>
+                      <div key={idx} className="flex items-start gap-2 bg-success-soft p-3 rounded-lg">
+                        <CheckCircle2 className="w-4 h-4 text-success-accent mt-0.5 flex-shrink-0" />
+                        <span className="text-sm text-foreground">{item.text}</span>
                       </div>
                     ))}
                   {info.cultural.doAndDont
                     .filter(item => item.type === 'dont')
                     .map((item, idx) => (
-                      <div key={idx} className="flex items-start gap-2 bg-red-50 p-3 rounded-lg">
-                        <XCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm text-slate-700">{item.text}</span>
+                      <div key={idx} className="flex items-start gap-2 bg-destructive/10 p-3 rounded-lg">
+                        <XCircle className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0" />
+                        <span className="text-sm text-foreground">{item.text}</span>
                       </div>
                     ))}
                 </div>
               </div>
 
-              <div className="bg-amber-50 p-4 rounded-lg">
-                <span className="text-xs font-medium text-amber-700 uppercase">Tipping</span>
-                <p className="text-slate-700 text-sm mt-1">{info.cultural.tipping}</p>
+              <div className="bg-warning-soft p-4 rounded-lg">
+                <span className="text-xs font-medium text-warning-accent uppercase">Tipping</span>
+                <p className="text-foreground text-sm mt-1">{info.cultural.tipping}</p>
               </div>
             </div>
           </Section>
@@ -359,33 +359,33 @@ export function CountryInfo({ countries, originCountry, tripId }: CountryInfoPro
           {/* Practical Information */}
           <Section
             title="Practical Information"
-            icon={<Lightbulb className="w-5 h-5 text-amber-500" />}
+            icon={<Lightbulb className="w-5 h-5 text-brand-500" />}
             expanded={expandedSections.has('practical')}
             onToggle={() => toggleSection('practical')}
           >
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <InfoCard
-                icon={<Banknote className="w-4 h-4 text-emerald-500" />}
+                icon={<Banknote className="w-4 h-4 text-success-accent" />}
                 label="Currency"
                 value={info.practical.currency}
               />
               <InfoCard
-                icon={<Languages className="w-4 h-4 text-blue-500" />}
+                icon={<Languages className="w-4 h-4 text-brand-500" />}
                 label="Language"
                 value={info.practical.language}
               />
               <InfoCard
-                icon={<Phone className="w-4 h-4 text-red-500" />}
+                icon={<Phone className="w-4 h-4 text-destructive" />}
                 label="Emergency"
                 value={info.practical.emergency}
               />
               <InfoCard
-                icon={<Plug className="w-4 h-4 text-slate-500" />}
+                icon={<Plug className="w-4 h-4 text-muted-foreground" />}
                 label="Electricity"
                 value={info.practical.electricity}
               />
               <InfoCard
-                icon={<Clock className="w-4 h-4 text-blue-500" />}
+                icon={<Clock className="w-4 h-4 text-brand-500" />}
                 label="Timezone"
                 value={info.practical.timezone}
               />
@@ -395,34 +395,34 @@ export function CountryInfo({ countries, originCountry, tripId }: CountryInfoPro
           {/* Health Information */}
           <Section
             title="Health & Safety"
-            icon={<Heart className="w-5 h-5 text-red-500" />}
+            icon={<Heart className="w-5 h-5 text-brand-500" />}
             expanded={expandedSections.has('health')}
             onToggle={() => toggleSection('health')}
           >
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-slate-50 p-4 rounded-lg">
+                <div className="bg-muted p-4 rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
-                    <Syringe className="w-4 h-4 text-blue-500" />
-                    <span className="text-xs font-medium text-slate-500 uppercase">Vaccinations</span>
+                    <Syringe className="w-4 h-4 text-brand-500" />
+                    <span className="text-xs font-medium text-muted-foreground uppercase">Vaccinations</span>
                   </div>
-                  <p className="text-slate-700 text-sm">{info.health.vaccinations}</p>
+                  <p className="text-foreground text-sm">{info.health.vaccinations}</p>
                 </div>
-                <div className="bg-slate-50 p-4 rounded-lg">
+                <div className="bg-muted p-4 rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
-                    <Droplets className="w-4 h-4 text-cyan-500" />
-                    <span className="text-xs font-medium text-slate-500 uppercase">Water Safety</span>
+                    <Droplets className="w-4 h-4 text-brand-500" />
+                    <span className="text-xs font-medium text-muted-foreground uppercase">Water Safety</span>
                   </div>
-                  <p className="text-slate-700 text-sm">{info.health.waterSafety}</p>
+                  <p className="text-foreground text-sm">{info.health.waterSafety}</p>
                 </div>
               </div>
 
               <div>
-                <h4 className="font-medium text-slate-800 mb-2">Health Tips</h4>
+                <h4 className="font-medium text-foreground mb-2">Health Tips</h4>
                 <ul className="space-y-2">
                   {info.health.healthTips.map((tip, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-sm text-slate-600">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                    <li key={idx} className="flex items-start gap-2 text-sm text-muted-foreground">
+                      <CheckCircle2 className="w-4 h-4 text-success-accent mt-0.5 flex-shrink-0" />
                       {tip}
                     </li>
                   ))}
@@ -432,8 +432,8 @@ export function CountryInfo({ countries, originCountry, tripId }: CountryInfoPro
           </Section>
 
           {/* Disclaimer */}
-          <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-            <p className="text-xs text-slate-500 text-center">
+          <div className="bg-muted p-4 rounded-lg border border-border">
+            <p className="text-xs text-muted-foreground text-center">
               This information is AI-generated and may not be fully up-to-date.
               Always verify with official government sources before traveling.
             </p>
@@ -467,17 +467,17 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+    <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
       <button
         onClick={onToggle}
-        className="w-full px-6 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors"
+        className="w-full px-6 py-4 flex items-center justify-between hover:bg-muted transition-colors"
       >
         <div className="flex items-center gap-3">
           {icon}
-          <h3 className="font-semibold text-slate-800">{title}</h3>
+          <h3 className="font-semibold text-foreground">{title}</h3>
         </div>
         <svg
-          className={`w-5 h-5 text-slate-400 transition-transform ${expanded ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 text-muted-foreground transition-transform ${expanded ? 'rotate-180' : ''}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -500,12 +500,12 @@ function InfoCard({
   value: string;
 }) {
   return (
-    <div className="bg-slate-50 p-4 rounded-lg">
+    <div className="bg-muted p-4 rounded-lg">
       <div className="flex items-center gap-2 mb-2">
         {icon}
-        <span className="text-xs font-medium text-slate-500 uppercase">{label}</span>
+        <span className="text-xs font-medium text-muted-foreground uppercase">{label}</span>
       </div>
-      <p className="text-slate-700 text-sm">{value}</p>
+      <p className="text-foreground text-sm">{value}</p>
     </div>
   );
 }

@@ -125,14 +125,14 @@ export function ChecklistEditor({
 
       {/* Empty state */}
       {items.length === 0 && (
-        <p className="text-xs text-slate-400 text-center py-3 dark:text-slate-500">
+        <p className="text-xs text-muted-foreground text-center py-3">
           No items yet. Add things to pack or tasks to complete.
         </p>
       )}
 
       {/* Limit warning */}
       {items.length >= maxItems && (
-        <p className="text-xs text-amber-600 text-center dark:text-amber-400">
+        <p className="text-xs text-warning-accent text-center">
           Maximum {maxItems} items reached.
         </p>
       )}
