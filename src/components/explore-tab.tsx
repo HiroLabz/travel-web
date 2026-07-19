@@ -208,11 +208,11 @@ export function ExploreTab({
   // Handle no destinations case
   if (!destinations || destinations.length === 0) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-12">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-12">
         <div className="flex flex-col items-center justify-center text-center">
-          <MapPin className="w-16 h-16 text-slate-300 mb-4" />
-          <h3 className="text-xl font-semibold text-slate-700 mb-2">No Destinations</h3>
-          <p className="text-slate-500">
+          <MapPin className="w-16 h-16 text-muted-foreground mb-4" />
+          <h3 className="text-xl font-semibold text-foreground mb-2">No Destinations</h3>
+          <p className="text-muted-foreground">
             Add destinations to your trip to explore recommendations.
           </p>
         </div>
@@ -231,9 +231,9 @@ export function ExploreTab({
     <div className="space-y-6">
       {/* Destination Selector */}
       {destinations.length > 1 && (
-        <div className="bg-gradient-to-br from-blue-50 to-blue-50 rounded-xl border border-blue-100 p-4">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-blue-600" />
+        <div className="bg-card rounded-xl border border-border shadow-sm p-4">
+          <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-brand-500" />
             Select Destination
           </h3>
           <div className="flex flex-wrap gap-2">
@@ -243,8 +243,8 @@ export function ExploreTab({
                 onClick={() => handleDestinationChange(index)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   selectedDestinationIndex === index
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'bg-white text-slate-700 hover:bg-blue-50 border border-slate-200'
+                    ? 'bg-brand-500 text-white shadow-sm'
+                    : 'bg-muted text-foreground hover:bg-brand-subtle border border-border'
                 }`}
               >
                 {dest.city}
@@ -256,14 +256,14 @@ export function ExploreTab({
       )}
 
       {/* Section Navigation */}
-      <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-2">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-2">
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => handleSectionChange('topRated')}
             className={`px-4 py-3 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
               activeSection === 'topRated'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                ? 'bg-brand-500 text-white shadow-sm'
+                : 'text-muted-foreground hover:bg-muted'
             }`}
           >
             <Award className="w-4 h-4" />
@@ -274,8 +274,8 @@ export function ExploreTab({
             onClick={() => handleSectionChange('topReview')}
             className={`px-4 py-3 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
               activeSection === 'topReview'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                ? 'bg-brand-500 text-white shadow-sm'
+                : 'text-muted-foreground hover:bg-muted'
             }`}
           >
             <TrendingUp className="w-4 h-4" />
@@ -286,8 +286,8 @@ export function ExploreTab({
             onClick={() => handleSectionChange('airportTransfer')}
             className={`px-4 py-3 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
               activeSection === 'airportTransfer'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                ? 'bg-brand-500 text-white shadow-sm'
+                : 'text-muted-foreground hover:bg-muted'
             }`}
           >
             <Navigation className="w-4 h-4" />
@@ -344,14 +344,14 @@ function TopRatedSection({
 }) {
   if (!data.data && !data.loading && !data.error) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-12">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-12">
         <div className="flex flex-col items-center justify-center text-center">
-          <Award className="w-16 h-16 text-slate-300 mb-4" />
-          <h3 className="text-xl font-semibold text-slate-700 mb-2">Discover Top-Rated Attractions</h3>
-          <p className="text-slate-500 mb-6 max-w-md">
+          <Award className="w-16 h-16 text-muted-foreground mb-4" />
+          <h3 className="text-xl font-semibold text-foreground mb-2">Discover Top-Rated Attractions</h3>
+          <p className="text-muted-foreground mb-6 max-w-md">
             Get AI-curated recommendations for the highest-quality, award-winning attractions in {city}.
           </p>
-          <Button onClick={onLoad} className="bg-blue-600 hover:bg-blue-700">
+          <Button onClick={onLoad} className="bg-brand-500 hover:bg-brand-600 rounded-lg">
             <Star className="w-4 h-4 mr-2" />
             Generate Recommendations
           </Button>
@@ -362,11 +362,11 @@ function TopRatedSection({
 
   if (data.loading && !data.data) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-12">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-12">
         <div className="flex flex-col items-center justify-center text-center">
-          <Loader2 className="w-10 h-10 text-blue-500 animate-spin mb-4" />
-          <h3 className="text-lg font-semibold text-slate-800 mb-2">Finding Top-Rated Places</h3>
-          <p className="text-slate-500 text-sm">
+          <Loader2 className="w-10 h-10 text-brand-500 animate-spin mb-4" />
+          <h3 className="text-lg font-semibold text-foreground mb-2">Finding Top-Rated Places</h3>
+          <p className="text-muted-foreground text-sm">
             Searching for the highest-quality attractions in {city}...
           </p>
         </div>
@@ -376,11 +376,11 @@ function TopRatedSection({
 
   if (data.error && !data.data) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-8">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-8">
         <div className="flex flex-col items-center justify-center text-center">
-          <AlertTriangle className="w-10 h-10 text-amber-500 mb-4" />
-          <h3 className="text-lg font-semibold text-slate-800 mb-2">Unable to Load Recommendations</h3>
-          <p className="text-slate-500 text-sm mb-4">{data.error}</p>
+          <AlertTriangle className="w-10 h-10 text-warning-accent mb-4" />
+          <h3 className="text-lg font-semibold text-foreground mb-2">Unable to Load Recommendations</h3>
+          <p className="text-muted-foreground text-sm mb-4">{data.error}</p>
           <Button onClick={onLoad} variant="outline" size="sm">
             <RefreshCw className="w-4 h-4 mr-2" />
             Try Again
@@ -395,22 +395,22 @@ function TopRatedSection({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-xl border border-blue-100">
+      <div className="bg-card p-6 rounded-xl border border-border shadow-sm">
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                <Award className="w-6 h-6 text-blue-600" />
+              <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
+                <Award className="w-6 h-6 text-brand-500" />
                 Top-Rated Places in {city}
               </h2>
               {data.cached && (
-                <span className="text-xs font-medium text-emerald-700 bg-emerald-100 px-2 py-1 rounded-full flex items-center gap-1">
+                <span className="text-xs font-medium text-success-accent bg-success-soft px-2 py-1 rounded-full flex items-center gap-1">
                   <CheckCircle2 className="w-3 h-3" />
                   Saved
                 </span>
               )}
             </div>
-            <p className="text-slate-600 max-w-2xl">{data.data.summary}</p>
+            <p className="text-muted-foreground max-w-2xl">{data.data.summary}</p>
           </div>
           <Button
             onClick={onRefresh}
@@ -428,42 +428,42 @@ function TopRatedSection({
       {/* Places Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {data.data.places.map((place) => (
-          <div key={place.id} className="bg-white rounded-xl shadow-sm border border-slate-100 p-6 hover:shadow-md transition-shadow">
+          <div key={place.id} className="bg-card rounded-xl shadow-sm border border-border p-6 hover:shadow-md transition-shadow">
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-slate-800 mb-1">{place.name}</h3>
-                <p className="text-sm text-slate-500 mb-2">{place.address}</p>
+                <h3 className="text-lg font-semibold text-foreground mb-1">{place.name}</h3>
+                <p className="text-sm text-muted-foreground mb-2">{place.address}</p>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-amber-50 text-amber-700 rounded-md text-xs font-medium">
-                    <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-warning-soft text-warning-accent rounded-md text-xs font-medium">
+                    <Star className="w-3 h-3 fill-warning-accent text-warning-accent" />
                     {place.rating}
                   </span>
-                  <span className="text-xs text-slate-500">{place.priceLevel}</span>
-                  <span className="text-xs text-slate-500">•</span>
-                  <span className="text-xs text-slate-500">{place.category}</span>
+                  <span className="text-xs text-muted-foreground">{place.priceLevel}</span>
+                  <span className="text-xs text-muted-foreground">•</span>
+                  <span className="text-xs text-muted-foreground">{place.category}</span>
                 </div>
               </div>
             </div>
 
-            <p className="text-slate-600 text-sm mb-3">{place.description}</p>
+            <p className="text-muted-foreground text-sm mb-3">{place.description}</p>
 
             {place.accolades && (
-              <div className="mb-3 p-2 bg-purple-50 border border-purple-100 rounded-lg">
-                <p className="text-xs font-medium text-purple-700 flex items-center gap-1">
+              <div className="mb-3 p-2 bg-brand-subtle border border-brand-500/20 rounded-lg">
+                <p className="text-xs font-medium text-brand-500 flex items-center gap-1">
                   <Award className="w-3 h-3" />
                   {place.accolades}
                 </p>
               </div>
             )}
 
-            <div className="flex items-center gap-2 text-xs text-slate-500 mb-3">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
               <Clock className="w-3 h-3" />
               <span>{place.estimatedDuration}</span>
             </div>
 
             {place.tips && (
-              <div className="mb-3 p-2 bg-blue-50 border border-blue-100 rounded-lg">
-                <p className="text-xs text-blue-700 flex items-start gap-1">
+              <div className="mb-3 p-2 bg-warning-soft border border-warning-accent/20 rounded-lg">
+                <p className="text-xs text-warning-accent flex items-start gap-1">
                   <Lightbulb className="w-3 h-3 mt-0.5 flex-shrink-0" />
                   <span>{place.tips}</span>
                 </p>
@@ -476,7 +476,7 @@ function TopRatedSection({
                   href={place.googleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-lg text-xs font-medium transition-colors"
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 bg-muted hover:bg-accent text-foreground rounded-lg text-xs font-medium transition-colors"
                 >
                   <MapPin className="w-3 h-3" />
                   View on Maps
@@ -488,7 +488,7 @@ function TopRatedSection({
                   href={place.imageSearchUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-lg text-xs font-medium transition-colors"
+                  className="inline-flex items-center justify-center gap-2 px-3 py-2 bg-muted hover:bg-accent text-foreground rounded-lg text-xs font-medium transition-colors"
                 >
                   <ExternalLink className="w-3 h-3" />
                   Photos
@@ -516,14 +516,14 @@ function TopReviewSection({
 }) {
   if (!data.data && !data.loading && !data.error) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-12">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-12">
         <div className="flex flex-col items-center justify-center text-center">
-          <TrendingUp className="w-16 h-16 text-slate-300 mb-4" />
-          <h3 className="text-xl font-semibold text-slate-700 mb-2">Discover Most Popular Attractions</h3>
-          <p className="text-slate-500 mb-6 max-w-md">
+          <TrendingUp className="w-16 h-16 text-muted-foreground mb-4" />
+          <h3 className="text-xl font-semibold text-foreground mb-2">Discover Most Popular Attractions</h3>
+          <p className="text-muted-foreground mb-6 max-w-md">
             Get AI-curated recommendations for the most-visited, highly-reviewed attractions in {city}.
           </p>
-          <Button onClick={onLoad} className="bg-blue-600 hover:bg-blue-700">
+          <Button onClick={onLoad} className="bg-brand-500 hover:bg-brand-600 rounded-lg">
             <MessageCircle className="w-4 h-4 mr-2" />
             Generate Recommendations
           </Button>
@@ -534,11 +534,11 @@ function TopReviewSection({
 
   if (data.loading && !data.data) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-12">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-12">
         <div className="flex flex-col items-center justify-center text-center">
-          <Loader2 className="w-10 h-10 text-blue-500 animate-spin mb-4" />
-          <h3 className="text-lg font-semibold text-slate-800 mb-2">Finding Most Popular Places</h3>
-          <p className="text-slate-500 text-sm">
+          <Loader2 className="w-10 h-10 text-brand-500 animate-spin mb-4" />
+          <h3 className="text-lg font-semibold text-foreground mb-2">Finding Most Popular Places</h3>
+          <p className="text-muted-foreground text-sm">
             Searching for the most-reviewed attractions in {city}...
           </p>
         </div>
@@ -548,11 +548,11 @@ function TopReviewSection({
 
   if (data.error && !data.data) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-8">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-8">
         <div className="flex flex-col items-center justify-center text-center">
-          <AlertTriangle className="w-10 h-10 text-amber-500 mb-4" />
-          <h3 className="text-lg font-semibold text-slate-800 mb-2">Unable to Load Recommendations</h3>
-          <p className="text-slate-500 text-sm mb-4">{data.error}</p>
+          <AlertTriangle className="w-10 h-10 text-warning-accent mb-4" />
+          <h3 className="text-lg font-semibold text-foreground mb-2">Unable to Load Recommendations</h3>
+          <p className="text-muted-foreground text-sm mb-4">{data.error}</p>
           <Button onClick={onLoad} variant="outline" size="sm">
             <RefreshCw className="w-4 h-4 mr-2" />
             Try Again
@@ -567,22 +567,22 @@ function TopReviewSection({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-xl border border-blue-100">
+      <div className="bg-card p-6 rounded-xl border border-border shadow-sm">
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                <TrendingUp className="w-6 h-6 text-blue-600" />
+              <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
+                <TrendingUp className="w-6 h-6 text-brand-500" />
                 Most Popular Places in {city}
               </h2>
               {data.cached && (
-                <span className="text-xs font-medium text-emerald-700 bg-emerald-100 px-2 py-1 rounded-full flex items-center gap-1">
+                <span className="text-xs font-medium text-success-accent bg-success-soft px-2 py-1 rounded-full flex items-center gap-1">
                   <CheckCircle2 className="w-3 h-3" />
                   Saved
                 </span>
               )}
             </div>
-            <p className="text-slate-600 max-w-2xl">{data.data.summary}</p>
+            <p className="text-muted-foreground max-w-2xl">{data.data.summary}</p>
           </div>
           <Button
             onClick={onRefresh}
@@ -600,28 +600,28 @@ function TopReviewSection({
       {/* Places Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {data.data.places.map((place) => (
-          <div key={place.id} className="bg-white rounded-xl shadow-sm border border-slate-100 p-6 hover:shadow-md transition-shadow">
+          <div key={place.id} className="bg-card rounded-xl shadow-sm border border-border p-6 hover:shadow-md transition-shadow">
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-slate-800 mb-1">{place.name}</h3>
-                <p className="text-sm text-slate-500 mb-2">{place.address}</p>
+                <h3 className="text-lg font-semibold text-foreground mb-1">{place.name}</h3>
+                <p className="text-sm text-muted-foreground mb-2">{place.address}</p>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-md text-xs font-medium">
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-brand-subtle text-brand-500 rounded-md text-xs font-medium">
                     <MessageCircle className="w-3 h-3" />
                     {place.reviewCount}
                   </span>
-                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-amber-50 text-amber-700 rounded-md text-xs font-medium">
-                    <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-warning-soft text-warning-accent rounded-md text-xs font-medium">
+                    <Star className="w-3 h-3 fill-warning-accent text-warning-accent" />
                     {place.averageRating}
                   </span>
-                  <span className="text-xs text-slate-500">{place.priceLevel}</span>
+                  <span className="text-xs text-muted-foreground">{place.priceLevel}</span>
                 </div>
               </div>
             </div>
 
-            <p className="text-slate-600 text-sm mb-3">{place.description}</p>
+            <p className="text-muted-foreground text-sm mb-3">{place.description}</p>
 
-            <div className="flex items-center gap-2 text-xs text-slate-500 mb-3">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
               <Clock className="w-3 h-3" />
               <span>{place.estimatedDuration}</span>
               <span>•</span>
@@ -629,8 +629,8 @@ function TopReviewSection({
             </div>
 
             {place.tips && (
-              <div className="mb-3 p-2 bg-blue-50 border border-blue-100 rounded-lg">
-                <p className="text-xs text-blue-700 flex items-start gap-1">
+              <div className="mb-3 p-2 bg-warning-soft border border-warning-accent/20 rounded-lg">
+                <p className="text-xs text-warning-accent flex items-start gap-1">
                   <Lightbulb className="w-3 h-3 mt-0.5 flex-shrink-0" />
                   <span>{place.tips}</span>
                 </p>
@@ -643,7 +643,7 @@ function TopReviewSection({
                   href={place.googleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-lg text-xs font-medium transition-colors"
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 bg-muted hover:bg-accent text-foreground rounded-lg text-xs font-medium transition-colors"
                 >
                   <MapPin className="w-3 h-3" />
                   View on Maps
@@ -655,7 +655,7 @@ function TopReviewSection({
                   href={place.imageSearchUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-lg text-xs font-medium transition-colors"
+                  className="inline-flex items-center justify-center gap-2 px-3 py-2 bg-muted hover:bg-accent text-foreground rounded-lg text-xs font-medium transition-colors"
                 >
                   <ExternalLink className="w-3 h-3" />
                   Photos
@@ -712,26 +712,26 @@ function AirportTransferSection({
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case 'easy':
-        return 'bg-green-50 text-green-700 border-green-200';
+        return 'bg-success-soft text-success-accent border-success-accent/20';
       case 'moderate':
-        return 'bg-amber-50 text-amber-700 border-amber-200';
+        return 'bg-warning-soft text-warning-accent border-warning-accent/20';
       case 'advanced':
-        return 'bg-red-50 text-red-700 border-red-200';
+        return 'bg-destructive/10 text-destructive border-destructive/30';
       default:
-        return 'bg-slate-50 text-slate-700 border-slate-200';
+        return 'bg-muted text-foreground border-border';
     }
   };
 
   if (!data.data && !data.loading && !data.error) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-12">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-12">
         <div className="flex flex-col items-center justify-center text-center">
-          <Navigation className="w-16 h-16 text-slate-300 mb-4" />
-          <h3 className="text-xl font-semibold text-slate-700 mb-2">Airport Transfer Guide</h3>
-          <p className="text-slate-500 mb-6 max-w-md">
+          <Navigation className="w-16 h-16 text-muted-foreground mb-4" />
+          <h3 className="text-xl font-semibold text-foreground mb-2">Airport Transfer Guide</h3>
+          <p className="text-muted-foreground mb-6 max-w-md">
             Get detailed step-by-step instructions for getting from the airport to your accommodation.
           </p>
-          <Button onClick={onLoad} className="bg-blue-600 hover:bg-blue-700">
+          <Button onClick={onLoad} className="bg-brand-500 hover:bg-brand-600 rounded-lg">
             <Plane className="w-4 h-4 mr-2" />
             Generate Transfer Guide
           </Button>
@@ -742,11 +742,11 @@ function AirportTransferSection({
 
   if (data.loading && !data.data) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-12">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-12">
         <div className="flex flex-col items-center justify-center text-center">
-          <Loader2 className="w-10 h-10 text-blue-500 animate-spin mb-4" />
-          <h3 className="text-lg font-semibold text-slate-800 mb-2">Generating Transfer Guide</h3>
-          <p className="text-slate-500 text-sm">
+          <Loader2 className="w-10 h-10 text-brand-500 animate-spin mb-4" />
+          <h3 className="text-lg font-semibold text-foreground mb-2">Generating Transfer Guide</h3>
+          <p className="text-muted-foreground text-sm">
             Creating detailed transfer options and step-by-step instructions...
           </p>
         </div>
@@ -756,13 +756,13 @@ function AirportTransferSection({
 
   if (data.error && !data.data) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-8">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-8">
         <div className="flex flex-col items-center justify-center text-center">
-          <AlertTriangle className="w-10 h-10 text-amber-500 mb-4" />
-          <h3 className="text-lg font-semibold text-slate-800 mb-2">Unable to Generate Guide</h3>
-          <p className="text-slate-500 text-sm mb-4">{data.error}</p>
+          <AlertTriangle className="w-10 h-10 text-warning-accent mb-4" />
+          <h3 className="text-lg font-semibold text-foreground mb-2">Unable to Generate Guide</h3>
+          <p className="text-muted-foreground text-sm mb-4">{data.error}</p>
           {data.error.includes('accommodation') ? (
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-muted-foreground">
               Add your accommodation details in the Itinerary tab first.
             </p>
           ) : (
@@ -781,22 +781,22 @@ function AirportTransferSection({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-br from-blue-50 to-sky-50 p-6 rounded-xl border border-blue-100">
+      <div className="bg-card p-6 rounded-xl border border-border shadow-sm">
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                <Plane className="w-6 h-6 text-blue-600" />
+              <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
+                <Plane className="w-6 h-6 text-brand-500" />
                 {data.data.airportName} ({data.data.airportCode})
               </h2>
               {data.cached && (
-                <span className="text-xs font-medium text-emerald-700 bg-emerald-100 px-2 py-1 rounded-full flex items-center gap-1">
+                <span className="text-xs font-medium text-success-accent bg-success-soft px-2 py-1 rounded-full flex items-center gap-1">
                   <CheckCircle2 className="w-3 h-3" />
                   Saved
                 </span>
               )}
             </div>
-            <p className="text-slate-600 text-sm">Complete transfer guide to your accommodation</p>
+            <p className="text-muted-foreground text-sm">Complete transfer guide to your accommodation</p>
           </div>
           <Button
             onClick={onRefresh}
@@ -812,30 +812,30 @@ function AirportTransferSection({
       </div>
 
       {/* Recommendation */}
-      <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
-        <h3 className="text-sm font-semibold text-emerald-800 mb-2 flex items-center gap-2">
+      <div className="bg-success-soft border border-success-accent/20 rounded-xl p-4">
+        <h3 className="text-sm font-semibold text-success-accent mb-2 flex items-center gap-2">
           <CheckCircle2 className="w-4 h-4" />
           Recommended for You
         </h3>
-        <p className="text-sm text-emerald-700">{data.data.recommendedOption}</p>
+        <p className="text-sm text-success-accent">{data.data.recommendedOption}</p>
       </div>
 
       {/* Transfer Options */}
       <div className="space-y-3">
-        <h3 className="text-lg font-semibold text-slate-800">Transfer Options</h3>
+        <h3 className="text-lg font-semibold text-foreground">Transfer Options</h3>
         {data.data.transferOptions.map((option) => (
-          <div key={option.id} className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+          <div key={option.id} className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
             <button
               onClick={() => toggleOption(option.id)}
-              className="w-full p-4 flex items-center justify-between hover:bg-slate-50 transition-colors"
+              className="w-full p-4 flex items-center justify-between hover:bg-muted/50 transition-colors"
             >
               <div className="flex items-center gap-3 flex-1">
-                <div className="p-2 bg-blue-50 rounded-lg">
+                <div className="p-2 bg-brand-subtle rounded-lg">
                   {getTransportIcon(option.type)}
                 </div>
                 <div className="text-left flex-1">
-                  <h4 className="font-semibold text-slate-800">{option.name}</h4>
-                  <div className="flex items-center gap-2 mt-1 text-xs text-slate-500">
+                  <h4 className="font-semibold text-foreground">{option.name}</h4>
+                  <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <DollarSign className="w-3 h-3" />
                       {option.estimatedCost}
@@ -853,46 +853,46 @@ function AirportTransferSection({
                 </div>
               </div>
               {expandedOptions.has(option.id) ? (
-                <ChevronUp className="w-5 h-5 text-slate-400" />
+                <ChevronUp className="w-5 h-5 text-muted-foreground" />
               ) : (
-                <ChevronDown className="w-5 h-5 text-slate-400" />
+                <ChevronDown className="w-5 h-5 text-muted-foreground" />
               )}
             </button>
 
             {expandedOptions.has(option.id) && (
-              <div className="p-4 pt-0 space-y-4 border-t border-slate-100">
+              <div className="p-4 pt-0 space-y-4 border-t border-border">
                 {/* Description */}
                 <div>
-                  <h5 className="text-sm font-semibold text-slate-700 mb-2">Step-by-Step Instructions</h5>
-                  <p className="text-sm text-slate-600 whitespace-pre-line">{option.description}</p>
+                  <h5 className="text-sm font-semibold text-foreground mb-2">Step-by-Step Instructions</h5>
+                  <p className="text-sm text-muted-foreground whitespace-pre-line">{option.description}</p>
                 </div>
 
                 {/* Details Grid */}
                 <div className="grid grid-cols-2 gap-3 text-sm">
                   <div>
-                    <span className="text-slate-500 text-xs">Availability</span>
-                    <p className="text-slate-800 font-medium">{option.availability}</p>
+                    <span className="text-muted-foreground text-xs">Availability</span>
+                    <p className="text-foreground font-medium">{option.availability}</p>
                   </div>
                   <div>
-                    <span className="text-slate-500 text-xs">Best For</span>
-                    <p className="text-slate-800 font-medium">{option.bestFor}</p>
+                    <span className="text-muted-foreground text-xs">Best For</span>
+                    <p className="text-foreground font-medium">{option.bestFor}</p>
                   </div>
                 </div>
 
                 {/* Booking Info */}
                 <div>
-                  <h5 className="text-sm font-semibold text-slate-700 mb-1">How to Book</h5>
-                  <p className="text-sm text-slate-600">{option.bookingInfo}</p>
+                  <h5 className="text-sm font-semibold text-foreground mb-1">How to Book</h5>
+                  <p className="text-sm text-muted-foreground">{option.bookingInfo}</p>
                 </div>
 
                 {/* Tips */}
                 {option.tips && option.tips.length > 0 && (
                   <div>
-                    <h5 className="text-sm font-semibold text-slate-700 mb-2">Practical Tips</h5>
+                    <h5 className="text-sm font-semibold text-foreground mb-2">Practical Tips</h5>
                     <ul className="space-y-2">
                       {option.tips.map((tip, idx) => (
-                        <li key={idx} className="text-sm text-slate-600 flex items-start gap-2">
-                          <Lightbulb className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+                        <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
+                          <Lightbulb className="w-4 h-4 text-warning-accent mt-0.5 flex-shrink-0" />
                           <span>{tip}</span>
                         </li>
                       ))}
@@ -907,14 +907,14 @@ function AirportTransferSection({
 
       {/* General Tips */}
       {data.data.generalTips && data.data.generalTips.length > 0 && (
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-          <h3 className="text-sm font-semibold text-blue-800 mb-3 flex items-center gap-2">
+        <div className="bg-info-soft border border-info-accent/20 rounded-xl p-4">
+          <h3 className="text-sm font-semibold text-info-accent mb-3 flex items-center gap-2">
             <Info className="w-4 h-4" />
             General Airport Tips
           </h3>
           <ul className="space-y-2">
             {data.data.generalTips.map((tip, idx) => (
-              <li key={idx} className="text-sm text-blue-700 flex items-start gap-2">
+              <li key={idx} className="text-sm text-info-accent flex items-start gap-2">
                 <CheckCircle2 className="w-4 h-4 mt-0.5 flex-shrink-0" />
                 <span>{tip}</span>
               </li>
@@ -925,14 +925,14 @@ function AirportTransferSection({
 
       {/* Important Notes */}
       {data.data.importantNotes && data.data.importantNotes.length > 0 && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-          <h3 className="text-sm font-semibold text-red-800 mb-3 flex items-center gap-2">
+        <div className="bg-destructive/10 border border-destructive/30 rounded-xl p-4">
+          <h3 className="text-sm font-semibold text-destructive mb-3 flex items-center gap-2">
             <AlertTriangle className="w-4 h-4" />
             Important Safety Warnings
           </h3>
           <ul className="space-y-2">
             {data.data.importantNotes.map((note, idx) => (
-              <li key={idx} className="text-sm text-red-700 flex items-start gap-2">
+              <li key={idx} className="text-sm text-destructive flex items-start gap-2">
                 <AlertTriangle className="w-4 h-4 mt-0.5 flex-shrink-0" />
                 <span>{note}</span>
               </li>

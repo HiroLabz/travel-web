@@ -21,7 +21,9 @@ import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { SortableDestinationItem } from '@/components/sortable-destination-item';
 import { DestinationDragOverlay } from '@/components/destination-drag-overlay';
+import { Timeline } from '@/components/timeline';
 import { format, parseISO } from 'date-fns';
+import { getTripStatus, type DestinationStatus } from '@/lib/trip-status';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -371,17 +373,40 @@ export function RouteTimeline({
     return <Navigation className="w-4 h-4" />;
   };
 
+  const { destinationStatus } = getTripStatus(trip, destinations);
+
+  const statusBadge = (status: DestinationStatus | null) => {
+    if (!status) return null;
+    const styles: Record<DestinationStatus, string> = {
+      completed: 'bg-success-soft text-success-accent',
+      current: 'bg-info-soft text-info-accent',
+      upcoming: 'bg-muted text-muted-foreground',
+    };
+    const labels: Record<DestinationStatus, string> = {
+      completed: 'Completed',
+      current: 'Current stop',
+      upcoming: 'Upcoming',
+    };
+    return (
+      <span className={`px-2.5 py-1 rounded-full text-[11px] font-semibold whitespace-nowrap ${styles[status]}`}>
+        {labels[status]}
+      </span>
+    );
+  };
+
   return (
     <>
-      <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
+      <div className="bg-card p-6 rounded-xl shadow-sm border border-border">
         <Collapsible open={routePlanOpen} onOpenChange={setRoutePlanOpen}>
           <div className="flex items-center justify-between mb-4">
-            <CollapsibleTrigger className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-              <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100 flex items-center">
-                <MapPin className="w-5 h-5 mr-2 text-blue-500" />
+            <CollapsibleTrigger className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+              <div className="w-9 h-9 rounded-md bg-brand-subtle text-brand-500 flex items-center justify-center flex-shrink-0">
+                <MapPin className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-semibold text-foreground">
                 Route Plan
               </h3>
-              <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${routePlanOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${routePlanOpen ? 'rotate-180' : ''}`} />
             </CollapsibleTrigger>
             <div className="flex items-center gap-2">
               {routeEditMode ? (
@@ -389,20 +414,20 @@ export function RouteTimeline({
                   size="sm"
                   variant="ghost"
                   onClick={() => setRouteEditMode(false)}
-                  className="text-slate-500"
+                  className="text-muted-foreground"
                 >
-                  <Check className="w-4 h-4 mr-1" />
-                  Done
+                  <Pencil className="w-4 h-4 mr-1" />
+                  Edit
                 </Button>
               ) : (
                 <Button
                   size="sm"
                   variant="ghost"
                   onClick={() => setRouteEditMode(true)}
-                  className="text-blue-600"
+                  className="text-brand-500"
                 >
-                  <Pencil className="w-4 h-4 mr-1" />
-                  Edit
+                  <Check className="w-4 h-4 mr-1" />
+                  Done
                 </Button>
               )}
             </div>
@@ -410,11 +435,11 @@ export function RouteTimeline({
 
           <CollapsibleContent>
             {/* Trip Title and Date Section */}
-            <div className="mb-6 pb-4 border-b border-slate-200 dark:border-slate-600">
+            <div className="mb-6 pb-4 border-b border-border">
               {editingTripDetails ? (
                 <div className="space-y-3">
                   <div>
-                    <label className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1 block">Trip Name</label>
+                    <label className="text-xs font-medium text-muted-foreground mb-1 block">Trip Name</label>
                     <Input
                       value={tripDetailsForm.title}
                       onChange={(e) => setTripDetailsForm(prev => ({ ...prev, title: e.target.value }))}
@@ -424,7 +449,7 @@ export function RouteTimeline({
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1 block">Start Date</label>
+                      <label className="text-xs font-medium text-muted-foreground mb-1 block">Start Date</label>
                       <Input
                         type="date"
                         value={tripDetailsForm.startDate}
@@ -433,7 +458,7 @@ export function RouteTimeline({
                       />
                     </div>
                     <div>
-                      <label className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1 block">End Date</label>
+                      <label className="text-xs font-medium text-muted-foreground mb-1 block">End Date</label>
                       <Input
                         type="date"
                         value={tripDetailsForm.endDate}
@@ -470,8 +495,8 @@ export function RouteTimeline({
               ) : (
                 <div className="flex items-start justify-between">
                   <div>
-                    <h4 className="font-semibold text-slate-900 dark:text-slate-100">{trip.title}</h4>
-                    <div className="flex items-center text-sm text-slate-500 dark:text-slate-400 mt-1">
+                    <h4 className="font-semibold text-foreground">{trip.title}</h4>
+                    <div className="flex items-center text-sm text-muted-foreground mt-1">
                       <Calendar className="w-3.5 h-3.5 mr-1.5" />
                       {formatDate(trip.startDate)} - {formatDate(trip.endDate)}
                     </div>
@@ -479,7 +504,7 @@ export function RouteTimeline({
                   {routeEditMode && (
                     <button
                       onClick={handleStartEditTripDetails}
-                      className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-slate-100 dark:hover:bg-slate-700 rounded transition-colors"
+                      className="p-1.5 text-muted-foreground hover:text-brand-500 hover:bg-muted rounded transition-colors"
                       title="Edit trip details"
                     >
                       <Pencil className="w-4 h-4" />
@@ -496,105 +521,114 @@ export function RouteTimeline({
               onDragEnd={handleDestDragEnd}
               onDragCancel={handleDestDragCancel}
             >
-              <div className="relative pl-4 border-l-2 border-slate-200 dark:border-slate-600 ml-3 space-y-6">
+              <Timeline>
                 <SortableContext
                   items={destinations.map((_, i) => String(i))}
                   strategy={verticalListSortingStrategy}
                 >
-                  {destinations.map((dest, index) => (
-                    <SortableDestinationItem
-                      key={index}
-                      id={String(index)}
-                      disabled={!routeEditMode}
-                    >
-                      <div className="flex items-start justify-between flex-1">
-                        {editingDestinationIndex === index ? (
-                          <div className="flex-1 space-y-2">
-                            <div className="flex gap-2">
-                              <Input
-                                value={editingDestination.city || ''}
-                                onChange={(e) => setEditingDestination(prev => ({ ...prev, city: e.target.value }))}
-                                placeholder="City"
-                                className="flex-1 h-8 text-sm"
-                              />
-                              <Input
-                                value={editingDestination.country || ''}
-                                onChange={(e) => setEditingDestination(prev => ({ ...prev, country: e.target.value }))}
-                                placeholder="Country"
-                                className="flex-1 h-8 text-sm"
-                              />
-                            </div>
-                            <div className="flex gap-2">
-                              <Input
-                                type="date"
-                                value={editingDestination.startDate || ''}
-                                onChange={(e) => setEditingDestination(prev => ({ ...prev, startDate: e.target.value }))}
-                                className="flex-1 h-8 text-sm"
-                              />
-                              <Input
-                                type="date"
-                                value={editingDestination.endDate || ''}
-                                onChange={(e) => setEditingDestination(prev => ({ ...prev, endDate: e.target.value }))}
-                                className="flex-1 h-8 text-sm"
-                              />
-                            </div>
-                            <div className="flex gap-1">
-                              <Button size="sm" variant="default" onClick={handleSaveDestination} className="h-7 text-xs">
-                                <Check className="w-3 h-3 mr-1" />
-                                Save
-                              </Button>
-                              <Button size="sm" variant="ghost" onClick={handleCancelEditDestination} className="h-7 text-xs">
-                                Cancel
-                              </Button>
-                            </div>
-                          </div>
-                        ) : (
-                          <>
-                            <div className="flex flex-col">
-                              <span className="font-bold text-slate-900 dark:text-slate-100">{dest.city}</span>
-                              <span className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">{dest.country}</span>
-                              {(dest.startDate || dest.endDate) && (
-                                <span className="text-xs text-slate-400 mt-1 flex items-center">
-                                  <Calendar className="w-3 h-3 mr-1" />
-                                  {formatDate(dest.startDate)} - {formatDate(dest.endDate)}
-                                </span>
-                              )}
-                            </div>
-
-                            {routeEditMode && (
-                              <div className="flex items-center gap-1">
-                                <button
-                                  onClick={() => handleStartEditDestination(index)}
-                                  className="p-1 text-slate-400 hover:text-blue-600"
-                                  title="Edit"
-                                >
-                                  <Pencil className="w-4 h-4" />
-                                </button>
-                                <button
-                                  onClick={() => handleDeleteDestination(index)}
-                                  className="p-1 text-slate-400 hover:text-red-600"
-                                  title="Delete"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </button>
+                  {destinations.map((dest, index) => {
+                    const status = destinationStatus(index);
+                    const dotClassName =
+                      status === 'current'
+                        ? 'border-info-accent bg-info-accent'
+                        : status === 'completed'
+                          ? 'border-success-accent bg-success-accent'
+                          : 'border-brand-500 bg-background';
+                    return (
+                      <SortableDestinationItem
+                        key={index}
+                        id={String(index)}
+                        disabled={!routeEditMode}
+                        dotClassName={dotClassName}
+                        isLast={index === destinations.length - 1}
+                      >
+                        <div className="flex items-start justify-between flex-1">
+                          {editingDestinationIndex === index ? (
+                            <div className="flex-1 space-y-2">
+                              <div className="flex gap-2">
+                                <Input
+                                  value={editingDestination.city || ''}
+                                  onChange={(e) => setEditingDestination(prev => ({ ...prev, city: e.target.value }))}
+                                  placeholder="City"
+                                  className="flex-1 h-8 text-sm"
+                                />
+                                <Input
+                                  value={editingDestination.country || ''}
+                                  onChange={(e) => setEditingDestination(prev => ({ ...prev, country: e.target.value }))}
+                                  placeholder="Country"
+                                  className="flex-1 h-8 text-sm"
+                                />
                               </div>
-                            )}
-                          </>
-                        )}
-                      </div>
+                              <div className="flex gap-2">
+                                <Input
+                                  type="date"
+                                  value={editingDestination.startDate || ''}
+                                  onChange={(e) => setEditingDestination(prev => ({ ...prev, startDate: e.target.value }))}
+                                  className="flex-1 h-8 text-sm"
+                                />
+                                <Input
+                                  type="date"
+                                  value={editingDestination.endDate || ''}
+                                  onChange={(e) => setEditingDestination(prev => ({ ...prev, endDate: e.target.value }))}
+                                  className="flex-1 h-8 text-sm"
+                                />
+                              </div>
+                              <div className="flex gap-1">
+                                <Button size="sm" variant="default" onClick={handleSaveDestination} className="h-7 text-xs">
+                                  <Check className="w-3 h-3 mr-1" />
+                                  Save
+                                </Button>
+                                <Button size="sm" variant="ghost" onClick={handleCancelEditDestination} className="h-7 text-xs">
+                                  Cancel
+                                </Button>
+                              </div>
+                            </div>
+                          ) : (
+                            <>
+                              <div className="flex flex-col">
+                                <span className="font-bold text-foreground">
+                                  {dest.city}{dest.country ? `, ${dest.country}` : ''}
+                                </span>
+                                {(dest.startDate || dest.endDate) && (
+                                  <span className="text-xs text-muted-foreground mt-1 flex items-center">
+                                    <Calendar className="w-3 h-3 mr-1" />
+                                    {formatDate(dest.startDate)} - {formatDate(dest.endDate)}
+                                  </span>
+                                )}
+                              </div>
 
-                      {index < destinations.length - 1 && editingDestinationIndex !== index && (
-                        <div className="mt-3 text-slate-300 absolute -bottom-5 left-6">
-                          <ArrowDown className="w-4 h-4" />
+                              <div className="flex items-center gap-2">
+                                {!routeEditMode && statusBadge(status)}
+                                {routeEditMode && (
+                                  <div className="flex items-center gap-1">
+                                    <button
+                                      onClick={() => handleStartEditDestination(index)}
+                                      className="p-1 text-muted-foreground hover:text-brand-500"
+                                      title="Edit"
+                                    >
+                                      <Pencil className="w-4 h-4" />
+                                    </button>
+                                    <button
+                                      onClick={() => handleDeleteDestination(index)}
+                                      className="p-1 text-muted-foreground hover:text-destructive"
+                                      title="Delete"
+                                    >
+                                      <Trash2 className="w-4 h-4" />
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            </>
+                          )}
                         </div>
-                      )}
-                    </SortableDestinationItem>
-                  ))}
+                      </SortableDestinationItem>
+                    );
+                  })}
                 </SortableContext>
                 {destinations.length === 0 && (
-                  <div className="text-slate-400 text-sm pl-4 italic">No destinations yet.</div>
+                  <div className="text-muted-foreground text-sm pl-4 italic">No destinations yet.</div>
                 )}
-              </div>
+              </Timeline>
               <DestinationDragOverlay activeDestination={activeDestination} />
             </DndContext>
 

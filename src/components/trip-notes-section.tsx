@@ -71,51 +71,57 @@ export function TripNotesSection({
 
   return (
     <div className="lg:col-span-3">
-      <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
+      <div className="bg-card p-6 rounded-xl shadow-sm border border-border">
         <Collapsible open={isOpen} onOpenChange={setIsOpen}>
           <CollapsibleTrigger className="flex items-center justify-between w-full">
-            <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-              <ListChecks className="w-4 h-4 text-indigo-500" />
-              Trip Notes & Packing Checklist
-            </h3>
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-md bg-brand-subtle text-brand-500 flex items-center justify-center flex-shrink-0">
+                <ListChecks className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-semibold text-foreground">
+                Notes & packing checklist
+              </h3>
+            </div>
             <div className="flex items-center gap-2">
               {(notes || checklist.length > 0) && (
-                <span className="text-xs bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 px-2 py-0.5 rounded-full">
+                <span className="text-xs font-semibold bg-brand-subtle text-brand-500 px-2.5 py-1 rounded-full">
                   {checklist.length > 0
-                    ? `${checklist.filter(c => c.completed).length}/${checklist.length}`
+                    ? `${checklist.filter(c => c.completed).length}/${checklist.length} packed`
                     : 'Notes'}
                 </span>
               )}
               {(savingNotes || savingChecklist) && (
-                <Loader2 className="w-3 h-3 animate-spin text-slate-400" />
+                <Loader2 className="w-3 h-3 animate-spin text-muted-foreground" />
               )}
-              <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${isOpen ? 'rotate-180' : ''}`} />
             </div>
           </CollapsibleTrigger>
 
-          <CollapsibleContent className="pt-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <CollapsibleContent className="pt-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Trip Quick Notes */}
               <div className="space-y-2">
-                <Label htmlFor="tripNotes" className="flex items-center gap-2 text-xs">
-                  <StickyNote className="w-3 h-3 text-amber-500" />
-                  Quick Notes
+                <Label htmlFor="tripNotes" className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                  <StickyNote className="w-3.5 h-3.5" />
+                  Quick notes
                 </Label>
-                <Textarea
-                  id="tripNotes"
-                  value={notes}
-                  onChange={(e) => handleNotesChange(e.target.value)}
-                  placeholder="General trip reminders, important info..."
-                  className="min-h-[120px] resize-none text-sm"
-                  rows={4}
-                />
+                <div className="relative">
+                  <Textarea
+                    id="tripNotes"
+                    value={notes}
+                    onChange={(e) => handleNotesChange(e.target.value)}
+                    placeholder="General trip reminders, important info..."
+                    className="min-h-[120px] resize-none text-sm bg-muted border-0 pl-5"
+                    rows={4}
+                  />
+                </div>
               </div>
 
               {/* Trip Checklist */}
               <div className="space-y-2">
-                <Label className="flex items-center gap-2 text-xs">
-                  <ListChecks className="w-3 h-3 text-indigo-500" />
-                  Packing / Prep Checklist
+                <Label className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                  <ListChecks className="w-3.5 h-3.5" />
+                  Packing checklist
                 </Label>
                 <ChecklistEditor
                   items={checklist}

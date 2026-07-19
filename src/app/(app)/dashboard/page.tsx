@@ -3,7 +3,7 @@
 import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import Image from 'next/image';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Users, Plus, LogOut, Settings, ChevronDown, Check, CreditCard, Compass, Globe, ChevronRight } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -126,28 +126,20 @@ export default function DashboardPage() {
           </div>
 
           {/* Credits & User Menu */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <CreditsIndicator />
             <div className="relative">
               <button
                 onClick={() => setShowMenu(!showMenu)}
-                className="flex items-center gap-3 bg-muted hover:bg-accent transition px-3 py-2 rounded-full pr-4 border border-border"
+                className="flex items-center rounded-full transition p-1 border border-border"
               >
-                <Image
-                  src={getAvatarUrl(userProfile?.photoURL, userProfile?.displayName, userProfile?.email)}
-                  alt={userProfile?.displayName || 'User'}
-                  width={32}
-                  height={32}
-                  className="w-8 h-8 rounded-full border border-border bg-muted"
-                  unoptimized
-                />
-                <div className="text-left hidden sm:block">
-                  <p className="text-xs font-semibold leading-none text-foreground">{userProfile?.displayName || 'User'}</p>
-                  <p className="text-[10px] text-muted-foreground leading-none mt-1 capitalize">
-                    {household?.members.find(m => m.uid === userProfile?.uid)?.role || 'Member'}
-                  </p>
-                </div>
-                <ChevronDown className="w-4 h-4 text-muted-foreground ml-1" />
+                <Avatar className="w-8 h-8 ">
+                  <AvatarImage
+                    src={getAvatarUrl(userProfile?.photoURL, userProfile?.displayName, userProfile?.email)}
+                    alt={userProfile?.displayName || 'User'}
+                  />
+                  <AvatarFallback>{getInitials(userProfile?.displayName)}</AvatarFallback>
+                </Avatar>
               </button>
 
               {showMenu && (

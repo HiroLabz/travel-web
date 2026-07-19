@@ -12,6 +12,7 @@ import { useSortableItinerary } from '@/hooks/use-sortable-itinerary';
 import { DroppableDateContainer } from '@/components/droppable-date-container';
 import { ItineraryDragOverlay } from '@/components/drag-overlay-item';
 import { TimelineSortableItem } from '@/components/timeline-sortable-item';
+import { Timeline } from '@/components/timeline';
 import { ItineraryDetailsDialog } from '@/components/itinerary-details';
 import { RoutePlannerFAB } from '@/components/route-planner-fab';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -22,7 +23,7 @@ import {
   Sparkles,
   MapPin,
   Clock,
-  Home,
+  LayoutGrid,
   Plane,
   Hotel,
   Utensils,
@@ -152,8 +153,8 @@ export function ItineraryTab({
       if (destCity === originCity) {
         if (originCountry && destCountry) {
           return !(destCountry === originCountry ||
-                   destCountry.includes(originCountry) ||
-                   originCountry.includes(destCountry));
+            destCountry.includes(originCountry) ||
+            originCountry.includes(destCountry));
         }
         return false;
       }
@@ -438,54 +439,50 @@ export function ItineraryTab({
   }, {} as Record<string, WizardItineraryItem[]>);
 
   return (
-    <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-300">
+    <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Itinerary Planner</h2>
-          <p className="text-slate-500 dark:text-slate-400 text-sm">Create your perfect trip schedule.</p>
+          <h2 className="text-2xl font-bold text-foreground">Itinerary planner</h2>
+          <p className="text-muted-foreground text-sm">Plan each day of the trip, activity by activity.</p>
         </div>
 
-        <div className="bg-white dark:bg-slate-800 p-1 rounded-lg border border-slate-200 dark:border-slate-700 flex shadow-sm overflow-x-auto scrollbar-hide">
+        <div className="bg-muted p-1 rounded-lg border border-border flex shadow-sm overflow-x-auto scrollbar-hide">
           <button
             onClick={() => setPlannerTab('home')}
-            className={`px-3 sm:px-4 py-2 text-sm font-medium rounded-md flex items-center transition-all whitespace-nowrap ${
-              plannerTab === 'home'
-              ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 shadow-sm'
-              : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
-            }`}
+            className={`px-3 sm:px-4 py-2 text-sm font-medium rounded-md flex items-center transition-all whitespace-nowrap ${plannerTab === 'home'
+                ? 'bg-card text-foreground shadow-sm'
+                : 'text-muted-foreground hover:text-foreground'
+              }`}
           >
-            <Home className="w-4 h-4 sm:mr-2" />
-            <span className="hidden sm:inline">Home</span>
+            <LayoutGrid className="w-4 h-4 sm:mr-2" />
+            <span className="hidden sm:inline">Overview</span>
           </button>
           <button
             onClick={() => setPlannerTab('route')}
-            className={`px-3 sm:px-4 py-2 text-sm font-medium rounded-md flex items-center transition-all whitespace-nowrap ${
-              plannerTab === 'route'
-              ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 shadow-sm'
-              : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
-            }`}
+            className={`px-3 sm:px-4 py-2 text-sm font-medium rounded-md flex items-center transition-all whitespace-nowrap ${plannerTab === 'route'
+                ? 'bg-card text-foreground shadow-sm'
+                : 'text-muted-foreground hover:text-foreground'
+              }`}
           >
             <Route className="w-4 h-4 sm:mr-2" />
             <span className="hidden sm:inline">Route</span>
           </button>
           <button
             onClick={() => setPlannerTab('ai')}
-            className={`px-3 sm:px-4 py-2 text-sm font-medium rounded-md flex items-center transition-all whitespace-nowrap ${
-              plannerTab === 'ai'
-              ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 shadow-sm'
-              : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
-            }`}
+            className={`px-3 sm:px-4 py-2 text-sm font-medium rounded-md flex items-center transition-all whitespace-nowrap ${plannerTab === 'ai'
+                ? 'bg-card text-foreground shadow-sm'
+                : 'text-muted-foreground hover:text-foreground'
+              }`}
           >
             <Sparkles className="w-4 h-4 sm:mr-2" />
             <span className="hidden sm:inline">AI Planner</span>
           </button>
           <button
             onClick={() => setPlannerTab('document')}
-            className={`px-3 sm:px-4 py-2 text-sm font-medium rounded-md flex items-center transition-all whitespace-nowrap ${
-              plannerTab === 'document'
-              ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 shadow-sm'
-              : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
-            }`}
+            className={`px-3 sm:px-4 py-2 text-sm font-medium rounded-md flex items-center transition-all whitespace-nowrap ${plannerTab === 'document'
+                ? 'bg-card text-foreground shadow-sm'
+                : 'text-muted-foreground hover:text-foreground'
+              }`}
           >
             <FileText className="w-4 h-4 sm:mr-2" />
             <span className="hidden sm:inline">Document</span>
@@ -517,7 +514,7 @@ export function ItineraryTab({
                 }
               }}
               disabled={isAddingActivity}
-              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
+              className="bg-brand-500 hover:bg-brand-600 rounded-lg"
             >
               {isAddingActivity ? (
                 <>
@@ -541,7 +538,7 @@ export function ItineraryTab({
               variant="outline"
               onClick={() => pdfInputRef.current?.click()}
               disabled={uploadStatus !== 'idle'}
-              className="border-dashed border-blue-300 dark:border-blue-600 text-blue-600 dark:text-blue-400 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-black"
+              className="border-border text-muted-foreground hover:bg-muted rounded-lg"
             >
               {uploadStatus === 'uploading' ? (
                 <>
@@ -565,6 +562,7 @@ export function ItineraryTab({
               <Button
                 variant="outline"
                 disabled={isExportingPdf}
+                className="border-border text-muted-foreground hover:bg-muted rounded-lg"
                 onClick={async () => {
                   setIsExportingPdf(true);
                   try {
@@ -590,22 +588,22 @@ export function ItineraryTab({
 
           {/* Timeline View */}
           {wizardItems.length === 0 ? (
-            <div className="bg-white dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-xl p-12 text-center">
-              <Calendar className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
-              <p className="text-slate-500 dark:text-slate-400 font-medium mb-2">No activities planned yet</p>
-              <p className="text-slate-400 dark:text-slate-500 text-sm mb-4">Start building your itinerary by adding activities or upload a travel PDF</p>
+            <div className="bg-card border-2 border-dashed border-border rounded-xl p-12 text-center">
+              <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground font-medium mb-2">No activities planned yet</p>
+              <p className="text-muted-foreground text-sm mb-4">Start building your itinerary by adding activities or upload a travel PDF</p>
               <div className="flex items-center justify-center gap-4">
                 <button
                   onClick={() => setWizardOpen(true)}
-                  className="text-blue-600 font-semibold hover:underline"
+                  className="text-brand-500 font-semibold hover:underline"
                 >
                   Add activity manually &rarr;
                 </button>
-                <span className="text-slate-300">or</span>
+                <span className="text-muted-foreground">or</span>
                 <button
                   onClick={() => pdfInputRef.current?.click()}
                   disabled={uploadStatus !== 'idle'}
-                  className="text-blue-600 font-semibold hover:underline disabled:opacity-50"
+                  className="text-brand-500 font-semibold hover:underline disabled:opacity-50"
                 >
                   Upload a PDF &rarr;
                 </button>
@@ -619,30 +617,30 @@ export function ItineraryTab({
                 if (todayItems.length === 0) return null;
 
                 return (
-                  <div className="bg-gradient-to-r from-emerald-500 to-green-500 rounded-xl shadow-lg border border-emerald-200 overflow-hidden">
+                  <div className="bg-success-soft rounded-xl shadow-sm border border-success-accent/20 overflow-hidden">
                     <div className="px-5 py-4">
-                      <h3 className="text-white font-bold flex items-center gap-2 text-lg">
+                      <h3 className="text-success-accent font-bold flex items-center gap-2 text-lg">
                         <Sparkles className="w-5 h-5" />
                         Happening Now
-                        <span className="text-xs font-normal bg-white/20 px-2 py-0.5 rounded-full">
+                        <span className="text-xs font-normal bg-success-accent/15 px-2 py-0.5 rounded-full">
                           {todayItems.length} {todayItems.length === 1 ? 'activity' : 'activities'}
                         </span>
                       </h3>
                     </div>
-                    <div className="bg-white dark:bg-slate-800 p-4">
+                    <div className="bg-card p-4">
                       <div className="space-y-3">
                         {todayItems.sort((a, b) => a.timeFrom.localeCompare(b.timeFrom))
                           .map((item, itemIdx) => (
-                            <div key={`${item.id}-${itemIdx}`} className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg p-3">
+                            <div key={`${item.id}-${itemIdx}`} className="bg-success-soft border border-success-accent/20 rounded-lg p-3">
                               <div className="flex items-start justify-between gap-3">
                                 <div className="flex-1">
-                                  <div className="font-semibold text-slate-800 dark:text-slate-100 mb-1">{item.placeName}</div>
-                                  <div className="text-sm text-slate-600 dark:text-slate-300 flex items-center gap-2">
+                                  <div className="font-semibold text-foreground mb-1">{item.placeName}</div>
+                                  <div className="text-sm text-muted-foreground flex items-center gap-2">
                                     <Clock className="w-3 h-3" />
                                     {formatTime(item.timeFrom, household.timeFormat || '24h')} - {formatTime(item.timeTo, household.timeFormat || '24h')}
                                   </div>
                                 </div>
-                                <button onClick={() => handleEditActivity(item)} className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 p-1">
+                                <button onClick={() => handleEditActivity(item)} className="text-success-accent hover:opacity-80 p-1">
                                   <Pencil className="w-4 h-4" />
                                 </button>
                               </div>
@@ -666,12 +664,12 @@ export function ItineraryTab({
                   .sort(([dateA], [dateB]) => {
                     const isACompleted = isDateCompleted(dateA);
                     const isBCompleted = isDateCompleted(dateB);
-                    
+
                     // Upcoming dates come first, completed dates at bottom
                     if (isACompleted !== isBCompleted) {
                       return isACompleted ? 1 : -1;
                     }
-                    
+
                     // Within same status group:
                     if (!isACompleted) {
                       // Both upcoming: sort chronologically (earliest first)
@@ -706,28 +704,27 @@ export function ItineraryTab({
                     }
 
                     return (
-                      <div key={date} className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
+                      <div key={date} className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
                         {/* Date Header - Clickable */}
                         <button
                           onClick={() => toggleDateCollapse(date)}
-                          className={`w-full px-5 py-3 flex items-center justify-between transition-colors ${
-                            dateIsToday
-                              ? 'bg-gradient-to-r from-emerald-500 to-green-500'
-                              : dateIsCompleted
-                              ? 'bg-gradient-to-r from-slate-400 to-slate-500'
-                              : 'bg-gradient-to-r from-blue-500 to-blue-600'
-                          } hover:opacity-90`}
+                          className="w-full px-5 py-3 flex items-center justify-between hover:bg-muted/50 transition-colors"
                         >
-                          <h3 className="text-white font-semibold flex items-center gap-2">
-                            <Calendar className="w-4 h-4" />
-                            {format(parseISO(date), 'EEEE, MMMM d, yyyy')}
-                            {dateIsCompleted && (
-                              <span className="text-xs font-normal bg-white/20 px-2 py-0.5 rounded-full">
-                                Completed
-                              </span>
-                            )}
-                          </h3>
-                          <div className="text-white">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-11 h-11 rounded-md flex flex-col items-center justify-center flex-shrink-0 ${dateIsToday ? 'bg-brand-500 text-white' : 'bg-muted text-muted-foreground'}`}>
+                              <span className="text-[10px] font-semibold uppercase leading-none">{format(parseISO(date), 'MMM')}</span>
+                              <span className="text-base font-bold leading-none">{format(parseISO(date), 'd')}</span>
+                            </div>
+                            <h3 className="text-foreground font-semibold flex items-center gap-2">
+                              {format(parseISO(date), 'EEEE, MMMM d, yyyy')}
+                              {dateIsCompleted && (
+                                <span className="text-xs font-normal bg-success-soft text-success-accent px-2 py-0.5 rounded-full">
+                                  Completed
+                                </span>
+                              )}
+                            </h3>
+                          </div>
+                          <div className="text-muted-foreground">
                             {isCollapsed ? <ChevronDown className="w-5 h-5" /> : <ChevronUp className="w-5 h-5" />}
                           </div>
                         </button>
@@ -739,39 +736,38 @@ export function ItineraryTab({
                               date={date}
                               itemIds={items.map(i => i.id)}
                             >
-                              <div className="relative">
-                                {/* Timeline Line */}
-                                <div className="absolute left-[23px] top-0 bottom-0 w-0.5 bg-slate-200 dark:bg-slate-700" />
+                              <Timeline>
+                                {items
+                                  .sort((a, b) => {
+                                    // Determine if items are completed based on end date/time
+                                    const now = new Date();
+                                    const aEndDateTime = new Date(`${a.dateTo}T${a.timeTo}`);
+                                    const bEndDateTime = new Date(`${b.dateTo}T${b.timeTo}`);
+                                    const aCompleted = aEndDateTime < now;
+                                    const bCompleted = bEndDateTime < now;
 
-                                {/* Items */}
-                                <div className="space-y-4">
-                                  {items
-                                    .sort((a, b) => {
-                                      // Determine if items are completed based on end date/time
-                                      const now = new Date();
-                                      const aEndDateTime = new Date(`${a.dateTo}T${a.timeTo}`);
-                                      const bEndDateTime = new Date(`${b.dateTo}T${b.timeTo}`);
-                                      const aCompleted = aEndDateTime < now;
-                                      const bCompleted = bEndDateTime < now;
-                                      
-                                      // Upcoming items first, completed items last
-                                      if (aCompleted !== bCompleted) {
-                                        return aCompleted ? 1 : -1;
-                                      }
-                                      
-                                      // Within same status, sort by start time
-                                      return a.timeFrom.localeCompare(b.timeFrom);
-                                    })
-                                    .map((item, index) => (
-                                      <TimelineSortableItem key={`${date}-${item.id}-${index}`} id={item.id}>
-                                        {/* Icon */}
-                                        <div className={`w-12 h-12 rounded-full ${getActivityIconColor(item)} text-white flex items-center justify-center flex-shrink-0 z-10 shadow-md`}>
-                                          {getActivityIcon(item)}
-                                        </div>
+                                    // Upcoming items first, completed items last
+                                    if (aCompleted !== bCompleted) {
+                                      return aCompleted ? 1 : -1;
+                                    }
 
+                                    // Within same status, sort by start time
+                                    return a.timeFrom.localeCompare(b.timeFrom);
+                                  })
+                                  .map((item, index) => {
+                                    const activityColor = getActivityIconColor(item);
+                                    return (
+                                      <TimelineSortableItem
+                                        key={`${date}-${item.id}-${index}`}
+                                        id={item.id}
+                                        isLast={index === items.length - 1}
+                                        icon={getActivityIcon(item)}
+                                        iconClassName={`${activityColor} text-white`}
+                                        dotClassName={`${activityColor.replace('bg-', 'border-')} ${activityColor}`}
+                                      >
                                         {/* Content */}
                                         <div
-                                          className="flex-1 bg-slate-50 dark:bg-slate-700 rounded-lg p-4 border border-slate-100 dark:border-slate-600 group hover:border-blue-200 dark:hover:border-blue-500 transition-colors cursor-pointer"
+                                          className="bg-muted rounded-lg p-4 border border-border group hover:border-brand-300 transition-colors cursor-pointer"
                                           onClick={() => handleViewDetails(item)}
                                         >
                                           <div className="flex items-start justify-between mb-2">
@@ -1038,9 +1034,9 @@ export function ItineraryTab({
                                               {item.sourceDocuments.map((doc, docIdx) => {
                                                 const meta = item.documentMetadata?.[doc.id];
                                                 const icon = meta?.documentType === 'boarding_pass' ? '🎫' :
-                                                             meta?.documentType === 'ticket' ? '📄' :
-                                                             meta?.documentType === 'hotel_voucher' ? '🏨' :
-                                                             meta?.documentType === 'confirmation' ? '📋' : '📎';
+                                                  meta?.documentType === 'ticket' ? '📄' :
+                                                    meta?.documentType === 'hotel_voucher' ? '🏨' :
+                                                      meta?.documentType === 'confirmation' ? '📋' : '📎';
 
                                                 return (
                                                   <button
@@ -1066,15 +1062,15 @@ export function ItineraryTab({
                                           {/* Description */}
                                           {item.description && (
                                             <div
-                                              className="text-sm text-slate-600 prose prose-sm max-w-none"
+                                              className="text-sm text-muted-foreground prose prose-sm max-w-none"
                                               dangerouslySetInnerHTML={{ __html: item.description }}
                                             />
                                           )}
                                         </div>
                                       </TimelineSortableItem>
-                                    ))}
-                                </div>
-                              </div>
+                                    );
+                                  })}
+                              </Timeline>
                             </DroppableDateContainer>
                           </div>
                         )}
@@ -1090,7 +1086,7 @@ export function ItineraryTab({
 
       {/* AI Planner Tab */}
       {plannerTab === 'ai' && (
-        <div className="space-y-4">
+        <div className="space-y-4 ">
           {aiPlannerDestinations.length > 1 && (
             <div className="bg-gradient-to-br from-blue-50 to-blue-50 p-4 rounded-xl border border-blue-100">
               <Label className="text-sm font-medium text-slate-700 mb-2 block">

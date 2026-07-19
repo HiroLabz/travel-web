@@ -35,6 +35,8 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
+const WIZARD_STEP_TITLES = ['Vacation type', 'Group & budget', 'Dining', 'Transport', 'Experiences'];
+
 interface ItineraryGeneratorProps {
   tripId: string;
   city: string;
@@ -51,6 +53,9 @@ export function ItineraryGenerator({
   onAddToItinerary,
 }: ItineraryGeneratorProps) {
   const { toast } = useToast();
+
+  // Wizard step (0-indexed, one preference category per step)
+  const [wizardStep, setWizardStep] = useState(0);
 
   // Preferences state - vacationTypes is now an array
   const [vacationTypes, setVacationTypes] = useState<VacationType[]>(['city']);
@@ -155,6 +160,7 @@ export function ItineraryGenerator({
     setTransportGeneralTips('');
     setTransportCard('');
     setShowTransport(false);
+    setWizardStep(0);
   };
 
   const handleGenerateTransport = async () => {
@@ -192,154 +198,198 @@ export function ItineraryGenerator({
   if (!groupedPlaces) {
     return (
       <TooltipProvider>
-        <div className="bg-gradient-to-br from-indigo-50 to-white p-6 rounded-xl border border-indigo-100 mb-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-bold text-indigo-900 flex items-center">
-              <Sparkles className="w-5 h-5 mr-2 text-indigo-500" />
+        <div className="bg-card p-6 rounded-xl border border-border shadow-sm mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-bold text-foreground flex items-center">
+              <Sparkles className="w-5 h-5 mr-2 text-brand-500" />
               AI Trip Planner
             </h3>
+            <span className="text-xs font-medium text-muted-foreground">
+              Step {wizardStep + 1} of {WIZARD_STEP_TITLES.length}: {WIZARD_STEP_TITLES[wizardStep]}
+            </span>
           </div>
 
-          <div className="space-y-5">
-            {/* Row 1: Vacation Types - Multi-select */}
-            <div>
-              <Label className="text-xs font-medium text-slate-600 mb-2 block">What type of vacation are you planning? (select all that apply)</Label>
-              <div className="flex flex-wrap gap-2">
-                {Object.entries(VACATION_TYPE_LABELS).map(([key, label]) => (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={() => toggleVacationType(key as VacationType)}
-                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
-                      vacationTypes.includes(key as VacationType)
-                        ? 'bg-indigo-600 text-white shadow-md'
-                        : 'bg-white border border-slate-200 text-slate-600 hover:border-indigo-300 hover:bg-indigo-50'
-                    }`}
-                  >
-                    <span className="text-lg">{VACATION_TYPE_ICONS[key as VacationType]}</span>
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </div>
+          {/* Progress bar */}
+          <div className="h-1.5 rounded-full bg-muted overflow-hidden mb-6">
+            <div
+              className="h-full bg-brand-500 rounded-full transition-all"
+              style={{ width: `${((wizardStep + 1) / WIZARD_STEP_TITLES.length) * 100}%` }}
+            />
+          </div>
 
-            {/* Row 2: Travel Group & Budget */}
-            <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-5 min-h-[140px]">
+            {/* Step 1: Vacation Types - Multi-select */}
+            {wizardStep === 0 && (
               <div>
-                <Label className="text-xs font-medium text-slate-600 mb-1.5 block">Travel Group</Label>
-                <Select value={travelGroup} onValueChange={(v) => setTravelGroup(v as TravelGroup)}>
-                  <SelectTrigger className="bg-white">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.entries(TRAVEL_GROUP_LABELS).map(([key, label]) => (
-                      <SelectItem key={key} value={key}>{label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label className="text-xs font-medium text-slate-600 mb-1.5 block">Accommodation Budget</Label>
-                <Select value={budget} onValueChange={(v) => setBudget(v as BudgetLevel)}>
-                  <SelectTrigger className="bg-white">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.entries(BUDGET_LABELS).map(([key, label]) => (
-                      <SelectItem key={key} value={key}>{label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            {/* Row 3: Dining */}
-            <div>
-              <Label className="text-xs font-medium text-slate-600 mb-1.5 block">Dining Preference</Label>
-              <Select value={dining} onValueChange={(v) => setDining(v as DiningPreference)}>
-                <SelectTrigger className="w-full bg-white">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.entries(DINING_LABELS).map(([key, label]) => (
-                    <SelectItem key={key} value={key}>{label}</SelectItem>
+                <Label className="text-xs font-medium text-muted-foreground mb-2 block">What type of vacation are you planning? (select all that apply)</Label>
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(VACATION_TYPE_LABELS).map(([key, label]) => (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => toggleVacationType(key as VacationType)}
+                      className={`px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+                        vacationTypes.includes(key as VacationType)
+                          ? 'bg-brand-500 text-white shadow-sm'
+                          : 'bg-card border border-border text-muted-foreground hover:border-brand-300 hover:bg-brand-subtle'
+                      }`}
+                    >
+                      <span className="text-lg">{VACATION_TYPE_ICONS[key as VacationType]}</span>
+                      {label}
+                    </button>
                   ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Row 4: Transport Options with Suggestions */}
-            <div>
-              <Label className="text-xs font-medium text-slate-600 mb-2 block">Available Transport</Label>
-              <div className="flex flex-wrap gap-2">
-                {Object.entries(TRANSPORT_LABELS).map(([key, label]) => (
-                  <Tooltip key={key}>
-                    <TooltipTrigger asChild>
-                      <button
-                        type="button"
-                        onClick={() => toggleTransport(key as TransportOption)}
-                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5 ${
-                          transport.includes(key as TransportOption)
-                            ? 'bg-emerald-600 text-white shadow-md'
-                            : 'bg-white border border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50'
-                        }`}
-                      >
-                        <span>{TRANSPORT_ICONS[key as TransportOption]}</span>
-                        {label}
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom" className="max-w-[200px] text-center">
-                      <p className="text-xs">{TRANSPORT_SUGGESTIONS[key as TransportOption]}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                ))}
+                </div>
               </div>
-              <p className="text-xs text-slate-400 mt-2 flex items-center gap-1">
-                <Info className="w-3 h-3" />
-                Hover over options for suggestions
-              </p>
-            </div>
+            )}
 
-            {/* Row 5: Experiences */}
-            <div>
-              <Label className="text-xs font-medium text-slate-600 mb-2 block">Experiences (select what interests you)</Label>
-              <div className="flex flex-wrap gap-2">
-                {Object.entries(EXPERIENCE_LABELS).map(([key, label]) => (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={() => toggleExperience(key as ExperienceType)}
-                    className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1 ${
-                      experiences.includes(key as ExperienceType)
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white border border-slate-200 text-slate-600 hover:border-blue-300'
-                    }`}
-                  >
-                    <span>{EXPERIENCE_ICONS[key as ExperienceType]}</span>
-                    {label}
-                  </button>
-                ))}
+            {/* Step 2: Travel Group & Budget */}
+            {wizardStep === 1 && (
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-xs font-medium text-muted-foreground mb-1.5 block">Travel Group</Label>
+                  <Select value={travelGroup} onValueChange={(v) => setTravelGroup(v as TravelGroup)}>
+                    <SelectTrigger className="bg-card">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.entries(TRAVEL_GROUP_LABELS).map(([key, label]) => (
+                        <SelectItem key={key} value={key}>{label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label className="text-xs font-medium text-muted-foreground mb-1.5 block">Accommodation Budget</Label>
+                  <Select value={budget} onValueChange={(v) => setBudget(v as BudgetLevel)}>
+                    <SelectTrigger className="bg-card">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.entries(BUDGET_LABELS).map(([key, label]) => (
+                        <SelectItem key={key} value={key}>{label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Generate Button */}
+            {/* Step 3: Dining */}
+            {wizardStep === 2 && (
+              <div>
+                <Label className="text-xs font-medium text-muted-foreground mb-1.5 block">Dining Preference</Label>
+                <Select value={dining} onValueChange={(v) => setDining(v as DiningPreference)}>
+                  <SelectTrigger className="w-full bg-card">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(DINING_LABELS).map(([key, label]) => (
+                      <SelectItem key={key} value={key}>{label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {/* Step 4: Transport Options with Suggestions */}
+            {wizardStep === 3 && (
+              <div>
+                <Label className="text-xs font-medium text-muted-foreground mb-2 block">Available Transport</Label>
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(TRANSPORT_LABELS).map(([key, label]) => (
+                    <Tooltip key={key}>
+                      <TooltipTrigger asChild>
+                        <button
+                          type="button"
+                          onClick={() => toggleTransport(key as TransportOption)}
+                          className={`px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5 ${
+                            transport.includes(key as TransportOption)
+                              ? 'bg-brand-500 text-white shadow-sm'
+                              : 'bg-card border border-border text-muted-foreground hover:border-brand-300 hover:bg-brand-subtle'
+                          }`}
+                        >
+                          <span>{TRANSPORT_ICONS[key as TransportOption]}</span>
+                          {label}
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom" className="max-w-[200px] text-center">
+                        <p className="text-xs">{TRANSPORT_SUGGESTIONS[key as TransportOption]}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  ))}
+                </div>
+                <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
+                  <Info className="w-3 h-3" />
+                  Hover over options for suggestions
+                </p>
+              </div>
+            )}
+
+            {/* Step 5: Experiences */}
+            {wizardStep === 4 && (
+              <div>
+                <Label className="text-xs font-medium text-muted-foreground mb-2 block">Experiences (select what interests you)</Label>
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(EXPERIENCE_LABELS).map(([key, label]) => (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => toggleExperience(key as ExperienceType)}
+                      className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1 ${
+                        experiences.includes(key as ExperienceType)
+                          ? 'bg-brand-500 text-white'
+                          : 'bg-card border border-border text-muted-foreground hover:border-brand-300'
+                      }`}
+                    >
+                      <span>{EXPERIENCE_ICONS[key as ExperienceType]}</span>
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Wizard Navigation */}
+          <div className="flex items-center gap-3 mt-6">
             <Button
-              onClick={handleGenerate}
-              disabled={loading || vacationTypes.length === 0 || experiences.length === 0}
-              className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-3"
+              type="button"
+              variant="outline"
+              onClick={() => setWizardStep((s) => Math.max(0, s - 1))}
+              disabled={wizardStep === 0}
+              className="border-border text-muted-foreground hover:bg-muted rounded-lg"
             >
-              {loading ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Finding places...
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Generate Recommendations
-                </>
-              )}
+              Back
             </Button>
+
+            {wizardStep < WIZARD_STEP_TITLES.length - 1 ? (
+              <Button
+                type="button"
+                onClick={() => setWizardStep((s) => Math.min(WIZARD_STEP_TITLES.length - 1, s + 1))}
+                disabled={wizardStep === 0 && vacationTypes.length === 0}
+                className="flex-1 bg-brand-500 hover:bg-brand-600 rounded-lg"
+              >
+                Next
+              </Button>
+            ) : (
+              <Button
+                onClick={handleGenerate}
+                disabled={loading || vacationTypes.length === 0 || experiences.length === 0}
+                className="flex-1 bg-brand-500 hover:bg-brand-600 rounded-lg text-white"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Finding places...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    Generate Recommendations
+                  </>
+                )}
+              </Button>
+            )}
           </div>
         </div>
       </TooltipProvider>
@@ -350,15 +400,15 @@ export function ItineraryGenerator({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-br from-indigo-50 to-white p-4 rounded-xl border border-indigo-100">
+      <div className="bg-card p-4 rounded-xl border border-border shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <h3 className="text-lg font-bold text-indigo-900 flex items-center">
-              <Sparkles className="w-5 h-5 mr-2 text-indigo-500" />
+            <h3 className="text-lg font-bold text-foreground flex items-center">
+              <Sparkles className="w-5 h-5 mr-2 text-brand-500" />
               Recommended Places for {city}{country ? `, ${country}` : ''}
             </h3>
             {summary && (
-              <p className="text-sm text-slate-500 mt-1">{summary}</p>
+              <p className="text-sm text-muted-foreground mt-1">{summary}</p>
             )}
           </div>
           <div className="flex gap-2">
@@ -367,7 +417,7 @@ export function ItineraryGenerator({
               size="sm"
               onClick={handleGenerateTransport}
               disabled={loadingTransport}
-              className="bg-sky-50 border-sky-200 text-sky-700 hover:bg-sky-100"
+              className="bg-brand-subtle border-brand-500/20 text-brand-500 hover:opacity-80"
             >
               {loadingTransport ? (
                 <>
@@ -391,32 +441,32 @@ export function ItineraryGenerator({
 
       {/* Grouped Results */}
       {Object.entries(groupedPlaces).map(([category, places]) => (
-        <div key={category} className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+        <div key={category} className="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
           {/* Category Header */}
-          <div className="bg-slate-50 px-4 py-3 border-b border-slate-200">
-            <h4 className="font-semibold text-slate-800 flex items-center gap-2">
+          <div className="bg-muted px-4 py-3 border-b border-border">
+            <h4 className="font-semibold text-foreground flex items-center gap-2">
               <span className="text-xl">{EXPERIENCE_ICONS[category as ExperienceType]}</span>
               {EXPERIENCE_LABELS[category as ExperienceType]}
-              <span className="text-xs font-normal text-slate-500 ml-1">
+              <span className="text-xs font-normal text-muted-foreground ml-1">
                 ({places.length} {places.length === 1 ? 'place' : 'places'})
               </span>
             </h4>
           </div>
 
           {/* Places List */}
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-border">
             {places.map((place) => (
-              <div key={place.id} className="p-4 hover:bg-slate-50 transition-colors">
+              <div key={place.id} className="p-4 hover:bg-muted transition-colors">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <h5 className="font-semibold text-slate-800">{place.name}</h5>
+                      <h5 className="font-semibold text-foreground">{place.name}</h5>
                       <div className="flex items-center gap-2">
                         <a
                           href={place.googleMapsUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-indigo-600 hover:text-indigo-700 flex items-center gap-1 text-xs"
+                          className="text-brand-500 hover:text-brand-600 flex items-center gap-1 text-xs"
                           title="Open in Google Maps"
                         >
                           <MapPin className="w-3 h-3" />
@@ -427,7 +477,7 @@ export function ItineraryGenerator({
                           href={place.imageSearchUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-sky-600 hover:text-sky-700 flex items-center gap-1 text-xs"
+                          className="text-brand-500 hover:text-brand-600 flex items-center gap-1 text-xs"
                           title="View images on Google"
                         >
                           <ImageIcon className="w-3 h-3" />
@@ -436,24 +486,24 @@ export function ItineraryGenerator({
                         </a>
                       </div>
                     </div>
-                    <p className="text-xs text-slate-500 mb-2">{place.address}</p>
-                    <p className="text-sm text-slate-600 mb-2 line-clamp-2">{place.description}</p>
-                    <div className="flex items-center gap-3 text-xs text-slate-500">
+                    <p className="text-xs text-muted-foreground mb-2">{place.address}</p>
+                    <p className="text-sm text-muted-foreground mb-2 line-clamp-2">{place.description}</p>
+                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
                         {place.estimatedDuration}
                       </span>
-                      <span className="font-medium text-emerald-600">{place.priceLevel}</span>
+                      <span className="font-medium text-success-accent">{place.priceLevel}</span>
                     </div>
                     {place.tips && (
-                      <p className="text-xs text-amber-600 mt-2 italic">Tip: {place.tips}</p>
+                      <p className="text-xs text-warning-accent mt-2 italic">Tip: {place.tips}</p>
                     )}
                   </div>
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={() => onAddToItinerary(place)}
-                    className="shrink-0 text-indigo-600 border-indigo-200 hover:bg-indigo-50 hover:border-indigo-300"
+                    className="shrink-0 text-brand-500 border-brand-500/30 hover:bg-brand-subtle hover:border-brand-500/50"
                   >
                     <Plus className="w-4 h-4 mr-1" />
                     Add
@@ -467,15 +517,15 @@ export function ItineraryGenerator({
 
       {/* Transport Recommendations Section */}
       {showTransport && transportOptions.length > 0 && (
-        <div className="bg-white rounded-xl border border-sky-200 overflow-hidden">
+        <div className="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
           {/* Transport Header */}
-          <div className="bg-gradient-to-r from-sky-50 to-blue-50 px-4 py-3 border-b border-sky-200">
-            <h4 className="font-bold text-slate-800 flex items-center gap-2">
-              <Bus className="w-5 h-5 text-sky-600" />
+          <div className="bg-brand-subtle px-4 py-3 border-b border-border">
+            <h4 className="font-bold text-foreground flex items-center gap-2">
+              <Bus className="w-5 h-5 text-brand-500" />
               Getting Around {city}
             </h4>
             {transportCard && (
-              <div className="mt-2 text-sm bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 text-amber-800">
+              <div className="mt-2 text-sm bg-warning-soft border border-warning-accent/20 rounded-lg px-3 py-2 text-warning-accent">
                 <strong className="font-semibold">Recommended Card:</strong> {transportCard}
               </div>
             )}
@@ -483,12 +533,12 @@ export function ItineraryGenerator({
 
           {/* General Tips */}
           {transportGeneralTips && (
-            <div className="px-4 py-3 bg-blue-50 border-b border-sky-100">
-              <h5 className="text-sm font-semibold text-slate-700 mb-1 flex items-center gap-1">
-                <Info className="w-4 h-4 text-blue-500" />
+            <div className="px-4 py-3 bg-info-soft border-b border-border">
+              <h5 className="text-sm font-semibold text-foreground mb-1 flex items-center gap-1">
+                <Info className="w-4 h-4 text-info-accent" />
                 General Tips
               </h5>
-              <p className="text-sm text-slate-600 whitespace-pre-line">{transportGeneralTips}</p>
+              <p className="text-sm text-muted-foreground whitespace-pre-line">{transportGeneralTips}</p>
             </div>
           )}
 
@@ -497,50 +547,50 @@ export function ItineraryGenerator({
             {transportOptions.map((option, index) => (
               <div
                 key={index}
-                className="border border-slate-200 rounded-lg p-4 hover:border-sky-300 hover:bg-sky-50/50 transition-all"
+                className="border border-border rounded-lg p-4 hover:border-brand-300 hover:bg-brand-subtle/50 transition-all"
               >
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <Navigation className="w-5 h-5 text-sky-600" />
-                    <h5 className="font-semibold text-slate-800">{option.name}</h5>
+                    <Navigation className="w-5 h-5 text-brand-500" />
+                    <h5 className="font-semibold text-foreground">{option.name}</h5>
                   </div>
-                  <span className="text-xs bg-sky-100 text-sky-700 px-2 py-1 rounded font-medium">
+                  <span className="text-xs bg-brand-subtle text-brand-500 px-2 py-1 rounded font-medium">
                     {option.type}
                   </span>
                 </div>
 
-                <p className="text-sm text-slate-600 mb-3">{option.description}</p>
+                <p className="text-sm text-muted-foreground mb-3">{option.description}</p>
 
                 <div className="space-y-2 text-sm">
                   <div className="flex items-start gap-2">
-                    <span className="font-medium text-slate-700 min-w-[80px]">Cost:</span>
-                    <span className="text-emerald-600 font-medium">{option.costInfo}</span>
+                    <span className="font-medium text-foreground min-w-[80px]">Cost:</span>
+                    <span className="text-success-accent font-medium">{option.costInfo}</span>
                   </div>
                   <div className="flex items-start gap-2">
-                    <span className="font-medium text-slate-700 min-w-[80px]">Hours:</span>
-                    <span className="text-slate-600">{option.availability}</span>
+                    <span className="font-medium text-foreground min-w-[80px]">Hours:</span>
+                    <span className="text-muted-foreground">{option.availability}</span>
                   </div>
                   <div className="flex items-start gap-2">
-                    <span className="font-medium text-slate-700 min-w-[80px]">Best For:</span>
-                    <span className="text-slate-600">{option.bestFor}</span>
+                    <span className="font-medium text-foreground min-w-[80px]">Best For:</span>
+                    <span className="text-muted-foreground">{option.bestFor}</span>
                   </div>
 
                   {option.tips && (
-                    <div className="mt-2 pt-2 border-t border-slate-100">
-                      <p className="text-xs text-amber-600 italic">
+                    <div className="mt-2 pt-2 border-t border-border">
+                      <p className="text-xs text-warning-accent italic">
                         <strong>Tip:</strong> {option.tips}
                       </p>
                     </div>
                   )}
 
                   {option.apps && option.apps.length > 0 && (
-                    <div className="mt-2 pt-2 border-t border-slate-100">
-                      <span className="text-xs font-medium text-slate-700">Recommended Apps: </span>
+                    <div className="mt-2 pt-2 border-t border-border">
+                      <span className="text-xs font-medium text-foreground">Recommended Apps: </span>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {option.apps.map((app, appIndex) => (
                           <span
                             key={appIndex}
-                            className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded"
+                            className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded"
                           >
                             {app}
                           </span>

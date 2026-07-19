@@ -310,13 +310,13 @@ export function CommutePlannerTab({
   // Empty state - no accommodations or airports
   if (accommodations.length === 0 && airports.length === 0) {
     return (
-      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-12">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-12">
         <div className="flex flex-col items-center justify-center text-center">
-          <Hotel className="w-16 h-16 text-slate-300 dark:text-slate-600 mb-4" />
-          <h3 className="text-xl font-semibold text-slate-700 dark:text-slate-200 mb-2">
+          <Hotel className="w-16 h-16 text-muted-foreground mb-4" />
+          <h3 className="text-xl font-semibold text-foreground mb-2">
             No Starting Points
           </h3>
-          <p className="text-slate-500 dark:text-slate-400 max-w-md">
+          <p className="text-muted-foreground max-w-md">
             Add an accommodation or airport in your itinerary to start planning commute routes.
           </p>
         </div>
@@ -330,9 +330,9 @@ export function CommutePlannerTab({
         {/* Left Column: Selection */}
         <div className="lg:col-span-1 space-y-4">
           {/* Origin Selection (Accommodation or Airport) */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-4">
-            <h3 className="font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2 mb-3">
-              <MapPin className="w-4 h-4 text-blue-500" />
+          <div className="bg-card rounded-xl shadow-sm border border-border p-4">
+            <h3 className="font-semibold text-foreground flex items-center gap-2 mb-3">
+              <MapPin className="w-4 h-4 text-brand-500" />
               Starting Point
             </h3>
             <Select
@@ -344,27 +344,27 @@ export function CommutePlannerTab({
               </SelectTrigger>
               <SelectContent>
                 {accommodations.length > 0 && (
-                  <div className="px-2 py-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                  <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
                     Accommodations
                   </div>
                 )}
                 {accommodations.map((acc) => (
                   <SelectItem key={acc.id} value={acc.id}>
                     <div className="flex items-center gap-2">
-                      <Hotel className="w-4 h-4 text-blue-500" />
+                      <Hotel className="w-4 h-4 text-brand-500" />
                       {acc.placeName}
                     </div>
                   </SelectItem>
                 ))}
                 {airports.length > 0 && (
-                  <div className="px-2 py-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 mt-2 border-t pt-2">
+                  <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground mt-2 border-t pt-2">
                     Airports
                   </div>
                 )}
                 {airports.map((airport) => (
                   <SelectItem key={airport.id} value={airport.id}>
                     <div className="flex items-center gap-2">
-                      <Plane className="w-4 h-4 text-blue-500" />
+                      <Plane className="w-4 h-4 text-brand-500" />
                       {airport.placeName}
                     </div>
                   </SelectItem>
@@ -372,16 +372,16 @@ export function CommutePlannerTab({
               </SelectContent>
             </Select>
             {selectedAccommodationId && (
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
+              <p className="text-xs text-muted-foreground mt-2">
                 {allOrigins.find((a) => a.id === selectedAccommodationId)?.address}
               </p>
             )}
           </div>
 
           {/* Transport Mode */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-4">
-            <h3 className="font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2 mb-3">
-              <Car className="w-4 h-4 text-emerald-500" />
+          <div className="bg-card rounded-xl shadow-sm border border-border p-4">
+            <h3 className="font-semibold text-foreground flex items-center gap-2 mb-3">
+              <Car className="w-4 h-4 text-success-accent" />
               Preferred Transport
             </h3>
             <div className="grid grid-cols-3 gap-2">
@@ -391,8 +391,8 @@ export function CommutePlannerTab({
                   onClick={() => setPreferredMode(mode)}
                   className={`p-3 rounded-lg border-2 transition-all ${
                     preferredMode === mode
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                      : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500'
+                      ? 'border-brand-500 bg-brand-subtle text-brand-500'
+                      : 'border-border hover:border-brand-300'
                   }`}
                 >
                   <div className="flex flex-col items-center gap-1">
@@ -407,22 +407,22 @@ export function CommutePlannerTab({
           </div>
 
           {/* Destinations Selection */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-4">
+          <div className="bg-card rounded-xl shadow-sm border border-border p-4">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                <MapPinned className="w-4 h-4 text-blue-500" />
+              <h3 className="font-semibold text-foreground flex items-center gap-2">
+                <MapPinned className="w-4 h-4 text-brand-500" />
                 Destinations ({selectedActivityIds.size}/{allDestinations.length})
               </h3>
               <div className="flex gap-2">
                 <button
                   onClick={selectAllActivities}
-                  className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+                  className="text-xs text-brand-500 hover:underline"
                 >
                   All
                 </button>
                 <button
                   onClick={deselectAllActivities}
-                  className="text-xs text-slate-500 dark:text-slate-400 hover:underline"
+                  className="text-xs text-muted-foreground hover:underline"
                 >
                   None
                 </button>
@@ -431,34 +431,34 @@ export function CommutePlannerTab({
 
             <div className="space-y-2 max-h-64 overflow-y-auto">
               {allDestinations.length === 0 ? (
-                <p className="text-sm text-slate-400 dark:text-slate-500 text-center py-4">
+                <p className="text-sm text-muted-foreground text-center py-4">
                   No destinations found in your itinerary.
                 </p>
               ) : (
                 allDestinations.map((item) => (
                   <label
                     key={item.id}
-                    className="flex items-start gap-3 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer"
+                    className="flex items-start gap-3 p-2 rounded-lg hover:bg-muted/50 cursor-pointer"
                   >
                     <Checkbox
                       checked={selectedActivityIds.has(item.id)}
                       onCheckedChange={() => toggleActivity(item.id)}
                     />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate flex items-center gap-2">
+                      <p className="text-sm font-medium text-foreground truncate flex items-center gap-2">
                         {item.travelType === 'air' ? (
-                          <Plane className="w-3.5 h-3.5 text-blue-500 flex-shrink-0" />
+                          <Plane className="w-3.5 h-3.5 text-brand-500 flex-shrink-0" />
                         ) : (
-                          <MapPin className="w-3.5 h-3.5 text-blue-500 flex-shrink-0" />
+                          <MapPin className="w-3.5 h-3.5 text-brand-500 flex-shrink-0" />
                         )}
                         {item.placeName}
                         {item.travelType === 'air' && (
-                          <span className="text-[10px] bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-1.5 py-0.5 rounded">
+                          <span className="text-[10px] bg-brand-subtle text-brand-500 px-1.5 py-0.5 rounded">
                             Airport
                           </span>
                         )}
                       </p>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 truncate pl-5">
+                      <p className="text-xs text-muted-foreground truncate pl-5">
                         {item.address}
                       </p>
                     </div>
@@ -472,7 +472,7 @@ export function CommutePlannerTab({
           <Button
             onClick={handleCalculateRoute}
             disabled={loading || !selectedAccommodationId || selectedActivityIds.size === 0}
-            className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
+            className="w-full bg-brand-500 hover:bg-brand-600 rounded-lg"
           >
             {loading ? (
               <>
@@ -488,8 +488,8 @@ export function CommutePlannerTab({
           </Button>
 
           {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
-              <p className="text-sm text-red-700 dark:text-red-400 flex items-center gap-2">
+            <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-3">
+              <p className="text-sm text-destructive flex items-center gap-2">
                 <AlertCircle className="w-4 h-4" />
                 {error}
               </p>
@@ -502,9 +502,9 @@ export function CommutePlannerTab({
           {route ? (
             <div className="space-y-4">
               {/* Summary Card */}
-              <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-4">
+              <div className="bg-card rounded-xl shadow-sm border border-border p-4">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">
+                  <h3 className="font-semibold text-foreground">
                     Route Summary
                   </h3>
                   <Button
@@ -519,21 +519,21 @@ export function CommutePlannerTab({
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  <div className="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-3 text-center">
-                    <p className="text-xs text-slate-500 dark:text-slate-400">Activities</p>
-                    <p className="text-xl font-bold text-slate-800 dark:text-slate-200">
+                  <div className="bg-muted rounded-lg p-3 text-center">
+                    <p className="text-xs text-muted-foreground">Activities</p>
+                    <p className="text-xl font-bold text-foreground">
                       {route.segments.length}
                     </p>
                   </div>
-                  <div className="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-3 text-center">
-                    <p className="text-xs text-slate-500 dark:text-slate-400">Total Distance</p>
-                    <p className="text-xl font-bold text-slate-800 dark:text-slate-200">
+                  <div className="bg-muted rounded-lg p-3 text-center">
+                    <p className="text-xs text-muted-foreground">Total Distance</p>
+                    <p className="text-xl font-bold text-foreground">
                       {route.totalDistance.text}
                     </p>
                   </div>
-                  <div className="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-3 text-center">
-                    <p className="text-xs text-slate-500 dark:text-slate-400">From</p>
-                    <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">
+                  <div className="bg-muted rounded-lg p-3 text-center">
+                    <p className="text-xs text-muted-foreground">From</p>
+                    <p className="text-sm font-medium text-foreground truncate">
                       {route.segments[0]?.from.name}
                     </p>
                   </div>
@@ -545,41 +545,41 @@ export function CommutePlannerTab({
                 {route.segments.map((segment, index) => (
                   <div
                     key={segment.id}
-                    className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden"
+                    className="bg-card rounded-xl shadow-sm border border-border overflow-hidden"
                   >
                     <button
                       onClick={() => toggleSegment(segment.id)}
-                      className="w-full p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-700/50"
+                      className="w-full p-4 flex items-center justify-between hover:bg-muted/50"
                     >
                       <div className="flex items-center gap-3">
-                        <span className="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs font-bold">
+                        <span className="w-6 h-6 rounded-full bg-brand-subtle text-brand-500 flex items-center justify-center text-xs font-bold">
                           {index + 1}
                         </span>
                         <div className="text-left">
-                          <p className="font-medium text-slate-800 dark:text-slate-200">
+                          <p className="font-medium text-foreground">
                             {segment.to.name}
                           </p>
-                          <p className="text-sm text-slate-500 dark:text-slate-400">
+                          <p className="text-sm text-muted-foreground">
                             {segment.distance.text} from {segment.from.name}
                           </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
                         {segment.duration[preferredMode] && (
-                          <span className="text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded">
+                          <span className="text-sm font-medium text-brand-500 bg-brand-subtle px-2 py-1 rounded">
                             {segment.duration[preferredMode]?.text}
                           </span>
                         )}
                         {expandedSegments.has(segment.id) ? (
-                          <ChevronUp className="w-4 h-4 text-slate-400" />
+                          <ChevronUp className="w-4 h-4 text-muted-foreground" />
                         ) : (
-                          <ChevronDown className="w-4 h-4 text-slate-400" />
+                          <ChevronDown className="w-4 h-4 text-muted-foreground" />
                         )}
                       </div>
                     </button>
 
                     {expandedSegments.has(segment.id) && (
-                      <div className="px-4 pb-4 border-t border-slate-100 dark:border-slate-700 pt-3 space-y-4">
+                      <div className="px-4 pb-4 border-t border-border pt-3 space-y-4">
                         {/* Transport Mode Durations */}
                         <div className="grid grid-cols-3 gap-2">
                           {(['driving', 'walking', 'cycling'] as CommuteTransportMode[]).map(
@@ -590,15 +590,15 @@ export function CommutePlannerTab({
                                   key={mode}
                                   className={`p-2 rounded-lg ${
                                     mode === preferredMode
-                                      ? 'bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800'
-                                      : 'bg-slate-50 dark:bg-slate-700/50'
+                                      ? 'bg-brand-subtle border border-brand-500/30'
+                                      : 'bg-muted'
                                   }`}
                                 >
-                                  <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
+                                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
                                     {getModeIcon(mode)}
                                     {COMMUTE_TRANSPORT_MODE_LABELS[mode]}
                                   </div>
-                                  <p className="font-semibold text-slate-800 dark:text-slate-200">
+                                  <p className="font-semibold text-foreground">
                                     {duration?.text || 'N/A'}
                                   </p>
                                 </div>
@@ -608,14 +608,14 @@ export function CommutePlannerTab({
                         </div>
 
                         {/* AI Transit Recommendation */}
-                        <div className="border-t border-slate-100 dark:border-slate-700 pt-3">
+                        <div className="border-t border-border pt-3">
                           {transitRecommendations.has(segment.id) ? (
                             <div className="space-y-3">
-                              <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
+                              <div className="flex items-center gap-2 text-success-accent">
                                 <Train className="w-4 h-4" />
                                 <span className="font-medium text-sm">Transit Recommendation</span>
                               </div>
-                              <p className="text-sm text-slate-700 dark:text-slate-300">
+                              <p className="text-sm text-foreground">
                                 {transitRecommendations.get(segment.id)?.transitRecommendation}
                               </p>
 
@@ -623,14 +623,14 @@ export function CommutePlannerTab({
                               <div className="space-y-2">
                                 {transitRecommendations.get(segment.id)?.transitSteps.map((step, i) => (
                                   <div key={i} className="flex items-start gap-2 text-sm">
-                                    <span className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs flex-shrink-0">
+                                    <span className="w-5 h-5 rounded-full bg-success-soft text-success-accent flex items-center justify-center text-xs flex-shrink-0">
                                       {i + 1}
                                     </span>
                                     <div>
                                       <span className="font-medium">{step.mode}:</span>{' '}
                                       {step.instruction}
                                       {step.duration && (
-                                        <span className="text-slate-500 dark:text-slate-400"> ({step.duration})</span>
+                                        <span className="text-muted-foreground"> ({step.duration})</span>
                                       )}
                                     </div>
                                   </div>
@@ -639,19 +639,19 @@ export function CommutePlannerTab({
 
                               {/* Cost and Tips */}
                               {transitRecommendations.get(segment.id)?.estimatedCost && (
-                                <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                   <DollarSign className="w-4 h-4" />
                                   <span>Estimated cost: {transitRecommendations.get(segment.id)?.estimatedCost}</span>
                                 </div>
                               )}
 
                               {transitRecommendations.get(segment.id)?.tips && transitRecommendations.get(segment.id)!.tips.length > 0 && (
-                                <div className="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-3">
-                                  <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400 text-sm font-medium mb-2">
+                                <div className="bg-warning-soft rounded-lg p-3">
+                                  <div className="flex items-center gap-2 text-warning-accent text-sm font-medium mb-2">
                                     <Lightbulb className="w-4 h-4" />
                                     Local Tips
                                   </div>
-                                  <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+                                  <ul className="text-sm text-muted-foreground space-y-1">
                                     {transitRecommendations.get(segment.id)?.tips.map((tip, i) => (
                                       <li key={i}>- {tip}</li>
                                     ))}
@@ -693,7 +693,7 @@ export function CommutePlannerTab({
                             )}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-1 text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                            className="flex items-center gap-1 text-sm text-brand-500 hover:underline"
                           >
                             <ExternalLink className="w-3 h-3" />
                             Open in Google Maps (Transit)
@@ -706,13 +706,13 @@ export function CommutePlannerTab({
               </div>
             </div>
           ) : (
-            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-12">
+            <div className="bg-card rounded-xl shadow-sm border border-border p-12">
               <div className="flex flex-col items-center justify-center text-center">
-                <Route className="w-16 h-16 text-slate-300 dark:text-slate-600 mb-4" />
-                <h3 className="text-xl font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                <Route className="w-16 h-16 text-muted-foreground mb-4" />
+                <h3 className="text-xl font-semibold text-foreground mb-2">
                   No Route Calculated
                 </h3>
-                <p className="text-slate-500 dark:text-slate-400 max-w-md">
+                <p className="text-muted-foreground max-w-md">
                   Select your accommodation and activities, then click &quot;Calculate Routes&quot; to
                   see travel times and distances.
                 </p>
