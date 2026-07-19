@@ -1,12 +1,7 @@
 "use client";
 // beui.dev/components/motion/input
 
-import {
-  AnimatePresence,
-  animate,
-  motion,
-  useReducedMotion,
-} from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import {
   forwardRef,
   useEffect,
@@ -18,6 +13,10 @@ import {
   type ReactNode,
 } from "react";
 import { cn } from "@/lib/utils";
+// transitions.dev — error state shake. Owns the border-color tween, the
+// shake keyframes, and the error message reveal; this component only
+// toggles the classes documented in that file.
+import "@/styles/transitions/error-shake.css";
 
 export type InputClassNames = {
   root?: string;
@@ -91,15 +90,38 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   // Right edge shows the success check, otherwise the caller's right icon.
   const rightSlot = success ? null : rightIcon;
 
-  // Shake the field when an error appears.
+  // Once a field has errored, keep the message mounted (transitions.dev's
+  // CSS fades it via opacity/visibility, not display, so it still needs a
+  // box to fade) and hold the last real text through that fade instead of
+  // blanking instantly when the error clears. Pristine fields that have
+  // never errored render no box at all, so they don't carry extra blank
+  // space under every input on every page.
+  const [hasErrored, setHasErrored] = useState(Boolean(errorMessage));
+  const [displayedError, setDisplayedError] = useState(errorMessage);
+  useEffect(() => {
+    if (errorMessage) {
+      setHasErrored(true);
+      setDisplayedError(errorMessage);
+    }
+  }, [errorMessage]);
+
+  // Replay the shake (transitions.dev — error state shake) whenever a new
+  // error appears. Tracks the last error we've already shaken for so it
+  // doesn't replay on unrelated re-renders while the same error is shown.
+  const shookForRef = useRef<string | boolean>(false);
   useEffect(() => {
     if (!fieldRef.current || reduce || !hasError) return;
-    animate(
-      fieldRef.current,
-      { x: [0, -6, 6, -4, 4, -2, 0] },
-      { duration: 0.45 },
-    );
-  }, [hasError, reduce]);
+    const key = errorMessage ?? true;
+    if (shookForRef.current === key) return;
+    shookForRef.current = key;
+    const el = fieldRef.current;
+    el.classList.remove("is-shaking");
+    void el.offsetWidth; // force reflow so the animation can replay
+    el.classList.add("is-shaking");
+  }, [hasError, errorMessage, reduce]);
+  useEffect(() => {
+    if (!hasError) shookForRef.current = false;
+  }, [hasError]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!controlled) setInternal(e.target.value);
@@ -108,7 +130,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 
   return (
     <div
-      className={cn("flex flex-col gap-1.5", classNames?.root)}
+      className={cn(
+        "t-input-wrap flex flex-col gap-1.5",
+        hasError && "is-error",
+        classNames?.root,
+      )}
     >
       {label ? (
         <label
@@ -134,10 +160,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
                 : "idle"
         }
         className={cn(
-          "relative h-11 overflow-hidden rounded-[10px] border bg-brand-subtle transition-colors duration-200",
+          "t-input relative h-11 overflow-hidden rounded-[10px] border bg-brand-subtle",
           "border-neutral-100",
           focused && !hasError && "border-brand-500 ring-2 ring-brand-100",
-          hasError && "border-danger-600 ring-2 ring-danger-100",
+          hasError && "is-error border-danger-600 ring-2 ring-danger-100",
           disabled && "opacity-60",
           className,
           classNames?.field,
@@ -216,32 +242,18 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         ) : null}
       </div>
 
-      <AnimatePresence initial={false}>
-        {errorMessage ? (
-          <motion.p
-            id={`${id}-error`}
-            role="alert"
-            initial={
-              reduce
-                ? { opacity: 0 }
-                : { opacity: 0, y: -4, filter: "blur(4px)" }
-            }
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            exit={
-              reduce
-                ? { opacity: 0 }
-                : { opacity: 0, y: -4, filter: "blur(4px)" }
-            }
-            transition={{ duration: 0.2 }}
-            className={cn(
-              "px-1 text-xs text-danger-500",
-              classNames?.errorMessage,
-            )}
-          >
-            {errorMessage}
-          </motion.p>
-        ) : null}
-      </AnimatePresence>
+      {hasErrored ? (
+        <p
+          id={`${id}-error`}
+          role="alert"
+          className={cn(
+            "t-error-msg px-1 text-xs text-danger-500",
+            classNames?.errorMessage,
+          )}
+        >
+          {displayedError}
+        </p>
+      ) : null}
     </div>
   );
 });

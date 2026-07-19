@@ -11,10 +11,10 @@ import {
 } from 'firebase/auth';
 import { auth, db } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
-import { Field, FieldError, FieldLabel } from '@/components/ui/field';
+import { Field, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/motion/input';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Check, Eye, EyeOff, Mail, Search } from 'lucide-react';
+import { Loader2, Check, Eye, EyeOff, Mail, Key, UserRound } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -39,7 +39,7 @@ type FormValues = z.infer<typeof formSchema>;
 // not in the shared motion/input.tsx default (that stays as-is for every
 // other, still-light-styled call site).
 const darkFieldClassName =
-  'h-[52px] rounded-full border-neutral-dark-700 bg-muted px-5 text-foreground placeholder:text-muted-foreground focus:border-accent-500 focus:ring-accent-500/30';
+  'h-[52px] rounded-full border-border bg-muted px-5 text-foreground placeholder:text-muted-foreground focus:border-accent-500 focus:ring-accent-500/30';
 
 /**
  * transitions.dev — "Success check with blur and rotate".
@@ -81,6 +81,7 @@ function LoginForm() {
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<FormValues>({
@@ -187,10 +188,10 @@ function LoginForm() {
         {/* Photo collage — peeks above the card's top edge. Placeholder
             assets: drop the real photos in public/assets/ under these two
             file names and they'll pick up automatically. */}
-        <div className="relative z-10 mx-auto -mb-16 h-32 w-40">
+        <div className="relative z-10 mx-auto -mb-14 h-32 w-40">
           <div className="absolute left-0 top-6 h-28 w-28 -rotate-6 overflow-hidden rounded-3xl border-4 border-background shadow-lg">
             <Image
-              src="/assets/auth-photo-1.jpg"
+              src="/assets/bg-image.jpg"
               alt=""
               fill
               sizes="112px"
@@ -199,7 +200,7 @@ function LoginForm() {
           </div>
           <div className="absolute right-0 top-0 h-28 w-28 rotate-6 overflow-hidden rounded-3xl border-4 border-background shadow-lg">
             <Image
-              src="/assets/auth-photo-2.jpg"
+              src="/assets/bg-image.jpg"
               alt=""
               fill
               sizes="112px"
@@ -208,7 +209,7 @@ function LoginForm() {
           </div>
         </div>
 
-        <div className="relative flex flex-col items-center rounded-[32px] border border-border bg-card px-8 pb-8 pt-20 shadow-xl">
+        <div className="relative flex flex-col items-center rounded-[32px] border border-border bg-card px-8 pb-8 pt-20 ">
           <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
             WanderNest
           </span>
@@ -241,13 +242,15 @@ function LoginForm() {
                     <Input
                       id="name"
                       aria-invalid={fieldState.invalid}
+                      error={fieldState.error?.message}
                       className={darkFieldClassName}
                       placeholder="Full name"
                       type="text"
+                      leftIcon={<UserRound />}
+                      classNames={{ leftIcon: ' left-5' }}
                       disabled={loading}
                       {...field}
                     />
-                    <FieldError errors={[fieldState.error]} />
                   </Field>
                 )}
               />
@@ -264,14 +267,15 @@ function LoginForm() {
                   <Input
                     id="email"
                     aria-invalid={fieldState.invalid}
+                    error={fieldState.error?.message}
                     className={darkFieldClassName}
                     placeholder="Email"
                     leftIcon={<Mail />}
+                    classNames={{ leftIcon: ' left-5' }}
                     type="email"
                     disabled={loading}
                     {...field}
                   />
-                  <FieldError errors={[fieldState.error]} />
                 </Field>
               )}
             />
@@ -287,13 +291,26 @@ function LoginForm() {
                   <Input
                     id="password"
                     aria-invalid={fieldState.invalid}
+                    error={fieldState.error?.message}
                     className={darkFieldClassName}
                     placeholder="Password"
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     disabled={loading}
+                    leftIcon={<Key />}
+                    classNames={{ leftIcon: ' left-5', rightIcon: 'right-5' }}
+                    rightIcon={
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((v) => !v)}
+                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                        aria-pressed={showPassword}
+                        className="pointer-events-auto hover:text-foreground"
+                      >
+                        {showPassword ? <EyeOff /> : <Eye />}
+                      </button>
+                    }
                     {...field}
                   />
-                  <FieldError errors={[fieldState.error]} />
                 </Field>
               )}
             />
@@ -308,7 +325,7 @@ function LoginForm() {
             )}
 
             <Button
-              className="!mt-5 h-[58px] w-full rounded-full bg-accent-500 text-white hover:bg-accent-600"
+              className="!mt-5 h-[48px] w-full rounded-full bg-accent-500 text-white hover:bg-accent-600"
               type="submit"
               disabled={loading}
             >

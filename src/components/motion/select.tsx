@@ -369,35 +369,35 @@ export function SelectContent({ className, children }: SelectContentProps) {
         ctx.reduce
           ? { opacity: open ? 1 : 0, height: open ? height : 0 }
           : {
-              opacity: open ? 1 : 0,
-              height: open ? height : 0,
-              // gap opens on the side facing the trigger
-              marginTop: isTop ? 0 : nearGap,
-              marginBottom: isTop ? nearGap : 0,
-              // near corners go flat->round; far corners stay rounded
-              borderTopLeftRadius: isTop ? 12 : nearRadius,
-              borderTopRightRadius: isTop ? 12 : nearRadius,
-              borderBottomLeftRadius: isTop ? nearRadius : 12,
-              borderBottomRightRadius: isTop ? nearRadius : 12,
-            }
+            opacity: open ? 1 : 0,
+            height: open ? height : 0,
+            // gap opens on the side facing the trigger
+            marginTop: isTop ? 0 : nearGap,
+            marginBottom: isTop ? nearGap : 0,
+            // near corners go flat->round; far corners stay rounded
+            borderTopLeftRadius: isTop ? 12 : nearRadius,
+            borderTopRightRadius: isTop ? 12 : nearRadius,
+            borderBottomLeftRadius: isTop ? nearRadius : 12,
+            borderBottomRightRadius: isTop ? nearRadius : 12,
+          }
       }
       transition={
         ctx.reduce
           ? { duration: 0.12 }
           : {
-              opacity: open
-                ? { duration: 0.18 }
-                : { duration: 0.16, delay: 0.12 },
-              height: open
-                ? { type: "spring", duration: 0.42, bounce: 0.14 }
-                : { duration: 0.26, ease: EASE_OUT, delay: 0.14 },
-              marginTop: isTop ? INSTANT_TRANSITION : gapT,
-              marginBottom: isTop ? gapT : INSTANT_TRANSITION,
-              borderTopLeftRadius: isTop ? INSTANT_TRANSITION : radiusT,
-              borderTopRightRadius: isTop ? INSTANT_TRANSITION : radiusT,
-              borderBottomLeftRadius: isTop ? radiusT : INSTANT_TRANSITION,
-              borderBottomRightRadius: isTop ? radiusT : INSTANT_TRANSITION,
-            }
+            opacity: open
+              ? { duration: 0.18 }
+              : { duration: 0.16, delay: 0.12 },
+            height: open
+              ? { type: "spring", duration: 0.42, bounce: 0.14 }
+              : { duration: 0.26, ease: EASE_OUT, delay: 0.14 },
+            marginTop: isTop ? INSTANT_TRANSITION : gapT,
+            marginBottom: isTop ? gapT : INSTANT_TRANSITION,
+            borderTopLeftRadius: isTop ? INSTANT_TRANSITION : radiusT,
+            borderTopRightRadius: isTop ? INSTANT_TRANSITION : radiusT,
+            borderBottomLeftRadius: isTop ? radiusT : INSTANT_TRANSITION,
+            borderBottomRightRadius: isTop ? radiusT : INSTANT_TRANSITION,
+          }
       }
       style={{
         transformOrigin: isTop ? "bottom" : "top",
@@ -407,7 +407,7 @@ export function SelectContent({ className, children }: SelectContentProps) {
       // flush against the trigger, then separates into its own rounded pill;
       // sits above or below depending on available space
       className={cn(
-        "absolute left-0 right-0 z-20 rounded-xl border border-neutral-100 bg-white shadow-m",
+        "absolute left-0 right-0 z-20 rounded-[10px] border border-neutral-100 bg-white shadow-m",
         isTop ? "bottom-full" : "top-full",
         className,
       )}

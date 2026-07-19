@@ -534,7 +534,7 @@ export function PopoverContent({ children, className }: PopoverContentProps) {
               ["--trigger-width" as string]: `${sizes.tW}px`,
             }}
             className={cn(
-              "w-max max-w-[min(92vw,20rem)] border border-neutral-100 p-4 text-neutral-dark-900 shadow-m outline-none",
+              "w-max max-w-[min(92vw,20rem)] border border-neutral-100 bg-white p-4 text-neutral-dark-900 shadow-m outline-none",
               className,
             )}
           >
