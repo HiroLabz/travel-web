@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Check, ChevronUp, ChevronDown, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/motion/input";
 import type { ChecklistItem } from "@/types";
 
 interface ChecklistItemRowProps {

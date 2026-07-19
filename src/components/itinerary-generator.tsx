@@ -27,13 +27,8 @@ import { Sparkles, Loader2, MapPin, Clock, Plus, ExternalLink, RotateCcw, Image 
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/motion/select';
+import { Tooltip } from '@/components/motion/tooltip';
 
 const WIZARD_STEP_TITLES = ['Vacation type', 'Group & budget', 'Dining', 'Transport', 'Experiences'];
 
@@ -197,7 +192,6 @@ export function ItineraryGenerator({
   // Render preferences form
   if (!groupedPlaces) {
     return (
-      <TooltipProvider>
         <div className="bg-card p-6 rounded-xl border border-border shadow-sm mb-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-bold text-foreground flex items-center">
@@ -297,24 +291,24 @@ export function ItineraryGenerator({
                 <Label className="text-xs font-medium text-muted-foreground mb-2 block">Available Transport</Label>
                 <div className="flex flex-wrap gap-2">
                   {Object.entries(TRANSPORT_LABELS).map(([key, label]) => (
-                    <Tooltip key={key}>
-                      <TooltipTrigger asChild>
-                        <button
-                          type="button"
-                          onClick={() => toggleTransport(key as TransportOption)}
-                          className={`px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5 ${
-                            transport.includes(key as TransportOption)
-                              ? 'bg-brand-500 text-white shadow-sm'
-                              : 'bg-card border border-border text-muted-foreground hover:border-brand-300 hover:bg-brand-subtle'
-                          }`}
-                        >
-                          <span>{TRANSPORT_ICONS[key as TransportOption]}</span>
-                          {label}
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent side="bottom" className="max-w-[200px] text-center">
-                        <p className="text-xs">{TRANSPORT_SUGGESTIONS[key as TransportOption]}</p>
-                      </TooltipContent>
+                    <Tooltip
+                      key={key}
+                      side="bottom"
+                      className="max-w-[200px] text-center"
+                      content={TRANSPORT_SUGGESTIONS[key as TransportOption]}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => toggleTransport(key as TransportOption)}
+                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5 ${
+                          transport.includes(key as TransportOption)
+                            ? 'bg-brand-500 text-white shadow-sm'
+                            : 'bg-card border border-border text-muted-foreground hover:border-brand-300 hover:bg-brand-subtle'
+                        }`}
+                      >
+                        <span>{TRANSPORT_ICONS[key as TransportOption]}</span>
+                        {label}
+                      </button>
                     </Tooltip>
                   ))}
                 </div>
@@ -392,7 +386,6 @@ export function ItineraryGenerator({
             )}
           </div>
         </div>
-      </TooltipProvider>
     );
   }
 

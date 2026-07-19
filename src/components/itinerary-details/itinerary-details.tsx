@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import type { WizardItineraryItem, Household, DocumentReference } from '@/types';
 import { ACTIVITY_TRAVEL_TYPE_LABELS } from '@/types';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/motion/tabs';
 import { Button } from '@/components/ui/button';
 import { InfoTab } from './info-tab';
 import { GalleryTab } from './gallery-tab';

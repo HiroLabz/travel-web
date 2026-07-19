@@ -7,14 +7,14 @@ import { formatCurrency, getCurrencySymbol } from '@/lib/constants';
 import { updateTripBudgetAction } from '@/lib/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Input } from '@/components/motion/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@/components/motion/select';
 import {
   Collapsible,
   CollapsibleContent,

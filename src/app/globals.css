@@ -11,82 +11,101 @@
        the `colors` block in tailwind.config.js (happy to write that
        too if useful).
        ========================================================== */
-    --brand-50: 220 30% 96.1%;
-    --brand-100: 220 31.9% 90.8%;
-    --brand-200: 220.6 30.7% 80.2%;
-    --brand-300: 220 31.3% 68%;
-    --brand-400: 220.5 33.6% 48.4%;
+    /* Recomputed directly from DESIGN.md's hex swatches (previous values
+       below -500 anchor were an interpolated approximation, not exact —
+       only the bolded -500 row in each scale had been hand-verified). */
+    --brand-50: 220 31.6% 92.5%; /* #e6eaf2 — exact */
+    --brand-100: 221.1 31.7% 76.5%; /* #b0bcd6 — exact */
+    --brand-200: 220.7 31.5% 65.1%; /* #8a9cc2 — exact */
+    --brand-300: 220.2 32.8% 49%; /* #546fa6 — exact */
+    --brand-400: 220.4 49% 39.2%; /* #335395 — exact */
     --brand-500: 220.3 100% 23.9%; /* #00287A — exact */
-    --brand-600: 220 100% 20%;
-    --brand-700: 220.5 100% 16.3%;
-    --brand-800: 220 100% 12.9%;
-    --brand-900: 220.4 100% 9.6%;
+    --brand-600: 220.5 100% 21.8%; /* #00246f — exact */
+    --brand-700: 220.7 100% 17.1%; /* #001c57 — exact */
+    --brand-800: 220.3 100% 13.1%; /* #001643 — exact */
+    --brand-900: 220 100% 10%; /* #001133 — exact */
 
-    --danger-50: 0 69.2% 97.5%;
-    --danger-100: 0 66.7% 94.1%;
-    --danger-200: 0 66.7% 87.1%;
-    --danger-300: 0 67.9% 79.2%;
-    --danger-400: 0 67.4% 66.3%;
+    --danger-50: 0 68% 95.1%; /* #fbeaea — exact */
+    --danger-100: 0 67.1% 84.5%; /* #f2bdbd — exact */
+    --danger-200: 0 67.5% 77.1%; /* #ec9d9d — exact */
+    --danger-300: 0 68% 66.9%; /* #e47171 — exact */
+    --danger-400: 0 67.5% 60.2%; /* #de5555 — exact */
     --danger-500: 0 67.6% 50.4%; /* #D62B2B — exact */
-    --danger-600: 0 66.7% 42.4%;
-    --danger-700: 0 66.9% 34.3%;
-    --danger-800: 0 66.9% 27.3%;
-    --danger-900: 0 67% 20.2%;
+    --danger-600: 0 66.7% 45.9%; /* #c32727 — exact */
+    --danger-700: 0 66.1% 35.9%; /* #981f1f — exact */
+    --danger-800: 0 66.2% 27.8%; /* #761818 — exact */
+    --danger-900: 0 66.7% 21.2%; /* #5a1212 — exact */
 
-    --secondary-50: 216 71.4% 97.3%;
-    --secondary-100: 217.5 70.6% 93.3%;
-    --secondary-200: 217.2 67.6% 85.5%;
-    --secondary-300: 217.8 68.1% 76.7%;
-    --secondary-400: 217.3 68% 62%;
+    --secondary-50: 219 71.4% 94.5%; /* #e7eefb — exact */
+    --secondary-100: 217 68.2% 82.7%; /* #b5ccf1 — exact */
+    --secondary-200: 217.1 67.9% 74.3%; /* #91b3ea — exact */
+    --secondary-300: 217.4 68.4% 62.7%; /* #5f90e1 — exact */
+    --secondary-400: 217.5 68.3% 55.5%; /* #407adb — exact */
     --secondary-500: 217.4 85.8% 44.3%; /* #1059D2 — exact */
-    --secondary-600: 217.2 86.2% 37.1%;
-    --secondary-700: 217.3 85.7% 30.2%;
-    --secondary-800: 217.5 85.2% 23.9%;
-    --secondary-900: 216.9 86.7% 17.6%;
+    --secondary-600: 217.5 85.4% 40.4%; /* #0f51bf — exact */
+    --secondary-700: 217.4 86.3% 31.4%; /* #0b3f95 — exact */
+    --secondary-800: 217.6 85.6% 24.5%; /* #093174 — exact */
+    --secondary-900: 217.8 85.3% 18.6%; /* #072558 — exact */
 
-    --success-50: 145.7 41.2% 96.7%;
-    --success-100: 146.7 42.9% 91.8%;
-    --success-200: 147.6 40.7% 82.2%;
-    --success-300: 147 41.1% 71.4%;
-    --success-400: 147.2 40.9% 53.5%;
-    --success-500: 147.3 88.8% 31.6%; /* #09984A — exact */
-    --success-600: 147 88.2% 26.7%;
-    --success-700: 147.2 89% 21.4%;
-    --success-800: 147.3 88.5% 17.1%;
-    --success-900: 147.4 87.7% 12.7%;
+    /* DESIGN.md "Accent Color" — was missing entirely; no Tailwind class
+       could reach it before. Kept separate from the shadcn --accent slot
+       below (generic hover-state gray) so nothing shadcn-facing changes. */
+    --accent-50: 256 88.2% 96.7%; /* #f3effe — exact */
+    --accent-100: 258.7 88.9% 89.4%; /* #dbccfc — exact */
+    --accent-200: 258.6 89.9% 84.5%; /* #cab4fb — exact */
+    --accent-300: 258.1 89.6% 77.5%; /* #b192f9 — exact */
+    --accent-400: 258 89.8% 73.1%; /* #a27df8 — exact */
+    --accent-500: 258.3 89.5% 66.3%; /* #8b5cf6 — exact */
+    --accent-600: 258 69.3% 60.4%; /* #7e54e0 — exact */
+    --accent-700: 258.5 45.8% 47.1%; /* #6341af — exact */
+    --accent-800: 257.9 45.2% 36.5%; /* #4c3387 — exact */
+    --accent-900: 257.8 45.1% 27.8%; /* #3a2767 — exact */
 
-    --warning-50: 49.1 100% 97.8%;
-    --warning-100: 50.4 92.6% 94.7%;
-    --warning-200: 49.1 96.5% 88.8%;
-    --warning-300: 49.1 95.7% 82%;
-    --warning-400: 49.1 96% 70.8%;
+    --success-50: 148 45.5% 93.5%; /* #e7f6ee — exact */
+    --success-100: 146.9 47.6% 79.8%; /* #b3e4c9 — exact */
+    --success-200: 147.1 47.7% 70%; /* #8ed7af — exact */
+    --success-300: 146.9 47.1% 56.3%; /* #5bc48a — exact */
+    --success-400: 147.1 51.6% 47.8%; /* #3bb974 — exact */
+    --success-500: 147.1 88.7% 34.7%; /* #0AA751 — exact */
+    --success-600: 147.3 88.8% 31.6%; /* #09984a — exact */
+    --success-700: 147.3 88.9% 24.7%; /* #07773a — exact */
+    --success-800: 147.2 87.8% 19.2%; /* #065c2d — exact */
+    --success-900: 147.3 89.2% 14.5%; /* #044622 — exact */
+
+    --warning-50: 48.6 100% 95.9%; /* #fffbea — exact */
+    --warning-100: 49.8 94.2% 86.5%; /* #fdf2bc — exact */
+    --warning-200: 48.9 96% 80.2%; /* #fdeb9c — exact */
+    --warning-300: 48.9 95.9% 71.2%; /* #fce26f — exact */
+    --warning-400: 49.3 95.5% 65.5%; /* #fbdd53 — exact */
     --warning-500: 49.1 95.5% 56.9%; /* #FAD428 — exact */
-    --warning-600: 49.1 72.1% 47.8%;
-    --warning-700: 49.1 72.6% 38.6%;
-    --warning-800: 48.8 72% 30.8%;
-    --warning-900: 49.3 72.4% 22.7%;
+    --warning-600: 49.1 78% 51.8%; /* #e4c124 — exact */
+    --warning-700: 49.2 72.8% 40.4%; /* #b2971c — exact */
+    --warning-800: 49.1 72.5% 31.4%; /* #8a7516 — exact */
+    --warning-900: 49.1 72.1% 23.9%; /* #695911 — exact */
 
-    --neutral-50: 0 0% 98%;
-    --neutral-100: 0 0% 94.1%;
-    --neutral-200: 0 0% 87.8%;
-    --neutral-300: 0 0% 78%;
-    --neutral-400: 0 0% 63.9%;
-    --neutral-500: 0 0% 54.9%;
-    --neutral-600: 0 0% 45.1%;
-    --neutral-700: 0 0% 34.9%;
-    --neutral-800: 0 0% 25.1%;
-    --neutral-900: 0 0% 14.9%;
+    /* Light Neutral — matches DESIGN.md exactly (#f6f6f6 … #464646). */
+    --neutral-50: 0 0% 96.5%; /* #f6f6f6 — exact */
+    --neutral-100: 0 0% 89%; /* #e3e3e3 — exact */
+    --neutral-200: 0 0% 83.9%; /* #d6d6d6 — exact */
+    --neutral-300: 0 0% 76.5%; /* #c3c3c3 — exact */
+    --neutral-400: 0 0% 72.2%; /* #b8b8b8 — exact */
+    --neutral-500: 0 0% 65.1%; /* #a6a6a6 — exact */
+    --neutral-600: 0 0% 59.2%; /* #979797 — exact */
+    --neutral-700: 0 0% 46.3%; /* #767676 — exact */
+    --neutral-800: 0 0% 35.7%; /* #5b5b5b — exact */
+    --neutral-900: 0 0% 27.5%; /* #464646 — exact */
 
-    --neutral-dark-50: 0 0% 96.1%;
-    --neutral-dark-100: 0 0% 89.8%;
-    --neutral-dark-200: 0 0% 80%;
-    --neutral-dark-300: 0 0% 63.9%;
-    --neutral-dark-400: 0 0% 45.1%;
-    --neutral-dark-500: 0 0% 32.2%;
-    --neutral-dark-600: 0 0% 23.9%;
-    --neutral-dark-700: 0 0% 16.1%;
-    --neutral-dark-800: 0 0% 9%;
-    --neutral-dark-900: 0 0% 3.9%;
+    /* Dark Neutral — matches DESIGN.md exactly (#efefef … #262626). */
+    --neutral-dark-50: 0 0% 93.7%; /* #efefef — exact */
+    --neutral-dark-100: 0 0% 80%; /* #cccccc — exact */
+    --neutral-dark-200: 0 0% 70.6%; /* #b4b4b4 — exact */
+    --neutral-dark-300: 0 0% 56.9%; /* #919191 — exact */
+    --neutral-dark-400: 0 0% 48.6%; /* #7c7c7c — exact */
+    --neutral-dark-500: 0 0% 35.7%; /* #5b5b5b — exact */
+    --neutral-dark-600: 0 0% 32.5%; /* #535353 — exact */
+    --neutral-dark-700: 0 0% 25.5%; /* #414141 — exact */
+    --neutral-dark-800: 0 0% 19.6%; /* #323232 — exact */
+    --neutral-dark-900: 0 0% 14.9%; /* #262626 — exact */
 
     --brand-subtle: 212.3 56.5% 95.5%; /* #EDF3FA — exact */
 
@@ -101,19 +120,19 @@
     --card-foreground: 0 0% 9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 9%;
-    --primary: 193.7 85.6% 38.2%; /* #0e8fb5 */
+    --primary: 220.3 100% 23.9%; /* brand-500 #00287a — was #0e8fb5 (Metronic teal) */
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 96.1%; /* #f5f5f5 */
-    --secondary-foreground: 0 0% 9%;
+    --secondary: 217.4 85.8% 44.3%; /* secondary-500 #1059d2 — DESIGN.md Secondary Color, was gray #f5f5f5 */
+    --secondary-foreground: 0 0% 100%;
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%; /* #737373 */
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 354.7 100% 44.7%; /* #e40014 */
+    --accent: 258.3 89.5% 66.3%; /* accent-500 #8b5cf6 — DESIGN.md Accent Color, was gray #f5f5f5 */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 67.6% 50.4%; /* danger-500 #d62b2b — was #e40014 */
     --destructive-foreground: 0 0% 100%;
     --border: 0 0% 89.8%; /* #e5e5e5 */
     --input: 0 0% 89.8%;
-    --ring: 193.9 83.2% 60.4%; /* #46c7ee */
+    --ring: 220.3 100% 23.9%; /* brand-500, aligned with DESIGN.md border-brand */
     --radius: 0.625rem;
     --chart-1: 193.9 83.2% 60.4%; /* #46c7ee */
     --chart-2: 193.6 67.7% 53.9%; /* #3ab5d9 */
@@ -122,27 +141,29 @@
     --chart-5: 216.9 60.6% 26.9%; /* #1b3b6e */
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 0 0% 9%;
-    --sidebar-primary: 193.7 85.6% 38.2%;
+    --sidebar-primary: 220.3 100% 23.9%; /* brand-500 */
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 0 0% 96.1%;
-    --sidebar-accent-foreground: 193.7 85.6% 38.2%;
+    --sidebar-accent-foreground: 220.3 100% 23.9%; /* brand-500 */
     --sidebar-border: 0 0% 89.8%;
     --sidebar-ring: 193.9 83.2% 60.4%;
 
-    /* Semantic soft/accent families consumed by badge + soft buttons */
+    /* Semantic soft/accent families consumed by badge + soft buttons.
+       Re-derived from the exact DESIGN.md scales above (previously used
+       generic/leftover hues unrelated to the design system). */
     --mono: 240 10% 3.9%;
     --mono-foreground: 0 0% 100%;
-    --primary-soft: 195.7 85.2% 94.7%; /* #e6f7fd */
-    --primary-accent: 194.3 83.2% 25.7%; /* #0b5e78 */
-    --info-soft: 195.7 85.2% 94.7%;
-    --info-accent: 194.3 83.2% 25.7%;
+    --primary-soft: 212.3 56.5% 95.5%; /* brand-subtle = DESIGN.md surface-brand-subtler */
+    --primary-accent: 220.7 100% 17.1%; /* brand-700 */
+    --info-soft: 212.3 56.5% 95.5%; /* DESIGN.md surface-Info-subtler = surface-brand-subtler */
+    --info-accent: 217.4 85.8% 44.3%; /* secondary-500 — DESIGN.md text-info/border-Info */
     --info-foreground: 0 0% 100%;
-    --success-soft: 138.5 76.5% 96.7%; /* green-50 */
-    --success-accent: 142.4 71.8% 29.2%; /* green-700 */
-    --warning-soft: 54.5 91.7% 95.3%; /* yellow-50 */
-    --warning-accent: 35.5 91.7% 32.9%; /* yellow-700 */
-    --destructive-soft: 354.5 84.6% 94.9%; /* #fde7e9 */
-    --destructive-accent: 354.8 100% 32%; /* #a3000e */
+    --success-soft: 148 45.5% 93.5%; /* success-50 */
+    --success-accent: 147.3 88.9% 24.7%; /* success-700 */
+    --warning-soft: 48.6 100% 95.9%; /* warning-50 */
+    --warning-accent: 49.2 72.8% 40.4%; /* warning-700 */
+    --destructive-soft: 0 68% 95.1%; /* danger-50 */
+    --destructive-accent: 0 66.1% 35.9%; /* danger-700 */
   }
 
   .dark {
@@ -153,19 +174,19 @@
     --card-foreground: 0 0% 98%;
     --popover: 224.1 54.8% 12.2%;
     --popover-foreground: 0 0% 98%;
-    --primary: 193.7 85.6% 38.2%; /* #0e8fb5 */
+    --primary: 220.3 100% 23.9%; /* brand-500, same as light theme */
     --primary-foreground: 0 0% 100%;
-    --secondary: 223.5 46.5% 16.9%; /* #17223f */
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 217.4 85.8% 44.3%; /* secondary-500, same as light theme */
+    --secondary-foreground: 0 0% 100%;
     --muted: 223.5 46.5% 16.9%;
     --muted-foreground: 221.1 20.2% 66.1%; /* #97a2ba */
-    --accent: 223.5 46.5% 16.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 358.8 100% 69.8%; /* #ff6568 */
+    --accent: 258.3 89.5% 66.3%; /* accent-500, same as light theme */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 68% 66.9%; /* danger-300 — brighter for contrast on dark bg */
     --destructive-foreground: 232.5 66.7% 2.4%; /* #02030a */
     --border: 223.3 37.4% 22.5%; /* #24304f */
     --input: 223.3 37.4% 22.5%;
-    --ring: 193.9 83.2% 60.4%; /* #46c7ee */
+    --ring: 220.3 100% 23.9%; /* brand-500, same as light theme */
     --chart-1: 193.9 83.2% 60.4%;
     --chart-2: 193.7 100% 72.5%; /* #73dfff */
     --chart-3: 220.6 81.3% 33.5%; /* #103d9b */
@@ -173,7 +194,7 @@
     --chart-5: 193.6 67.7% 53.9%; /* #3ab5d9 */
     --sidebar-background: 222.9 60% 6.9%;
     --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 193.7 85.6% 38.2%;
+    --sidebar-primary: 220.3 100% 23.9%; /* brand-500 */
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 223.5 46.5% 16.9%;
     --sidebar-accent-foreground: 0 0% 98%;
@@ -182,17 +203,17 @@
 
     --mono: 240 4.9% 83.9%; /* zinc-300 */
     --mono-foreground: 240 10% 3.9%; /* zinc-950 */
-    --primary-soft: 201.8 62.3% 10.4%; /* #0a1f2b */
-    --primary-accent: 193.7 100% 72.5%; /* #73dfff */
-    --info-soft: 201.8 62.3% 10.4%;
-    --info-accent: 193.7 100% 72.5%;
+    --primary-soft: 220 100% 10%; /* brand-900 */
+    --primary-accent: 220.7 31.5% 65.1%; /* brand-200 */
+    --info-soft: 217.8 85.3% 18.6%; /* secondary-900 */
+    --info-accent: 217.4 68.4% 62.7%; /* secondary-300 */
     --info-foreground: 232.5 66.7% 2.4%;
-    --success-soft: 144.9 80.4% 10%; /* green-950 */
-    --success-accent: 142.1 70.6% 45.3%; /* green-500 */
-    --warning-soft: 26 83.3% 14.1%; /* yellow-950 */
-    --warning-accent: 45.4 93.4% 47.5%; /* yellow-500 */
-    --destructive-soft: 355.7 93.3% 11.8%; /* #3a0206 */
-    --destructive-accent: 358.8 100% 69.8%; /* #ff6568 */
+    --success-soft: 147.3 89.2% 14.5%; /* success-900 */
+    --success-accent: 147.1 51.6% 47.8%; /* success-400 */
+    --warning-soft: 49.1 72.1% 23.9%; /* warning-900 */
+    --warning-accent: 49.1 95.5% 56.9%; /* warning-500 */
+    --destructive-soft: 0 66.7% 21.2%; /* danger-900 */
+    --destructive-accent: 0 68% 66.9%; /* danger-300 */
   }
 }
 

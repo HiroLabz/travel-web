@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Input } from '@/components/ui/input';
+import { Input } from '@/components/motion/input';
 import { searchCitiesAction, type CitySearchResult } from '@/lib/actions';
 import { MapPin, Loader2, Sparkles } from 'lucide-react';
 

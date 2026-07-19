@@ -58,7 +58,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@/components/motion/select';
 import {
   DropdownMenu,
   DropdownMenuContent,

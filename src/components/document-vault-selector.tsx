@@ -10,10 +10,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from '@/components/ui/dialog';
+} from '@/components/motion/morphing-modal';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/motion/input';
+import { Checkbox } from '@/components/motion/checkbox';
 import { Search, FileText, Image as ImageIcon, Loader2 } from 'lucide-react';
 
 interface DocumentVaultSelectorProps {

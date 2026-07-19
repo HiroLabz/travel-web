@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Loader2, Plus, Trash2, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Input } from '@/components/motion/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogPortal, DialogOverlay } from '@/components/ui/dialog';
 import { differenceInCalendarDays } from 'date-fns';

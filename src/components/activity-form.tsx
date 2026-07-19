@@ -34,7 +34,7 @@ import { ActivityAttachmentPicker, PendingUpload } from '@/components/activity-a
 import { DocumentVaultSelector } from '@/components/document-vault-selector';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Input } from '@/components/motion/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import {
@@ -43,12 +43,7 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import { ChecklistEditor } from '@/components/checklist-editor';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Tooltip } from '@/components/motion/tooltip';
 import { MiniEditor } from '@/components/mini-editor';
 import { OriginSelectorDialog } from '@/components/origin-selector-dialog';
 import { cn } from '@/lib/utils';
@@ -666,29 +661,22 @@ export function ActivityForm({
                 allowManualEntry={true}
               />
             </div>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    onClick={handleCalculateDistance}
-                    disabled={calculatingDistance || !address || allAccommodations.length === 0}
-                    className="flex-shrink-0"
-                  >
-                    {calculatingDistance ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <Route className="w-4 h-4" />
-                    )}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Calculate distance from accommodation</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <Tooltip content="Calculate distance from accommodation">
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                onClick={handleCalculateDistance}
+                disabled={calculatingDistance || !address || allAccommodations.length === 0}
+                className="flex-shrink-0"
+              >
+                {calculatingDistance ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Route className="w-4 h-4" />
+                )}
+              </Button>
+            </Tooltip>
           </div>
           {distanceFromAccommodation && detectedAccommodation && (
             <div className="flex items-center gap-2 text-sm text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-3 py-2 rounded-lg">

@@ -5,7 +5,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from '@/components/motion/morphing-modal';
 import { RoutePlannerForm } from '@/components/route-planner-form';
 import { Route } from 'lucide-react';
 import type { WizardItineraryItem, Household, Destination, ExchangeRateCache } from '@/types';

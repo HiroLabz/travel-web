@@ -4,14 +4,15 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Trip, Household, DestinationCurrency, ExchangeRateCache } from '@/types';
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
-} from '@/components/ui/sheet';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerClose,
+} from '@/components/motion/drawer';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/motion/tabs';
+import { Input } from '@/components/motion/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import {
@@ -20,7 +21,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@/components/motion/select';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -281,17 +282,18 @@ export function TripSettingsSheet({
     .filter((c, i, arr) => arr.indexOf(c) === i && c !== homeCurrency);
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full sm:max-w-lg overflow-y-auto">
-        <SheetHeader>
-          <SheetTitle className="flex items-center gap-2">
+    <Drawer open={open} onOpenChange={onOpenChange} side="right" ariaLabel="Trip Settings">
+      <DrawerContent className="w-full sm:max-w-lg">
+        <DrawerClose />
+        <DrawerHeader>
+          <DrawerTitle className="flex items-center gap-2">
             <Settings2 className="h-5 w-5" />
             Trip Settings
-          </SheetTitle>
-          <SheetDescription>
+          </DrawerTitle>
+          <DrawerDescription>
             Manage trip details, currencies, and more.
-          </SheetDescription>
-        </SheetHeader>
+          </DrawerDescription>
+        </DrawerHeader>
 
         <Tabs defaultValue="general" className="mt-6">
           <TabsList className="grid w-full grid-cols-4">
@@ -613,7 +615,7 @@ export function TripSettingsSheet({
             </div>
           </TabsContent>
         </Tabs>
-      </SheetContent>
-    </Sheet>
+      </DrawerContent>
+    </Drawer>
   );
 }
