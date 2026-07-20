@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useActionState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
 import { createTripAction } from '@/lib/actions';
@@ -16,7 +15,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/motion/select';
+} from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/motion/tabs';
 import { DateRangePicker } from '@/components/date-range-picker';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -28,6 +27,7 @@ import { COUNTRIES } from '@/lib/constants';
 import { getAvatarUrl } from '@/lib/avatar';
 import { UpgradePromptModal } from '@/components/upgrade-prompt-modal';
 import { NoTravelGroupModal } from '@/components/no-travel-group-modal';
+import { cn } from '@/lib/utils';
 
 type DestinationDraft = {
   id: string;
@@ -38,9 +38,6 @@ type DestinationDraft = {
   dateTo?: string;
 };
 
-// DESIGN.md Fields treatment (surface-brand-subtler bg, border-light,
-// rounded pill) — same tokens used on the login page for consistency.
-const fieldClass = 'h-[52px] rounded-full border-neutral-100 bg-brand-subtle px-5 placeholder:text-muted-foreground';
 // Fields inside the active stop's blue panel need light surfaces for
 // contrast against secondary-500, so they get their own treatment.
 const stopFieldClass = 'h-[48px] rounded-full border-transparent bg-white px-5 border-border placeholder:text-muted-foreground';
@@ -67,6 +64,11 @@ export default function CreateTripPage() {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [activeStop, setActiveStop] = useState(0);
+  // The date-range popover floats over the page instead of pushing content
+  // down, so the tallest state (2-month calendar, open) can overlap the CTA
+  // sitting right below it. Reserve clearance for that only while it's open.
+  const [tripDatesOpen, setTripDatesOpen] = useState(false);
+  const [stopDatesOpen, setStopDatesOpen] = useState(false);
 
   const getCountryName = (code: string) => {
     const country = COUNTRIES.find((c) => c.value === code);
@@ -148,6 +150,18 @@ export default function CreateTripPage() {
     days = differenceInCalendarDays(new Date(endDate), new Date(startDate)) + 1;
   }
 
+  // Only step 1 needs a real "leave the flow" back button — step 2's Back
+  // just moves to step 1. history.length > 1 means there's a page the user
+  // actually came from in this tab; otherwise (direct link, new tab) fall
+  // back to the dashboard rather than leaving them on a dead end.
+  const handleLeaveCreate = () => {
+    if (window.history.length > 1) {
+      router.back();
+    } else {
+      router.push('/dashboard');
+    }
+  };
+
   useEffect(() => {
     const handleStateChange = async () => {
       await refreshSubscription();
@@ -202,7 +216,7 @@ export default function CreateTripPage() {
         </Link>
       </div>
 
-      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-6 py-10 lg:grid-cols-2 lg:py-16">
+      <div className="mx-auto max-w-xl px-6 py-10 lg:py-16">
         <div>
           <p className="text-xs md:text-md lg:text-lg 2xl:text-2xl font-semibold uppercase tracking-widest text-muted-foreground">
             {step === 1 ? `Hi, ${firstName}!` : 'Got something in mind?'}
@@ -229,50 +243,64 @@ export default function CreateTripPage() {
             <input type="hidden" name="userId" value={user?.uid || ''} />
 
             {step === 1 ? (
-              <div className="space-y-3 rounded-2xl bg-info-soft py-5 px-4 border">
-                <Input
-                  aria-label="Trip Name"
-                  placeholder="Trip Name"
-                  className={stopFieldClass}
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-
-                <Select value={tripType} onValueChange={(v) => handleTripTypeChange(v as TripType)} >
-                  <SelectTrigger className={fieldClass} aria-label="Trip Type">
-                    <SelectValue placeholder="Trip Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {(Object.keys(TRIP_TYPE_LABELS) as TripType[]).map((key) => (
-                      <SelectItem key={key} value={key}>
-                        {TRIP_TYPE_LABELS[key]}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <div>
-                  <p className="mb-1.5 px-1 text-xs font-medium text-brand-800">Trip Dates</p>
-                  <DateRangePicker
-                    aria-label="Overall trip dates"
-                    from={startDate}
-                    to={endDate}
-                    placeholder="Overall Start – Overall End"
-                    onChange={({ from, to }) => {
-                      setStartDate(from ?? '');
-                      setEndDate(to ?? '');
-                    }}
+              <div className='space-y-3 '>
+                <div className="space-y-3 rounded-2xl bg-info-soft py-5 px-4 border shadow-l">
+                  <Input
+                    aria-label="Trip Name"
+                    placeholder="Trip Name"
+                    className={stopFieldClass}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                   />
+
+                  <Select value={tripType} onValueChange={(v) => handleTripTypeChange(v as TripType)} >
+                    <SelectTrigger className={stopFieldClass} aria-label="Trip Type">
+                      <SelectValue placeholder="Trip Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {(Object.keys(TRIP_TYPE_LABELS) as TripType[]).map((key) => (
+                        <SelectItem key={key} value={key}>
+                          {TRIP_TYPE_LABELS[key]}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <div>
+                    <p className="mb-1.5 px-1 text-xs font-medium text-brand-800">Trip Dates</p>
+                    <DateRangePicker
+                      aria-label="Overall trip dates"
+                      from={startDate}
+                      to={endDate}
+                      placeholder="Overall Start – Overall End"
+                      onChange={({ from, to }) => {
+                        setStartDate(from ?? '');
+                        setEndDate(to ?? '');
+                      }}
+                      onOpenChange={setTripDatesOpen}
+                    />
+                  </div>
+
+                </div>
+                <div className={cn('flex flex-row gap-3', tripDatesOpen && 'invisible')}>
+                  <Button
+                    type="button"
+                    onClick={handleLeaveCreate}
+                    variant="outline"
+                    className="h-[48px] flex-1 rounded-full"
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => setStep(2)}
+                    disabled={!title || !startDate}
+                    className="h-[48px] flex-1 rounded-full bg-accent-500 text-white hover:bg-accent-600"
+                  >
+                    Next: Destinations
+                  </Button>
                 </div>
 
-                <Button
-                  type="button"
-                  onClick={() => setStep(2)}
-                  disabled={!title || !startDate}
-                  className="!mt-5 h-[52px] w-full rounded-full bg-accent-500 text-white hover:bg-accent-600"
-                >
-                  Next: Destinations
-                </Button>
               </div>
             ) : (
               <div className="space-y-3">
@@ -290,7 +318,7 @@ export default function CreateTripPage() {
                       onClick={handleAddDest}
                       className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                     >
-                      <Plus className="h-3.5 w-3.5" /> Add Stop
+                      <Plus className="h-3.5 w-3.5" /> Add
                     </button>
                   </div>
 
@@ -355,6 +383,7 @@ export default function CreateTripPage() {
                                 updateDest(dest.id, 'dateFrom', from ?? '');
                                 updateDest(dest.id, 'dateTo', to ?? '');
                               }}
+                              onOpenChange={setStopDatesOpen}
                             />
                           </div>
                         </div>
@@ -363,7 +392,7 @@ export default function CreateTripPage() {
                   ))}
                 </Tabs>
 
-                <div className="flex gap-3 pt-2">
+                <div className={cn('flex gap-3 pt-2', stopDatesOpen && 'invisible')}>
                   <Button
                     type="button"
                     onClick={() => setStep(1)}
@@ -383,18 +412,6 @@ export default function CreateTripPage() {
               </div>
             )}
           </form>
-        </div>
-
-        {/* Illustration — placeholder path, drop the real asset in
-            public/assets/create-trip-illustration.jpg to replace it. */}
-        <div className="relative hidden overflow-hidden rounded-3xl lg:block">
-          <Image
-            src="/assets/bg-image.jpg"
-            alt=""
-            fill
-            sizes="(min-width: 1024px) 50vw, 0px"
-            className="object-cover"
-          />
         </div>
       </div>
 

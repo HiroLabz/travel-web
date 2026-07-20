@@ -1,6 +1,7 @@
 'use client';
 
 import { Loader2 } from 'lucide-react';
+import { Loader } from '@/components/motion/loader';
 import { cn } from '@/lib/utils';
 
 interface LoadingScreenProps {
@@ -16,17 +17,7 @@ export function LoadingScreen({ message, className }: LoadingScreenProps) {
         className
       )}
     >
-      <div className="flex flex-col items-center gap-4">
-        <div className="relative">
-          <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping" />
-          <div className="relative rounded-full bg-primary/10 p-4">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          </div>
-        </div>
-        {message && (
-          <p className="text-sm text-muted-foreground animate-pulse">{message}</p>
-        )}
-      </div>
+      <Loader variant="dither" size={40} label={message ?? 'Loading'} className="text-primary" />
     </div>
   );
 }

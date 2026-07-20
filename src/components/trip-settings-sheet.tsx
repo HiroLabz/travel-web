@@ -283,7 +283,7 @@ export function TripSettingsSheet({
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange} side="right" ariaLabel="Trip Settings">
-      <DrawerContent className="w-full sm:max-w-lg">
+      <DrawerContent className="w-full sm:max-w-2xl">
         <DrawerClose />
         <DrawerHeader>
           <DrawerTitle className="flex items-center gap-2">

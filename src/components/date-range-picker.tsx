@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import type { DateRange } from 'react-day-picker';
@@ -31,6 +31,8 @@ export interface DateRangePickerProps {
   className?: string;
   triggerClassName?: string;
   'aria-label'?: string;
+  /** Fires when the calendar panel opens or closes — lets the caller reserve layout space so the panel doesn't overlap content below it. */
+  onOpenChange?: (open: boolean) => void;
 }
 
 // shadcn/ui Range Picker (Calendar mode="range") composed with beUI's
@@ -46,8 +48,21 @@ export function DateRangePicker({
   className,
   triggerClassName,
   'aria-label': ariaLabel,
+  onOpenChange,
 }: DateRangePickerProps) {
   const [open, setOpen] = useState(false);
+  const handleOpenChange = (next: boolean) => {
+    setOpen(next);
+    onOpenChange?.(next);
+  };
+  // react-day-picker's range mode reports a "complete" range (from === to)
+  // on the very first click, not just a pending start date — so closing as
+  // soon as both ends exist would close after one click. Require a second
+  // click each time the panel opens before treating the range as finished.
+  const selectionCountRef = useRef(0);
+  useEffect(() => {
+    if (open) selectionCountRef.current = 0;
+  }, [open]);
   const range: DateRange | undefined = { from: toDate(from), to: toDate(to) };
   const minDate = toDate(min);
 
@@ -58,7 +73,7 @@ export function DateRangePicker({
     : placeholder;
 
   return (
-    <Popover open={open} onOpenChange={setOpen} align="start" className={className}>
+    <Popover open={open} onOpenChange={handleOpenChange} align="start" className={className}>
       <PopoverTrigger>
         <button
           type="button"
@@ -85,11 +100,12 @@ export function DateRangePicker({
           defaultMonth={range.from ?? minDate ?? new Date()}
           disabled={minDate ? { before: minDate } : undefined}
           onSelect={(next) => {
+            selectionCountRef.current += 1;
             onChange({
               from: next?.from ? toISO(next.from) : undefined,
               to: next?.to ? toISO(next.to) : undefined,
             });
-            if (next?.from && next?.to) setOpen(false);
+            if (selectionCountRef.current >= 2 && next?.from && next?.to) handleOpenChange(false);
           }}
         />
       </PopoverContent>
