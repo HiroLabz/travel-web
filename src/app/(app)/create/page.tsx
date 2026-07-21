@@ -40,7 +40,7 @@ type DestinationDraft = {
 
 // Fields inside the active stop's blue panel need light surfaces for
 // contrast against secondary-500, so they get their own treatment.
-const stopFieldClass = 'h-[48px] rounded-full border-transparent bg-white px-5 border-border placeholder:text-muted-foreground';
+const stopFieldClass = 'h-[80px] rounded-full border-transparent bg-white px-5 border-border placeholder:text-muted-foreground';
 
 export default function CreateTripPage() {
   const router = useRouter();
@@ -257,7 +257,7 @@ export default function CreateTripPage() {
                     <SelectTrigger className={stopFieldClass} aria-label="Trip Type">
                       <SelectValue placeholder="Trip Type" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent >
                       {(Object.keys(TRIP_TYPE_LABELS) as TripType[]).map((key) => (
                         <SelectItem key={key} value={key}>
                           {TRIP_TYPE_LABELS[key]}
