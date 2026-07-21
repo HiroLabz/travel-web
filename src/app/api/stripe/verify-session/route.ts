@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { stripe, STRIPE_PRICE_IDS, StripePlanId } from '@/lib/stripe';
+import { getStripe, STRIPE_PRICE_IDS, StripePlanId } from '@/lib/stripe';
 import { verifyAuth, unauthorizedResponse } from '@/lib/api-auth';
 
 export async function POST(request: NextRequest) {
@@ -10,6 +10,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    const stripe = getStripe();
     const body = await request.json();
     const { sessionId } = body as { sessionId: string };
 
