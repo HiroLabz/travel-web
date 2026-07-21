@@ -24,13 +24,13 @@ import TextAlign from '@tiptap/extension-text-align';
 import Image from '@tiptap/extension-image';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Input } from '@/components/motion/input';
 import { Label } from '@/components/ui/label';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from '@/components/motion/popover';
 
 interface MiniEditorProps {
   value: string;
@@ -232,7 +232,7 @@ export function MiniEditor({ value, onChange, placeholder }: MiniEditorProps) {
 
         {/* Image */}
         <Popover open={imagePopoverOpen} onOpenChange={setImagePopoverOpen}>
-          <PopoverTrigger asChild>
+          <PopoverTrigger>
             <button
               type="button"
               className="p-1.5 rounded hover:bg-slate-200 transition-colors"

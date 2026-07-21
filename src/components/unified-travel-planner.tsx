@@ -4,14 +4,14 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Checkbox } from '@/components/motion/checkbox';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@/components/motion/select';
 import {
   Route,
   MapPin,
@@ -865,7 +865,7 @@ export function UnifiedTravelPlanner({
           {isRouteMode && (
             <Select
               value={sortOrder}
-              onValueChange={(v: 'nearest' | 'farthest') => handleSort(v)}
+              onValueChange={(v: string) => handleSort(v as 'nearest' | 'farthest')}
               disabled={isSorting || !selectedOriginId || selectedDestinationIds.size === 0}
             >
               <SelectTrigger className="w-[160px]">

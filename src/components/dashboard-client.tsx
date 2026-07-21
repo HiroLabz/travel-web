@@ -9,7 +9,7 @@ import { Plus, X } from 'lucide-react';
 import { parseISO } from 'date-fns';
 import { deleteTripAction, renameTripAction, toggleTripPinAction, archiveTripAction, copyTripAction } from '@/lib/actions';
 import { useToast } from '@/hooks/use-toast';
-import { Input } from '@/components/ui/input';
+import { Input } from '@/components/motion/input';
 import { useLoading } from '@/contexts/loading-context';
 import { LoadingScreen } from '@/components/ui/loading-screen';
 import { TripCard } from '@/components/trip-card';

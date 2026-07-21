@@ -11,11 +11,11 @@ import type { TravelDocument, TripFolder, HouseholdMember } from '@/types';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Upload, FileText, Trash2, ShieldCheck, Plane, FileQuestion, Plus, VenetianMask, FileBadge, Folder, FolderPlus, Pencil, Eye, ExternalLink, Image as ImageIcon, FileIcon, ZoomIn, ZoomOut, RotateCw, Sparkles, Search, MoreVertical, Users, ChevronLeft, ChevronRight } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/motion/morphing-modal';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Input } from '@/components/motion/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/motion/select';
 import { PDFViewer } from '@/components/pdf-viewer';
 
 function UploadDialog({

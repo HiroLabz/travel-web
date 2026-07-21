@@ -36,14 +36,14 @@ import { ItineraryDragOverlay } from '@/components/drag-overlay-item';
 import { ActivityForm } from '@/components/activity-form';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Input } from '@/components/motion/input';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from '@/components/ui/dialog';
+} from '@/components/motion/morphing-modal';
 import {
   AlertDialog,
   AlertDialogContent,

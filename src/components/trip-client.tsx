@@ -214,230 +214,230 @@ export default function TripClient({ trip: initialTrip, household }: { trip: Tri
               </button>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div className="hidden lg:flex items-center gap-1 mt-2 pb-3 overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:flex lg:items-start lg:gap-6">
+
+        {/* Vertical tabs — desktop/tablet only; mobile uses TripBottomNav */}
+        <nav className="hidden lg:block w-56 shrink-0 sticky top-24 bg-card rounded-3xl shadow-sm border border-border p-2">
+          <div className="flex flex-col gap-1">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2 whitespace-nowrap flex-shrink-0 ${activeTab === tab.id
+                className={`w-full px-4 py-2.5 rounded-full text-sm font-medium transition-colors flex items-center gap-3 ${activeTab === tab.id
                   ? 'bg-brand-500 text-white shadow-sm'
                   : 'text-muted-foreground hover:bg-muted'
                   }`}
               >
-                <tab.icon className="w-4 h-4" />
+                <tab.icon className="w-4 h-4 shrink-0" />
                 {tab.label}
               </button>
             ))}
           </div>
-        </div>
-      </div>
+        </nav>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex-1 min-w-0">
 
-        {activeTab === 'dashboard' && (
-          <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-            {/* Hero */}
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900 px-6 py-8 sm:px-9 text-white">
-              <div className="relative flex flex-wrap items-start justify-between gap-4">
-                <div className="min-w-[280px]">
-                  <div className="text-[11px] font-semibold uppercase tracking-wider text-white/60">Trip overview</div>
-                  <div className="font-bold text-2xl sm:text-3xl mt-2 tracking-tight">{trip.title}</div>
+          {activeTab === 'dashboard' && (
+            <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+              {/* Hero */}
+              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900 px-6 py-8 sm:px-9 text-white">
+                <div className="relative flex flex-wrap items-start justify-between gap-4">
+                  <div className="min-w-[280px]">
+                    <div className="text-[11px] font-semibold uppercase tracking-wider text-white/60">Trip overview</div>
+                    <div className="font-bold text-2xl sm:text-3xl mt-2 tracking-tight">{trip.title}</div>
 
-                  {destinations.length > 0 && (
-                    <div className="flex items-center gap-2 mt-4 flex-wrap">
-                      {destinations.map((dest, idx) => {
-                        const isCurrent = idx === tripStatus.currentDestinationIndex;
-                        return (
-                          <div key={`${dest.city}-${idx}`} className="flex items-center gap-2">
-                            {idx > 0 && <ArrowRight className="w-4 h-4 text-white/50" />}
-                            <span className={`px-3.5 py-1.5 rounded-full text-sm font-medium ${isCurrent ? 'bg-white/25' : 'bg-white/10'}`}>
-                              {dest.city}
-                            </span>
-                          </div>
-                        );
-                      })}
+                    {destinations.length > 0 && (
+                      <div className="flex items-center gap-2 mt-4 flex-wrap">
+                        {destinations.map((dest, idx) => {
+                          const isCurrent = idx === tripStatus.currentDestinationIndex;
+                          return (
+                            <div key={`${dest.city}-${idx}`} className="flex items-center gap-2">
+                              {idx > 0 && <ArrowRight className="w-4 h-4 text-white/50" />}
+
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-5 mt-5 flex-wrap text-sm text-white/80">
+                      <span className="flex items-center gap-1.5">
+                        <Calendar className="w-4 h-4" />
+                        {format(parseISO(trip.startDate), 'MMM d')} &ndash; {format(parseISO(trip.endDate), 'MMM d, yyyy')}
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <Users className="w-4 h-4" />
+                        {household.members.length} traveler{household.members.length === 1 ? '' : 's'}
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <BedDouble className="w-4 h-4" />
+                        {Math.max(tripStatus.totalDays - 1, 0)} night{Math.max(tripStatus.totalDays - 1, 0) === 1 ? '' : 's'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {tripStatus.currentDestination && (
+                    <div className="bg-white/10 border border-white/20 rounded-xl px-6 py-4 min-w-[180px]">
+                      <div className="text-[11px] font-semibold uppercase tracking-wider text-white/60">Right now</div>
+                      <div className="flex items-center gap-2 mt-2 font-semibold text-xl">
+                        <LocateFixed className="w-5 h-5" />
+                        {tripStatus.currentDestination.city}
+                      </div>
+                      <div className="text-xs text-white/60 mt-1.5">Day {tripStatus.dayNumber} of {tripStatus.totalDays}</div>
                     </div>
                   )}
-
-                  <div className="flex items-center gap-5 mt-5 flex-wrap text-sm text-white/80">
-                    <span className="flex items-center gap-1.5">
-                      <Calendar className="w-4 h-4" />
-                      {format(parseISO(trip.startDate), 'MMM d')} &ndash; {format(parseISO(trip.endDate), 'MMM d, yyyy')}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <Users className="w-4 h-4" />
-                      {household.members.length} traveler{household.members.length === 1 ? '' : 's'}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <BedDouble className="w-4 h-4" />
-                      {Math.max(tripStatus.totalDays - 1, 0)} night{Math.max(tripStatus.totalDays - 1, 0) === 1 ? '' : 's'}
-                    </span>
-                  </div>
                 </div>
-
-                {tripStatus.currentDestination && (
-                  <div className="bg-white/10 border border-white/20 rounded-xl px-6 py-4 min-w-[180px]">
-                    <div className="text-[11px] font-semibold uppercase tracking-wider text-white/60">Right now</div>
-                    <div className="flex items-center gap-2 mt-2 font-semibold text-xl">
-                      <LocateFixed className="w-5 h-5" />
-                      {tripStatus.currentDestination.city}
-                    </div>
-                    <div className="text-xs text-white/60 mt-1.5">Day {tripStatus.dayNumber} of {tripStatus.totalDays}</div>
-                  </div>
-                )}
               </div>
+
+              <RouteTimeline
+                trip={trip}
+                destinations={destinations}
+                household={household}
+                onTripUpdate={(updates) => setTrip(prev => ({ ...prev, ...updates }))}
+                onDestinationsChange={(newDests) => {
+                  setDestinations(newDests);
+                  setTrip(prev => ({ ...prev, destinations: newDests, destination: newDests[0]?.city || '' }));
+                }}
+              />
+
+              <TripNotesSection
+                tripId={trip.id}
+                initialNotes={tripNotes}
+                initialChecklist={tripChecklist}
+                onNotesChange={setTripNotes}
+                onChecklistChange={setTripChecklist}
+              />
+
+              <BudgetCard
+                tripId={trip.id}
+                initialBudgetItems={budgetItems}
+                budgetCategories={budgetCategories}
+                currency={household.currency || 'USD'}
+                wizardItems={wizardItems}
+                onBudgetChange={setBudgetItems}
+              />
+
+              <UpcomingSchedule
+                wizardItems={wizardItems}
+                itineraryLength={trip.itinerary.length}
+                household={household}
+                onViewFullItinerary={() => setActiveTab('itinerary')}
+                onChecklistToggle={handleActivityChecklistToggle}
+              />
             </div>
+          )}
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              <div className="lg:col-span-2">
-                <RouteTimeline
-                  trip={trip}
-                  destinations={destinations}
-                  household={household}
-                  onTripUpdate={(updates) => setTrip(prev => ({ ...prev, ...updates }))}
-                  onDestinationsChange={(newDests) => {
-                    setDestinations(newDests);
-                    setTrip(prev => ({ ...prev, destinations: newDests, destination: newDests[0]?.city || '' }));
-                  }}
-                />
-              </div>
-              <div className="lg:col-span-1">
-                <BudgetCard
-                  tripId={trip.id}
-                  initialBudgetItems={budgetItems}
-                  budgetCategories={budgetCategories}
-                  currency={household.currency || 'USD'}
-                  wizardItems={wizardItems}
-                  onBudgetChange={setBudgetItems}
-                />
-              </div>
-            </div>
-
-            <TripNotesSection
-              tripId={trip.id}
-              initialNotes={tripNotes}
-              initialChecklist={tripChecklist}
-              onNotesChange={setTripNotes}
-              onChecklistChange={setTripChecklist}
-            />
-
-            <UpcomingSchedule
-              wizardItems={wizardItems}
-              itineraryLength={trip.itinerary.length}
+          {activeTab === 'itinerary' && (
+            <ItineraryTab
+              trip={trip}
               household={household}
-              onViewFullItinerary={() => setActiveTab('itinerary')}
-              onChecklistToggle={handleActivityChecklistToggle}
-            />
-          </div>
-        )}
-
-        {activeTab === 'itinerary' && (
-          <ItineraryTab
-            trip={trip}
-            household={household}
-            wizardItems={wizardItems}
-            exchangeRates={trip.exchangeRates}
-            onWizardItemsChange={setWizardItems}
-            onNoteContentUpdated={handleNoteContentUpdated}
-            onPreviewDocument={setPreviewDocument}
-          />
-        )}
-
-        {activeTab === 'commute' && (
-          <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-foreground mb-2">Commute</h2>
-              <p className="text-muted-foreground">Plan routes between where you&apos;re staying and where you&apos;re going.</p>
-            </div>
-            <CommutePlannerTab
-              tripId={trip.id}
               wizardItems={wizardItems}
-              savedSettings={trip.commuteSettings}
-              currency={household?.currency}
-              tripDestinations={trip.destinations}
+              exchangeRates={trip.exchangeRates}
+              onWizardItemsChange={setWizardItems}
+              onNoteContentUpdated={handleNoteContentUpdated}
+              onPreviewDocument={setPreviewDocument}
             />
-          </div>
-        )}
+          )}
 
-        {activeTab === 'documents' && (
-          <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-foreground mb-2">Travel documents</h2>
-              <p className="text-muted-foreground">Store tickets, passports, and hotel vouchers for the whole group.</p>
+          {activeTab === 'commute' && (
+            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-foreground mb-2">Commute</h2>
+                <p className="text-muted-foreground">Plan routes between where you&apos;re staying and where you&apos;re going.</p>
+              </div>
+              <CommutePlannerTab
+                tripId={trip.id}
+                wizardItems={wizardItems}
+                savedSettings={trip.commuteSettings}
+                currency={household?.currency}
+                tripDestinations={trip.destinations}
+              />
             </div>
+          )}
 
-            <DocumentVault
+          {activeTab === 'documents' && (
+            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-foreground mb-2">Travel documents</h2>
+                <p className="text-muted-foreground">Store tickets, passports, and hotel vouchers for the whole group.</p>
+              </div>
+
+              <DocumentVault
+                tripId={trip.id}
+                householdId={trip.householdId}
+                tripStartDate={trip.startDate}
+                tripEndDate={trip.endDate}
+                members={household.members}
+                onActivitiesAdded={async () => {
+                  // Refresh wizard items when PDF analysis adds activities
+                  const result = await getWizardItemsAction(trip.id);
+                  if (result.items) {
+                    setWizardItems(result.items);
+                  }
+                }}
+              />
+            </div>
+          )}
+
+          {activeTab === 'expense' && (
+            <ExpenseTab
               tripId={trip.id}
               householdId={trip.householdId}
-              tripStartDate={trip.startDate}
-              tripEndDate={trip.endDate}
+              expenses={expenses}
+              onExpensesChange={setExpenses}
               members={household.members}
-              onActivitiesAdded={async () => {
-                // Refresh wizard items when PDF analysis adds activities
-                const result = await getWizardItemsAction(trip.id);
-                if (result.items) {
-                  setWizardItems(result.items);
+              budgetCategories={budgetCategories}
+              currency={household.currency || 'USD'}
+              destinations={destinations}
+              destinationCurrencies={trip.destinationCurrencies}
+              exchangeRates={trip.exchangeRates}
+            />
+          )}
+
+          {activeTab === 'explore' && (
+            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-foreground mb-2">Explore</h2>
+                <p className="text-muted-foreground">Discover things to do, curated for this trip.</p>
+              </div>
+              <ExploreTab
+                tripId={trip.id}
+                destinations={aiPlannerDestinations.map(d => ({ city: d.city, country: d.country }))}
+                days={trip.days}
+                travelGroup="solo"
+                budget="midrange"
+                currency={household?.currency}
+                accommodationAddress={
+                  wizardItems.find(item => item.travelType === 'accommodation')?.address
                 }
-              }}
-            />
-          </div>
-        )}
-
-        {activeTab === 'expense' && (
-          <ExpenseTab
-            tripId={trip.id}
-            householdId={trip.householdId}
-            expenses={expenses}
-            onExpensesChange={setExpenses}
-            members={household.members}
-            budgetCategories={budgetCategories}
-            currency={household.currency || 'USD'}
-            destinations={destinations}
-            destinationCurrencies={trip.destinationCurrencies}
-            exchangeRates={trip.exchangeRates}
-          />
-        )}
-
-        {activeTab === 'explore' && (
-          <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-foreground mb-2">Explore</h2>
-              <p className="text-muted-foreground">Discover things to do, curated for this trip.</p>
+              />
             </div>
-            <ExploreTab
-              tripId={trip.id}
-              destinations={aiPlannerDestinations.map(d => ({ city: d.city, country: d.country }))}
-              days={trip.days}
-              travelGroup="solo"
-              budget="midrange"
-              currency={household?.currency}
-              accommodationAddress={
-                wizardItems.find(item => item.travelType === 'accommodation')?.address
-              }
-            />
-          </div>
-        )}
+          )}
 
-        {activeTab === 'information' && trip.tripType === 'international' && (
-          <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-foreground mb-2">Country information</h2>
-              <p className="text-muted-foreground">
-                Essential travel information for your destinations including immigration, customs, and cultural norms.
-              </p>
+          {activeTab === 'information' && trip.tripType === 'international' && (
+            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-foreground mb-2">Country information</h2>
+                <p className="text-muted-foreground">
+                  Essential travel information for your destinations including immigration, customs, and cultural norms.
+                </p>
+              </div>
+
+              <CountryInfo
+                tripId={trip.id}
+                countries={
+                  trip.destinations?.map(d => d.country).filter(Boolean) ||
+                  (trip.destination ? [trip.destination] : [])
+                }
+                originCountry={household?.countryOfOrigin}
+              />
             </div>
+          )}
 
-            <CountryInfo
-              tripId={trip.id}
-              countries={
-                trip.destinations?.map(d => d.country).filter(Boolean) ||
-                (trip.destination ? [trip.destination] : [])
-              }
-              originCountry={household?.countryOfOrigin}
-            />
-          </div>
-        )}
+        </div>
 
       </div>
 

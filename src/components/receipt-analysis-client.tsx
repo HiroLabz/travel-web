@@ -20,11 +20,11 @@ import {
   Image as ImageIcon, Receipt, ChevronDown, ChevronUp,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Input } from '@/components/motion/input';
 import { Label } from '@/components/ui/label';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from '@/components/ui/select';
+} from '@/components/motion/select';
 import { BillSplitSelector } from '@/components/bill-split-selector';
 
 interface ReceiptAnalysisClientProps {

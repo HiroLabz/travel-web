@@ -45,15 +45,15 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from '@/components/motion/popover';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
+} from '@/components/motion/select';
+import { Input } from '@/components/motion/input';
 import { Label } from '@/components/ui/label';
 import { useState, useCallback } from 'react';
 
@@ -116,7 +116,7 @@ const ColorPicker = ({ editor, type }: { editor: any; type: 'text' | 'highlight'
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger>
         <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
           {type === 'text' ? (
             <div className="flex flex-col items-center">
@@ -181,7 +181,7 @@ const LinkPopover = ({ editor }: { editor: any }) => {
 
   return (
     <Popover open={open} onOpenChange={handleOpenChange}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger>
         <Toggle size="sm" pressed={editor.isActive('link')}>
           <LinkIcon className="h-4 w-4" />
         </Toggle>
@@ -233,7 +233,7 @@ const ImagePopover = ({ editor }: { editor: any }) => {
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger>
         <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
           <ImageIcon className="h-4 w-4" />
         </Button>

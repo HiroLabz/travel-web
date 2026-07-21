@@ -51,6 +51,19 @@ export default {
           800: 'hsl(var(--danger-800))',
           900: 'hsl(var(--danger-900))',
         },
+        // DESIGN.md "Light Neutral" ramp — exact hex matches.
+        neutral: {
+          50: 'hsl(var(--neutral-50))',
+          100: 'hsl(var(--neutral-100))',
+          200: 'hsl(var(--neutral-200))',
+          300: 'hsl(var(--neutral-300))',
+          400: 'hsl(var(--neutral-400))',
+          500: 'hsl(var(--neutral-500))',
+          600: 'hsl(var(--neutral-600))',
+          700: 'hsl(var(--neutral-700))',
+          800: 'hsl(var(--neutral-800))',
+          900: 'hsl(var(--neutral-900))',
+        },
         // Fixed dark decorative surfaces (stay dark regardless of theme).
         'neutral-dark': {
           50: 'hsl(var(--neutral-dark-50))',
@@ -136,6 +149,18 @@ export default {
         accent: {
           DEFAULT: 'hsl(var(--accent))',
           foreground: 'hsl(var(--accent-foreground))',
+          // DESIGN.md "Accent Color" raw scale (purple, #8b5cf6) — distinct
+          // from the shadcn DEFAULT/foreground hover-state slot above.
+          50: 'hsl(var(--accent-50))',
+          100: 'hsl(var(--accent-100))',
+          200: 'hsl(var(--accent-200))',
+          300: 'hsl(var(--accent-300))',
+          400: 'hsl(var(--accent-400))',
+          500: 'hsl(var(--accent-500))',
+          600: 'hsl(var(--accent-600))',
+          700: 'hsl(var(--accent-700))',
+          800: 'hsl(var(--accent-800))',
+          900: 'hsl(var(--accent-900))',
         },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
@@ -166,6 +191,18 @@ export default {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+      },
+      // DESIGN.md Drop Shadows — distinct keys only; `xl` is left untouched
+      // since Tailwind's default `shadow-xl` already has 138+ existing call
+      // sites across the app unrelated to this design system.
+      boxShadow: {
+        xs: '0 1px 2px rgba(32,31,33,0.05)',
+        s: '0 1px 3px rgba(32,31,33,0.08)',
+        m: '0 4px 6px -1px rgba(32,31,33,0.08)',
+        l: '0 10px 15px -3px rgba(32,31,33,0.04)',
+        xsl: '0 25px 50px -12px rgba(32,31,33,0.15)',
+        tabs: '0 1px 3px rgba(32,31,33,0.05)',
+        button: '0 1px 2px rgba(32,31,33,0.04)',
       },
       keyframes: {
         'accordion-down': {

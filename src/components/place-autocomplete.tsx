@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Input } from '@/components/ui/input';
+import { Input } from '@/components/motion/input';
 import { searchPlacesAction } from '@/lib/actions';
 import { MapPin, Loader2, Plus, Sparkles } from 'lucide-react';
 import type { GeoLocation } from '@/types';

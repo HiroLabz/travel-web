@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react';
 import type { WizardItineraryItem, ChecklistItem } from '@/types';
 import { quickUpdateWizardItemAction } from '@/lib/actions';
-import { Input } from '@/components/ui/input';
+import { Input } from '@/components/motion/input';
 import { Button } from '@/components/ui/button';
 import { Check, Plus, X, ListChecks } from 'lucide-react';
 

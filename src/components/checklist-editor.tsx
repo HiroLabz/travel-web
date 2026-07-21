@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Plus } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/motion/input";
 import { Button } from "@/components/ui/button";
 import { ChecklistItemRow } from "@/components/checklist-item-row";
 import type { ChecklistItem } from "@/types";

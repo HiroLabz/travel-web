@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from '@/components/ui/dialog';
+} from '@/components/motion/morphing-modal';
 import { Button } from '@/components/ui/button';
 import { Hotel, MapPin, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';

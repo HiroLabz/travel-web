@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useOffline } from '@/lib/offline';
-import { Switch } from '@/components/ui/switch';
+import { Switch } from '@/components/motion/switch';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';

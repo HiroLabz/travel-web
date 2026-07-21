@@ -16,7 +16,6 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { PWAInstallBanner } from '@/components/pwa-install-banner';
 import { getAvatarUrl } from '@/lib/avatar';
 import { CreditsIndicator } from '@/components/credits-indicator';
-import { CreateTripModal } from '@/components/create-trip-modal';
 import { Logo } from '@/components/logo';
 
 interface HouseholdOption {
@@ -31,14 +30,12 @@ export default function DashboardPage() {
   const { toast } = useToast();
   const [showMenu, setShowMenu] = useState(false);
   const [households, setHouseholds] = useState<HouseholdOption[]>([]);
-  const [createOpen, setCreateOpen] = useState(false);
 
-  // Deep link / bookmark support for the old /create route, which now
-  // redirects here with ?create=1 instead of rendering its own page.
+  // Backward compat for any bookmarks/links from when /create used to
+  // redirect here with ?create=1 instead of rendering its own page.
   useEffect(() => {
     if (searchParams.get('create') === '1') {
-      setCreateOpen(true);
-      router.replace('/dashboard', { scroll: false });
+      router.replace('/create');
     }
   }, [searchParams, router]);
 
@@ -229,8 +226,10 @@ export default function DashboardPage() {
             <p className="text-sm sm:text-base text-white/70 max-w-md mb-7">
               Explore the world&apos;s most hidden gems with personalized itineraries and local insights.
             </p>
-            <Button size="lg" className="gap-2" onClick={() => setCreateOpen(true)}>
-              <Plus className="w-5 h-5" /> Start planning
+            <Button size="lg" className="gap-2" asChild>
+              <Link href="/create">
+                <Plus className="w-5 h-5" /> Start planning
+              </Link>
             </Button>
           </div>
         </div>
@@ -253,8 +252,6 @@ export default function DashboardPage() {
         </div>
         <DashboardClient />
       </div>
-
-      <CreateTripModal open={createOpen} onOpenChange={setCreateOpen} />
     </div>
   );
 }

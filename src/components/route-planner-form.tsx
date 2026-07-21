@@ -4,14 +4,14 @@ import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+import { Input } from '@/components/motion/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@/components/motion/select';
 import { RoutePlannerPlaceInput } from '@/components/route-planner-place-input';
 import { RoutePlannerResultsView } from '@/components/route-planner-results';
 import {

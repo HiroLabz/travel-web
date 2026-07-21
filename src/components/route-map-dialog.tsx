@@ -5,7 +5,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from '@/components/motion/morphing-modal';
 import { RouteMap } from './route-map';
 import type { RouteWaypoint, RouteSegmentWithMode } from '@/types';
 import { X } from 'lucide-react';

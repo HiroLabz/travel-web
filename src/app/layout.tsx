@@ -48,7 +48,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="font-body antialiased dark">
+      <body className="font-body antialiased ">
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-RK1S420KEM"
           strategy="afterInteractive"

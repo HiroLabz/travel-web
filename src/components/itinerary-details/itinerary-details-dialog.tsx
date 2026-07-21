@@ -5,7 +5,7 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from '@/components/motion/morphing-modal';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { ItineraryDetails } from './itinerary-details';
 

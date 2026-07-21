@@ -1,35 +1,54 @@
 "use client"
 
+import { useEffect, useRef } from "react"
 import { useToast } from "@/hooks/use-toast"
-import {
-  Toast,
-  ToastClose,
-  ToastDescription,
-  ToastProvider,
-  ToastTitle,
-  ToastViewport,
-} from "@/components/ui/toast"
+import { AnimatedToastStack, type AnimatedToast } from "@/components/motion/animated-toast-stack"
+
+// Matches the Radix Toast default auto-dismiss delay this replaces.
+const DEFAULT_DURATION = 5000
 
 export function Toaster() {
-  const { toasts } = useToast()
+  const { toasts, dismiss } = useToast()
+  const timers = useRef(new Map<string, ReturnType<typeof setTimeout>>())
+
+  useEffect(() => {
+    const activeIds = new Set(toasts.filter((t) => t.open !== false).map((t) => t.id))
+    timers.current.forEach((timer, id) => {
+      if (!activeIds.has(id)) {
+        clearTimeout(timer)
+        timers.current.delete(id)
+      }
+    })
+    activeIds.forEach((id) => {
+      if (timers.current.has(id)) return
+      const timer = setTimeout(() => dismiss(id), DEFAULT_DURATION)
+      timers.current.set(id, timer)
+    })
+  }, [toasts, dismiss])
+
+  useEffect(() => {
+    const map = timers.current
+    return () => {
+      map.forEach(clearTimeout)
+      map.clear()
+    }
+  }, [])
+
+  const mapped: AnimatedToast[] = toasts
+    .filter((t) => t.open !== false)
+    .map(({ id, title, description, variant }) => ({
+      id,
+      title,
+      description,
+      status: variant === "destructive" ? "error" : "success",
+    }))
 
   return (
-    <ToastProvider>
-      {toasts.map(function ({ id, title, description, action, ...props }) {
-        return (
-          <Toast key={id} {...props}>
-            <div className="grid gap-1">
-              {title && <ToastTitle>{title}</ToastTitle>}
-              {description && (
-                <ToastDescription>{description}</ToastDescription>
-              )}
-            </div>
-            {action}
-            <ToastClose />
-          </Toast>
-        )
-      })}
-      <ToastViewport />
-    </ToastProvider>
+    <AnimatedToastStack
+      toasts={mapped}
+      onDismiss={dismiss}
+      position="bottom-right"
+      placement="fixed"
+    />
   )
 }
