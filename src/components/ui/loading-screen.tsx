@@ -13,7 +13,7 @@ export function LoadingScreen({ message, className }: LoadingScreenProps) {
   return (
     <div
       className={cn(
-        'fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm',
+        'fixed inset-0 z-40 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm',
         className
       )}
     >
